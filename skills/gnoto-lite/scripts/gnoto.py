@@ -55,8 +55,8 @@ def c_new(a):
     if os.path.exists(a.file) and not a.force:
         raise gn.NoteError("%s は既にある（上書きするなら --force）" % a.file)
     note = gn.new_note(a.title, a.style, a.n)
-    if a.style == "normal" and a.heading:
-        gn.insert_rows(note, [[gn.text_block(a.title, htype="1")]])
+    # --heading は何もしない（互換のために残す）。GNOTO もプレビューも題を一番上に出すので、
+    # 題と同じ見出しを本文に置くと、題が 2 回出る。
     gn.save(a.file, note)
     out("作った：%s（%s）" % (a.file, a.style))
 
@@ -162,7 +162,14 @@ def _add(a, rows):
 
 
 def c_heading(a):
-    _add(a, [[gn.text_block(read_arg(a.text), htype=a.level, html=a.html)]])
+    t = read_arg(a.text)
+    note = gn.load(a.file)
+    title = str(note["note"].get("title", ""))
+    rows = gn.content_of(note).get("rows") or []
+    if not a.html and not rows and "".join(t.split()) == "".join(title.split()):
+        out("省いた：題と同じ見出しは置かない（題は GNOTO とプレビューの一番上に出る）")
+        return
+    _add(a, [[gn.text_block(t, htype=a.level, html=a.html)]])
 
 
 def c_text_add(a):
@@ -381,7 +388,7 @@ def build_parser():
     sp.add_argument("--title", default="無題")
     sp.add_argument("--style", default="normal", choices=gn.STYLES)
     sp.add_argument("--n", type=int, default=0, help="第 n 回")
-    sp.add_argument("--heading", action="store_true", help="ノーマルの先頭に題の見出しを置く")
+    sp.add_argument("--heading", action="store_true", help="（何もしない。題は一番上に出るので、同じ見出しは置かない）")
     sp.add_argument("--force", action="store_true")
 
     sp = add("set", c_set, "題・style・第 n 回を直す")
