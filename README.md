@@ -46,7 +46,7 @@ CONNECTORS.md を参照。コネクタなしでも動く。コネクタの URL�
 
 ## ライセンス
 
-プラグイン全体は MIT（LICENSE）。ただし **skills/gnoto-lite フォルダには別のライセンス**（skills/gnoto-lite/LICENSE。ソースは読めるが、Claude の外での再利用を禁じる条件。草案）がある。
+プラグイン全体は MIT（LICENSE）。ただし **skills/gnoto-lite フォルダには別のライセンス**（skills/gnoto-lite/LICENSE。ソースは読めるが、Claude の外での再利用を禁じる条件）がある。
 
 ---
 
@@ -105,4 +105,4 @@ The plugin works without any connector. If you have a connector for Japanese leg
 
 ## License
 
-The plugin as a whole is MIT (see LICENSE). The skills/gnoto-lite folder has its own, separate licence (skills/gnoto-lite/LICENSE): a source-available draft that allows use inside Claude as part of this plugin and forbids extracting, porting or reusing it to provide note or law-mode features outside Claude.
+The plugin as a whole is MIT (see LICENSE). The skills/gnoto-lite folder has its own, separate licence (skills/gnoto-lite/LICENSE): a source-available licence that allows use inside Claude as part of this plugin and forbids extracting, porting or reusing it to provide note or law-mode features outside Claude.
