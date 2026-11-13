@@ -47,7 +47,8 @@ node cli.js list                                   # 型の一覧（17 のレン
 node cli.js spec.json out.svg --png --width-mm 120 --density 600
 node cli.js spec.json out.svg --steps --png        # 積み上げ図：step ごとに out_1.svg、out_2.svg…（スライド用）
 node cli.js spec.json out.svg --step 2             # step 2 までを描き、step 2 を強調
-node cli.js all specs/ out/ --png                  # フォルダの仕様を全部
+node cli.js all specs/ out/ --png                  # フォルダの仕様を全部（SVG を先に全部作り、PNG は同時に。--jobs N）
+node cli.js batch a.json b.json --outdir out/ --png   # 指定した仕様をまとめて（誤りのある仕様は飛ばして残りを作る。終了コード 1）
 ```
 
 `cli.js` の出力は三種類ある。

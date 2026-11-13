@@ -15,6 +15,20 @@
 
 4つの入口スキル（laba-hanrei・laba-slides・laba-figures・laba-score）は、本体（skills/laba）の該当部分を開くための入口で、規則と道具は本体に一つだけある。
 
+Cowork と Claude Code では、`agents/` の9つの担当（確認・節の執筆・図・巻末・統一・法的点検・足した文の点検・文体の点検・図の点検）が読み込まれ、段階を分けて同時に進められる（claude.ai のチャットでは読み込まれない）。
+
+## 速く進める（1.3.0）
+
+claude.ai のチャットでは、全部の段階を順に回すと時間がかかる。そこで、正確さの守りを減らさずに待ち時間を減らす決まりを入れた（`skills/laba/references/speed.md`）。
+
+- **条文・判例の確認をまとめて呼ぶ**：結果に頼らない呼び出しを、同じ回に全部出す（1件ずつ呼ばない）。
+- **スクリプトを一度に走らせる**：検査（`pipeline.py`）は互いに独立なものを同時に、図（`figgen/cli.js batch`）は何枚も1回で（PNG は同時に変換）、`build_and_check.py` は docx・PDF 化・検査を1回で。
+- **速さ優先**：主題が1つで資料が短い依頼（または「急ぎ」「ざっと」）は、段階を縮める。条文・判例の確認、「未確認」の表示、足した説明の規則、網羅の照合は省かない。
+- **⑨〜⑪（検査→直し→採点）は既定で最大2回。**
+- **Cowork・Claude Code では担当（`agents/`）に分けて同時に進める**：確認、節の執筆、図、巻末、統一、点検（法的・足した文・文体・図）。チャットでは `agents/` は読み込まれない（公式の仕様）ので、同じ分担を1人で進める。
+
+測った値（自作の架空の資料。4コアの計算機）：検査20本が 0.87 秒から 0.27 秒、図45本（PNG つき）が 12.2 秒（1本ずつ呼ぶ）から 2.3 秒。Claude 側の往復の減り方（約110回から約25回）は見込みで、実測ではない。詳しくは speed.md の7。
+
 ## 到達点
 
 本体の SKILL.md の「スコアボード」を参照（独立採点・機械測定・自己採点を分けて記載）。
@@ -67,6 +81,18 @@ LABA is a plugin that turns Japanese law course materials (lecture handouts, tex
 
 The four entry skills (laba-hanrei, laba-slides, laba-figures and laba-score) only open the relevant part of the main skill (skills/laba). The rules and tools exist in one place, in the main skill.
 
+## Faster runs (1.3.0)
+
+Running every stage one after another in a claude.ai chat is slow. The plugin now shortens the waiting without weakening the accuracy safeguards (see skills/laba/references/speed.md, written in Japanese):
+
+- **Batched lookups.** Statute, decision and bibliography lookups that do not depend on each other are issued together in one turn instead of one by one.
+- **Concurrent scripts.** The check pipeline runs its independent checks at the same time; diagram generation and PNG conversion handle many figures in one call; one script builds the Word file, converts it to PDF and runs the checks in one call.
+- **Fast path.** For light requests (one topic, a short source, or when the user asks for speed) some stages are shortened. Statute and decision verification, the "unverified" marking, the rules for added text and the coverage check are never skipped.
+- **Capped revision loop.** The check, fix and score loop runs at most twice by default.
+- **Agents in Cowork and Claude Code.** The agents folder defines a verifier, section writers, a figure maker, a back-matter builder, a harmonizer and four independent reviewers. In claude.ai chat, plugin agents and hooks are not loaded (documented platform behaviour), so the same split is done by one assistant.
+
+Measured on a made-up sample on a 4-core machine: the 20 checks went from 0.87 s to 0.27 s, and 45 diagrams with PNG output from 12.2 s (one call per diagram) to 2.3 s. The reduction in assistant round trips (about 110 to about 25) is an estimate, not a measurement.
+
 ## Results so far
 
 See the scoreboard in the main skill's SKILL.md. It keeps three kinds of figures apart: scores given by an independent grader who did not write the note, figures measured by the bundled check scripts, and self-assessment by the author (which is not reported as a result).
@@ -86,7 +112,8 @@ See the scoreboard in the main skill's SKILL.md. It keeps three kinds of figures
 
 ## What the plugin runs and accesses
 
-- **Local scripts.** The skills ask Claude to run the Python and Node.js scripts bundled under skills/laba/scripts. They read your source files and write Word documents, slide files, and images in your working folder.
+- **Local scripts.** The skills ask Claude to run the Python and Node.js scripts bundled under skills/laba/scripts. They read your source files and write Word documents, slide files, and images in your working folder. Several of them are started at the same time as separate local processes (the check pipeline, and diagram conversion with the sharp library). build_and_check.py also runs LibreOffice (soffice) in headless mode on the Word file it just wrote, to make a PDF, if LibreOffice is installed. None of these make network requests.
+- **Agents.** The agents folder holds nine plain-text agent definitions (Markdown files) (a verifier, section writers, a figure maker, a back-matter builder, a harmonizer, and reviewers). They are loaded only in Cowork and Claude Code. The reviewers are given no file-editing tools (they can read files and run local commands). They report findings and never change the note. The verifier uses whatever connector you registered, or the public web pages named in the next item.
 - **Web access for verification.** To check statutes and court decisions, the skills tell Claude to look up the official e-Gov law database (Japanese Digital Agency) and the Courts of Japan case-law search. They read public pages only and send no personal data.
 - **gnoto-lite scripts.** skills/gnoto-lite/scripts is a plain note-file writer and renderer in Python 3 (standard library only). It reads and writes .gnoto files you name, writes a self-contained static HTML preview, and, only if a Chromium-based browser is installed and you ask for a PNG, starts that browser in headless mode on a temporary local file. For Word export it calls the bundled build_docx.py. The scripts make no network requests and contain no statute or case data and no citation parsing. Statutes and decisions are fetched by Claude through your own connector or the official public pages, saved as JSON by Claude, and the scripts only format that JSON into ordinary note blocks with its provenance.
 - **No hooks, no bundled servers.** The plugin contains no hooks and no MCP server configuration. It sends nothing anywhere on its own.

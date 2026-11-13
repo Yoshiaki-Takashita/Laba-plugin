@@ -8,6 +8,7 @@ usage: pipeline.py --note NOTE.txt --body BODY.txt --out DIR
                    [--index index.json] [--pdf NOTE.pdf]
                    [--fig-specs 'figs/*.json'] [--deck DECK.pptx [--deck-theme teal|mono]]
                    [--ledger LEDGER.tsv --resume-text RESUME.txt] [--sync-resume RESUME.json --sync-deck DECK_SPEC.json]
+                   [--jobs N] [--timing] [--pdf-wait 秒]
   --note   ノートの全文（build_docx.py --text-out）   --body  本文だけ（--body-out）
   --source 資料の書き起こし（あれば、網羅・一致・確度・文体の比較をする）
   --blocks build_docx.py の入力 JSON、または DOC を定義した .py（表・まとめ・層を正確に読むため。無ければ全文テキストから層を推定する）
@@ -21,10 +22,14 @@ usage: pipeline.py --note NOTE.txt --body BODY.txt --out DIR
   --ledger／--resume-text 判例研究の引用台帳と、ID つきの本文を hanrei/ledger.py で検査する
   --sync-resume／--sync-deck 判例研究のレジュメとスライドの構成を hanrei/sync_check.py で照らす
   --certainty-ignore 確度の検査（足した層の候補）のうち、読んで留保と別の点だと確かめた文を、理由つきで除く一覧（certainty_check.py --ignore）
+  --jobs   同時に走らせる検査の数（既定：CPU の数、最大 8。1 にすると 1 本ずつ。結果は同じで、速さだけが変わる）
+  --pdf-wait --pdf のファイルがまだ無いとき、できるまで（最大この秒数）待つのは頁数の検査だけにする。ほかの検査は先に走る（build_and_check.py が PDF を作りながら検査を回すときに使う）
+  --timing 検査ごとの所要秒と、全体の実時間・順に走らせた場合の合計を出す
 出力：DIR/*.json（各検査）と DIR/report.md（結果の表、WARN の一覧、次に直す点）。
 次に直す点は references/algorithms/next-fix.md の決定表（16指標）による。指標ごとの文書は references/metrics/。機械が見るのは形だけなので、
 法的な正確さ・意味のずれ・書き手の判定は、独立点検（references/verification.md）で見る。"""
-import sys, os, json, subprocess, glob
+import sys, os, json, subprocess, glob, time
+from concurrent.futures import ThreadPoolExecutor, wait, FIRST_COMPLETED
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 
@@ -34,6 +39,41 @@ def arg(flag, default=None):
 def run(name, *args):
     r = subprocess.run([sys.executable, os.path.join(HERE, name)] + [a for a in args if a is not None], capture_output=True, text=True)
     return r.returncode, (r.stdout + r.stderr).strip()
+
+def run_jobs(jobs, workers, timing):
+    """依存（deps）の終わった検査から、同時に走らせる。戻り値は (題, 名, 終了コード, 出力) を呼んだ順に並べたもの。
+    検査どうしは互いの出力ファイルを読まない（読むものは deps に挙げてある）ので、順に走らせた場合と結果は同じ。"""
+    workers = workers or min(8, os.cpu_count() or 2)
+    def go(j):
+        t0 = time.time()
+        if j.get('wait_file'):    # 別の工程が作っているファイルを待つ（できてから名前が付く前提。無ければ待たずに進む）
+            end = time.time() + j['wait_sec']
+            while not os.path.exists(j['wait_file']) and time.time() < end:
+                time.sleep(0.2)
+        j['rc'], j['out'] = j['fn']() if j['fn'] else run(j['name'], *j['args'])
+        j['sec'] = time.time() - t0
+        return j
+    t0 = time.time()
+    if workers <= 1:
+        for j in jobs:
+            go(j)
+    else:
+        pending, running, done = list(jobs), {}, set()
+        with ThreadPoolExecutor(max_workers=workers) as ex:
+            while pending or running:
+                for j in [x for x in pending if all(id(d) in done for d in x['deps'])]:
+                    pending.remove(j); running[ex.submit(go, j)] = j
+                if not running:
+                    raise RuntimeError('検査の依存が循環している')
+                fin, _ = wait(list(running), return_when=FIRST_COMPLETED)
+                for f in fin:
+                    f.result(); done.add(id(running.pop(f)))
+    if timing:
+        wall, tot = time.time() - t0, sum(j['sec'] for j in jobs)
+        for j in sorted(jobs, key=lambda x: -x['sec'])[:8]:
+            print(f"  {j['sec']:.2f}s  {j['title']}（{j['name']}）", file=sys.stderr)
+        print(f"  実時間 {wall:.2f}s／順に走らせた場合の合計 {tot:.2f}s／同時 {workers}", file=sys.stderr)
+    return [(j['title'], j['name'], j['rc'], j['out']) for j in jobs]
 
 def load(d, n):
     p = os.path.join(d, n)
@@ -50,17 +90,18 @@ def main():
     os.makedirs(out, exist_ok=True)
     src, blocks, figs, cards, rev = arg('--source'), arg('--blocks'), arg('--figs'), arg('--cards'), arg('--reviewer')
     J = lambda n: os.path.join(out, n)
-    log = []
-    def step(title, name, *a):
-        rc, o = run(name, *a); log.append((title, name, rc, o)); return rc
+    jobs = []   # 検査の一覧。互いに独立なものは同時に走らせる（deps に挙げたものが終わってから）。出力の並びは呼んだ順のまま
+    def step(title, name, *a, after=(), fn=None):
+        j = {'title': title, 'name': name, 'args': [x for x in a if x is not None], 'deps': list(after), 'fn': fn, 'rc': None, 'out': '', 'sec': 0.0}
+        jobs.append(j); return j
     if src:
-        step('一覧化', 'inventory.py', src, '--out', J('inventory.json'), '--md', J('inventory.md'))
-        step('網羅（機械照合）', 'coverage_check.py', J('inventory.json'), note, '--out', J('coverage.json'), *(['--ignore', arg('--coverage-ignore')] if arg('--coverage-ignore') else []))
-        step('文体の測定', 'style_profile.py', src, '--out', J('profile.json'))
-        step('文体', 'style_check.py', body, '--profile', J('profile.json'), '--out', J('style.json'))
+        j_inv = step('一覧化', 'inventory.py', src, '--out', J('inventory.json'), '--md', J('inventory.md'))
+        step('網羅（機械照合）', 'coverage_check.py', J('inventory.json'), note, '--out', J('coverage.json'), *(['--ignore', arg('--coverage-ignore')] if arg('--coverage-ignore') else []), after=[j_inv])
+        j_prof = step('文体の測定', 'style_profile.py', src, '--out', J('profile.json'))
+        step('文体', 'style_check.py', body, '--profile', J('profile.json'), '--out', J('style.json'), after=[j_prof])
         step('一致（丸写しの程度）', 'match_check.py', src, body, '--out', J('match.json'))
-        step('確度の語', 'certainty_check.py', src, note, '--out', J('certainty.json'))
-        step('書誌', 'cite_check.py', note, '--inventory', J('inventory.json'), '--out', J('cite.json'))
+        j_cert = step('確度の語', 'certainty_check.py', src, note, '--out', J('certainty.json'))
+        step('書誌', 'cite_check.py', note, '--inventory', J('inventory.json'), '--out', J('cite.json'), after=[j_inv])
         step('密度', 'density.py', body, '--source', src, '--out', J('density.json'))
     else:
         step('文体（既定値）', 'style_check.py', body, '--out', J('style.json'))
@@ -113,24 +154,26 @@ def main():
     else:
         step('定義の照合（⑤）', 'definition_check.py', '--note-only', lay, '--out', J('definition.json'))
     if src and blocks:
-        step('確度の語（層つき）', 'certainty_check.py', src, blocks, '--out', J('certainty.json'), *(['--ignore', arg('--certainty-ignore')] if arg('--certainty-ignore') else []))
+        step('確度の語（層つき）', 'certainty_check.py', src, blocks, '--out', J('certainty.json'), *(['--ignore', arg('--certainty-ignore')] if arg('--certainty-ignore') else []), after=[j_cert])   # 同じ certainty.json を上書きするので、全文の検査のあとに回す
     if arg('--reasons'):
         a = ['check', arg('--reasons'), '--note', lay, '--out', J('reason_table.json')] + (['--fulltext', arg('--fulltext')] if arg('--fulltext') else []) + (['--source', src] if src else [])
         step('判例の理由の出所表（③）', 'reason_table.py', *a)
     if arg('--tf'):
         step('短答式の命題（⑫）', 'tf_items.py', 'check', arg('--tf'), '--note', lay, '--out', J('tf.json'))
     if cards:
-        sys.path.insert(0, HERE)
-        import card_build
-        from laba_blocks import load_units
-        ntxt = '\n'.join(u['text'] for u in load_units(lay) if u['layer'] in ('body', 'table', 'zak'))
-        cs = json.load(open(cards, encoding='utf-8'))['cards']
-        tfi = json.load(open(arg('--tf'), encoding='utf-8'))['items'] if arg('--tf') else None
-        iss = card_build.check(cs, ntxt, tfi)
-        json.dump({'n_cards': len(cs), 'issue_count': len(iss), 'issues': iss, 'notes': card_build.check.notes,
-                   'extended': all((c.get(k) or '').strip() for c in cs for k in ('tf', 'opening'))},
-                  open(J('card.json'), 'w', encoding='utf-8'), ensure_ascii=False, indent=2)
-        log.append(('論点カード', 'card_build.py', 0, '\n'.join(['  所見: ' + x for x in iss] + [f'論点 {len(cs)}／所見 {len(iss)}／注意 {len(card_build.check.notes)}'])))
+        def _card():
+            sys.path.insert(0, HERE)
+            import card_build
+            from laba_blocks import load_units
+            ntxt = '\n'.join(u['text'] for u in load_units(lay) if u['layer'] in ('body', 'table', 'zak'))
+            cs = json.load(open(cards, encoding='utf-8'))['cards']
+            tfi = json.load(open(arg('--tf'), encoding='utf-8'))['items'] if arg('--tf') else None
+            iss = card_build.check(cs, ntxt, tfi)
+            json.dump({'n_cards': len(cs), 'issue_count': len(iss), 'issues': iss, 'notes': card_build.check.notes,
+                       'extended': all((c.get(k) or '').strip() for c in cs for k in ('tf', 'opening'))},
+                      open(J('card.json'), 'w', encoding='utf-8'), ensure_ascii=False, indent=2)
+            return 0, '\n'.join(['  所見: ' + x for x in iss] + [f'論点 {len(cs)}／所見 {len(iss)}／注意 {len(card_build.check.notes)}'])
+        step('論点カード', 'card_build.py', fn=_card)
     if blocks and (cards or arg('--tf') or arg('--index')):
         # 派生物（カード・短答・まとめ・索引）を、根拠にした本文の箇所と照合する
         a = [blocks, '--out', J('derived.json')] + (['--cards', cards] if cards else []) + (['--tf', arg('--tf')] if arg('--tf') else []) + (['--index', arg('--index')] if arg('--index') else [])
@@ -139,11 +182,14 @@ def main():
     a = [note, '--out', J('numbers.json'), '--md', J('numbers.md')] + (['--blocks', blocks] if blocks else []) + (['--source', src] if src else []) \
         + (['--cards', cards] if cards else []) + (['--tf', arg('--tf')] if arg('--tf') else []) + (['--index', arg('--index')] if arg('--index') else []) \
         + (['--pdf', arg('--pdf'), '--pages-out', J('pages.json')] if arg('--pdf') else [])
-    step('報告用の数値', 'report_numbers.py', *a)
+    jn = step('報告用の数値', 'report_numbers.py', *a)
+    if arg('--pdf') and arg('--pdf-wait'):
+        jn['wait_file'], jn['wait_sec'] = arg('--pdf'), float(arg('--pdf-wait'))
     a = ['--dir', out, '--out', J('score.json'), '--md', J('score.md')]
     if rev:
         a += ['--reviewer', rev]
-    step('採点', 'score.py', *a)
+    step('採点', 'score.py', *a, after=list(jobs))   # 全部の json がそろってから
+    log = run_jobs(jobs, int(arg('--jobs', 0) or 0), '--timing' in sys.argv)
 
     # ---- 次に直す点（references/algorithms/next-fix.md の決定表） ----
     st, cov, m, ce, ci, de = (load(out, n) for n in ('style.json', 'coverage.json', 'match.json', 'certainty.json', 'cite.json', 'density.json'))

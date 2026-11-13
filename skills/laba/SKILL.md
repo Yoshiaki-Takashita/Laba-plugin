@@ -118,6 +118,7 @@ v5 の採点で「直すとよい」とされた任意の5点（索引、全体�
 | 「GNOTO のノートにして」「GNOTO のスライドにして」（出力先が GNOTO） | 内容は上の手順で作り、.gnoto に書く（Word と併用も可）。ノーマルとスライドだけ | `skills/gnoto-lite/SKILL.md`（`${CLAUDE_PLUGIN_ROOT}` で指す） |
 | 「図にして」「関係図を描いて」 | 図だけ（仕様から生成し、検査と照合を通す） | `references/figures.md` |
 | 「採点して」「他の本と比べて」 | 16指標の採点（機械と点検者の分担を守る） | `references/scoring.md` |
+| 「急ぎで」「ざっと」「速く」、または主題1つ・短い資料の軽い依頼 | 上の各行の成果物を、**速さ優先**（段階を縮める。正確さの守りは省かない）で | `references/speed.md` 4 |
 | 「今この場で教えて」「簡潔に」 | ファイルを作らず、チャットで「ざっくり理解」の形で答える | `references/zakkuri.md` 7 |
 | 題目だけ渡された（資料なし） | ノートを作るが、網羅に限界があると伝える | `references/workflow.md` 資料なし |
 
@@ -133,16 +134,41 @@ v5 の採点で「直すとよい」とされた任意の5点（索引、全体�
 | ② 一覧化 | 見出し・判例・条文・相互参照・問いを一覧に。難所を3つ以上書き出す。資料の誤記を控える | `workflow.md` ② | `inventory.py` |
 | ③ 文体の測定 | 教科書型なら、資料の文体を数値にし、言い回しの型を控える | `style-imitation.md` 1〜3 | `style_profile.py` |
 | ④ 構成 | 見出しを資料と1対1に。整理軸・前提・まとめの位置を決める | `techniques.md` 1、`fields/` の該当分野 | — |
-| ⑤ 本文 | 技法に沿って書く。判例は書く前に確かめる。足した説明の規則を守る | `techniques.md`、`style-imitation.md` 4〜7、`added-text-safety.md`、`case-verification.md`、`connector.md`、`examples/` | `case_lookup.py` |
+| ⑤ 本文 | 技法に沿って書く。判例は書く前に確かめる（確認は**まとめて呼ぶ**。`speed.md` 2）。足した説明の規則を守る | `techniques.md`、`style-imitation.md` 4〜7、`added-text-safety.md`、`case-verification.md`、`connector.md`、`speed.md`、`examples/` | `verify_plan.py`、`case_lookup.py` |
 | ⑥ ざっくり理解 | 難所の直前に、平易な手ほどきを置く。冒頭に全体像 | `zakkuri.md` | — |
-| ⑦ 図表 | 難所ごとにメッセージを一文で書き、決定表で型を選ぶ。用例の仕様（JSON）を写して中身を入れ替え、エンジンで作る。機械の点検と本文との照合を通し、PNG を見て矢印を一本ずつ読み、六観点で採点する（どれかが3以下なら直す） | `figures.md`（入口）、`figures/02-types/` の該当の型、`algorithms/figure-type.md`、`figures/10-quality-rubric.md` | `figgen/cli.js`、`fig_lint.py`、`figgen/trace.py` |
+| ⑦ 図表 | 難所ごとにメッセージを一文で書き、決定表で型を選ぶ。用例の仕様（JSON）を写して中身を入れ替え、エンジンで作る（何枚もあるときは `cli.js batch` で**まとめて**）。機械の点検と本文との照合を通し、PNG を見て矢印を一本ずつ読み、六観点で採点する（どれかが3以下なら直す） | `figures.md`（入口）、`figures/02-types/` の該当の型、`algorithms/figure-type.md`、`figures/10-quality-rubric.md` | `figgen/cli.js`（`batch`）、`fig_lint.py`、`figgen/trace.py` |
 | ⑧ 設例・巻末の表 | 分野の論証の型で論じ、各ケースの結論を言い切る。結論一覧表。巻末に、論点カード、短答式の命題、判例の理由の出所表、概念の索引 | `yoken-jijitsu.md`、`ronten-card.md`、`metrics/12-exam-use.md`、`metrics/03-reason-fidelity.md` | `card_build.py`、`tf_items.py`、`reason_table.py`、`xref_index.py`、`yoken_table.py` |
-| ⑨ 機械検査 | docx を作り、検査を全部回す。PDF にして全頁を見る。レポートの「9.5 に届く条件のうち未達」と「次に直す点」を読む。機械の誤検知は理由を書いて除く | `docx-format.md`、`workflow.md` ⑨、`statute-verification.md`、`algorithms/next-fix.md` | `build_docx.py`、`pipeline.py` |
+| ⑨ 機械検査 | docx を作り、検査を全部回す。PDF にして全頁を見る。レポートの「9.5 に届く条件のうち未達」と「次に直す点」を読む。機械の誤検知は理由を書いて除く | `docx-format.md`、`workflow.md` ⑨、`statute-verification.md`、`algorithms/next-fix.md` | `build_and_check.py`（`build_docx.py`＋`pipeline.py`＋PDF 化を1回で）、`pipeline.py` |
 | ⑩ 独立点検 | 本文を書いていない点検者に、法的正確さ・足した文の意味・書き手の判定・図を見させる | `verification.md`、`reviewer-prompts/` | — |
-| ⑪ 採点 | 基本4指標＋独自12指標で採点し、判定を出す。「資料を上回る」まで⑨〜⑪を回す。その先は、指標ごとの「9.5 に届く条件」を満たす | `scoring.md`、`metrics/` | `score.py` |
+| ⑪ 採点 | 基本4指標＋独自12指標で採点し、判定を出す。**回す回数は既定で最大2回**（`speed.md` 5）。利用者が「資料を上回るまで」「9.5 まで」と求めたときだけ、その先（指標ごとの「9.5 に届く条件」）まで回す | `scoring.md`、`metrics/` | `score.py` |
 | ⑫ 渡す | 結論・確認状況・誤記・確かめてほしい点を短く報告。版を残す | `delivery.md` | — |
 
-各段階の終わりに `references/checklists/` の該当の表で確かめる。迷う判断（資料の型、図の型、表か文か、判例の置き場所、ざっくり理解の位置、補足の付け方、次に直す点）は `references/algorithms/` の決定表で決める。書く前に `references/failure-catalog.md` に目を通す。小さな依頼でも①〜⑩は省かない。⑪の採点を回すのは、利用者が求めたとき、または分量の大きい依頼のとき。
+各段階の終わりに `references/checklists/` の該当の表で確かめる。迷う判断（資料の型、図の型、表か文か、判例の置き場所、ざっくり理解の位置、補足の付け方、次に直す点）は `references/algorithms/` の決定表で決める。書く前に `references/failure-catalog.md` に目を通す。小さな依頼でも、正確さの守り（条文・判例の確認、「未確認」、足した説明の規則、網羅の照合）は省かない。軽い依頼は「速さ優先」（下の節）で段階を縮めてよい。⑪の採点を回すのは、利用者が求めたとき、または分量の大きい依頼のとき。
+
+## 速く進める
+
+チャットで全部を順に回すと長くかかる。**正確さの守りを減らさずに**待ち時間を減らす決まりが `references/speed.md` にある。要点：
+
+- **確認はまとめて呼ぶ。** 条文・判例・文献の確認は、結果に頼らない呼び出しを**同じ回に全部出す**（1回目：書誌と条文の本文、2回目：要旨・全文・「」の照合、3回目：引き直し）。先に `scripts/verify_plan.py` で、同じ条・同じ判例を1件にまとめ、法令名つきで並べた表を作る。
+- **道具はまとめて走らせる。** `pipeline.py` は検査を同時に走らせる。図は `figgen/cli.js batch` で何枚も1回で作る（PNG は同時に変換）。`build_and_check.py` は docx・PDF 化・検査を1回で回す。
+- **速さ優先**：主題が1つ、資料が短い（目安：5,000字以内）、図3枚以内・判例5件以内の依頼、または利用者が「急ぎ」「ざっと」と言ったときは、ざっくり理解を3か所まで、巻末を縮約（論点カード5・短答10問）、図の六観点の採点と⑪の採点・回しを省く。**省かないもの**：条文・判例の確認、「未確認」の表示、足した説明の規則、網羅の機械照合、機械の検査。報告に「速さ優先版」と、縮約した所を書く。詳しい表は `speed.md` 4・6。
+- **⑨〜⑪は既定で最大2回。** 3回目は、優先度1（誤りにつながる）の所見が残るときだけ。
+
+## 担当に分けて進める（Cowork・Claude Code）
+
+担当（`agents/`）が読み込まれる環境では、段階を担当に分けて同時に進められる。claude.ai のチャットでは `agents/` と hooks は読み込まれないので、上の「速く進める」で1人で進める（担当を立てる道具が無ければ、チャットとして進める）。細かい手順・受け渡しのファイル・指示は `references/orchestration.md`。
+
+| 波 | 段階 | 誰が | 同時にすること |
+|---|---|---|---|
+| 0 | ①〜④ | 親（この会話の Claude） | 一覧化、文体の測定、構成。**共通の文体の指示（`style-guide.md`）・術語表（`glossary.json`）・節の担当表（`outline.json`）を作る**。確認の計画（`verify_plan.py`） |
+| 1 | ⑤の確認 | `verifier`（確認）×組 | 条文・判例を組ごとに確かめる。各担当の中でもまとめて呼ぶ |
+| 2 | ⑤⑥（⑧の設例） | `section-writer`（節の執筆）×節 | 節ごとに同時に書く。確認済みの条文・判例だけを使う |
+| 3 | ⑦⑧ | `figure-maker`（図）×図、`backmatter-builder`（巻末） | 図と巻末を同時に作る（本文が先） |
+| 4 | 仕上げ・⑨ | `harmonizer`（統一）→ 親 | 節・図・巻末を結合し、術語・体・参照・重複をそろえる（内容は変えない）。続けて `build_and_check.py` |
+| 5 | ⑩ | `legal-reviewer`（法的点検）、`added-text-reviewer`（足した文の点検）、`style-reviewer`（文体の点検）、`figure-reviewer`（図の点検） | 本文を書いていない点検者が、読むだけで同時に点検する |
+| 6 | ⑪⑫ | 親 | 指摘を直し、再検査（上限は `speed.md` 5）、報告 |
+
+決まり：担当は自分のファイルだけを書く（同じファイルに2人が書かない）。**判例は1つの節にだけ割り当て**、ほかの節は参照にする。担当は別の担当を立てられない（立てるのは親だけ）。点検の担当には、作成の経緯と自己評価を渡さない。点検の担当を立てたら、報告では「独立点検：実施（担当名）」と書く。
 
 ## 判例研究とスライド（別の流れ）
 
@@ -198,8 +224,9 @@ v5 の採点で「直すとよい」とされた任意の5点（索引、全体�
 | 正確さの下準備 | `cite_check.py`、`statute_check.py`、`definition_check.py`、`certainty_check.py`、`reason_source_check.py`、`reason_table.py`、`case_lookup.py` |
 | 論証と効率 | `density.py`、`argument_check.py`、`info_efficiency.py`、`summary_dup_check.py`、`xref_index.py` |
 | 巻末の表 | `card_build.py`、`tf_items.py`、`yoken_table.py` |
-| 作る・回す・採点 | `build_docx.py`、`pipeline.py`（検査22本→採点→次に直す点。図・スライド・判例研究の検査も任意の段として回せる）、`score.py`、`run_checks.sh`（簡易版） |
-| 図 | `figgen/cli.js`（仕様→SVG・PNG）、`figgen/trace.py`（本文との照合）、`fig_lint.py`、`fig_build.js`、`templates/`（手書き用のひな形7型） |
+| 作る・回す・採点 | `build_docx.py`、`pipeline.py`（検査22本を同時に走らせ→採点→次に直す点。図・スライド・判例研究の検査も任意の段として回せる。`--jobs`・`--timing`）、`build_and_check.py`（docx・PDF 化・検査を1回で）、`score.py`、`run_checks.sh`（簡易版） |
+| 確認の下準備 | `verify_plan.py`（条文・判例を、まとめて呼ぶ組に分けた表） |
+| 図 | `figgen/cli.js`（仕様→SVG・PNG。`batch`・`all` で何枚も同時に）、`figgen/trace.py`（本文との照合）、`fig_lint.py`、`fig_build.js`、`templates/`（手書き用のひな形7型） |
 | スライド | `slides/build_deck.js`、`slides/deck_lint.py`、`slides/note_to_deck.py` |
 | 判例研究 | `hanrei/resume_build.py`、`hanrei/ledger.py`、`hanrei/resume_to_deck.py`、`hanrei/sync_check.py` |
 
@@ -210,6 +237,7 @@ v5 の採点で「直すとよい」とされた任意の5点（索引、全体�
 | 場所 | 中身 | いつ読むか |
 |---|---|---|
 | `references/workflow.md` | 12段階の詳細、資料の型ごとの分岐 | 最初に |
+| `references/speed.md`、`orchestration.md` | 速く進める決まり（まとめて呼ぶ・まとめて走らせる・速さ優先・回数の上限）、実測値と見込み／担当に分けて進める手順（Cowork・Claude Code） | 最初に（依頼が軽いとき、急ぎのとき、条文・判例を確かめる前、担当を立てられる環境のとき） |
 | `references/techniques.md`、`style-imitation.md`、`zakkuri.md`、`yoken-jijitsu.md` | 説明の技法、文体の合わせ方、ざっくり理解、設例の論証の型（民事・刑事・行政・憲法・会社法） | 本文を書く前（④〜⑧） |
 | `references/added-text-safety.md`、`case-verification.md`、`statute-verification.md` | 足した説明の規則、判例の確認と理由の出所表、条文の確認 | 本文を書く前と、点検の前 |
 | `references/connector.md` | 日本法コネクタ（条文・判例・会議録・文献のツール）の使い分けと、確かめた振る舞い | コネクタがつながっているとき、条文・判例を確かめる前 |

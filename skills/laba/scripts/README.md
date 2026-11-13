@@ -44,10 +44,12 @@
 | `tf_items.py` | 短答式の命題の候補を本文から拾い、仕上げた一覧を検査し、巻末の表にする |
 | `yoken_table.py` | 条文つきの規律を要件・効果に分けた候補と、その所見 |
 | `build_docx.py` | ブロックの列を Word にする。本文だけのテキストも出す（見本：`sample_blocks.json`） |
-| `pipeline.py` | 検査を全部回し、採点し、`report.md` に「9.5 に届く条件のうち未達」と「次に直す点」を書く |
+| `pipeline.py` | 検査を全部回し、採点し、`report.md` に「9.5 に届く条件のうち未達」と「次に直す点」を書く。互いに独立な検査は同時に走らせる（`--jobs N`、既定は CPU の数で最大 8。`--jobs 1` で1本ずつ。`--timing` で検査ごとの秒を出す）。結果は順に走らせたときと同じ |
+| `build_and_check.py` | 図の PNG（任意）→ docx と本文テキスト →（PDF 化 ‖ 全部の検査）を1回で。PDF 化と検査が重なる。`--source` など、残りの引数は `pipeline.py` に渡る |
+| `verify_plan.py` | 条文・判例の確認を「まとめて呼ぶ」ための表（同じ条・判例を1件にまとめ、法令名つきで並べ、組に分ける）。ネットワークは使わない |
 | `score.py` | 機械の結果と点検者の採点から、総合点と判定を出す |
 | `report_numbers.py` | 報告に書く数値（字数、分量比、頁数、判例・条文・表・図の数、論点・短答・索引の数、下が空く頁）を、数え方つきで出す。報告の数値はこの出力を写す |
-| `run_checks.sh` | 基本の検査だけをまとめて走らせる簡易版（新しい検査は `pipeline.py`） |
+| `run_checks.sh` | 基本の検査だけをまとめて走らせる簡易版（独立な検査は背景で同時に。新しい検査は `pipeline.py`） |
 | `laba_blocks.py`／`laba_common.py` | 検査が共有する部品（層つきの読み込み、判例・条文の正規表現） |
 | `example_profile.json` | 文体の実測値の見本（数値だけ） |
 
@@ -55,7 +57,7 @@
 
 | 道具 | 何をするか |
 |---|---|
-| `figgen/cli.js` | 図の仕様（JSON）から SVG と 600dpi の PNG を作る。レンダラ17、用例43（`figgen/specs/`）。使い方は `figgen/README.md` |
+| `figgen/cli.js` | 図の仕様（JSON）から SVG と 600dpi の PNG を作る。レンダラ17、用例43（`figgen/specs/`）。使い方は `figgen/README.md`。`batch 仕様… --outdir DIR --png`（と `all`）は、何枚もを1回で作り、PNG は同時に N 枚（`--jobs`） |
 | `figgen/trace.py` | 図のラベル・数字・条文番号・言い切りが本文にあるかを照合する |
 | `fig_lint.py` | 図（SVG）の規則の検査（error 10・warn 10） |
 | `fig_build.js` | 手で書いた SVG を PNG にする |

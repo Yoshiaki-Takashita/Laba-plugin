@@ -53,3 +53,14 @@
 ## 6. コネクタが使えないとき
 
 ツールが無い、`upstream_error` が続く、`not_covered` だった、のどれかなら、従来の手順に戻る（`statute-verification.md` 2・4節、`case-verification.md` 2節）。コネクタの結果を推測で補わない。
+
+## 7. まとめて呼ぶ（速くするため）
+
+条文・判例・文献を1件ずつ呼んで待つと、件数だけ往復が増える。**結果に頼らない呼び出しは、同じ回に全部出す**。
+
+1. 先に `scripts/verify_plan.py --statute work/statute.json --inventory work/inventory.json` で、条文を法令名つきの表記で1件ずつ、判例を1件ずつ並べた表を作る（4の取り違えを防ぐため、法令名は省かない）。
+2. 1回目：条文ごとの `law_get_article`、判例ごとの `case_verify_citation`、文献ごとの `biblio_search` を、同じ回に全部。
+3. 2回目：1回目で `found` だった判例の `case_get`、理由を書く判例の `case_get_fulltext`（`find`）、「」で引く箇所の `case_quote_check`（`scope: "fulltext"`）を、同じ回に全部。
+4. 3回目：`no_match`・`multiple`・`upstream_error` だけ、入力を直して引き直す。
+
+コネクタは、同じ上流への呼び出しを自分で順番に処理する。まとめて出すと待つ時間は短くなるが、結果は1件ずつ呼んだときと同じ（各結果の `status`・`provenance` は、1件ずつ見る）。1回に出す数は20件前後を目安にし、`upstream_error` が増えたら半分にして引き直す。同時数の上限は不明。

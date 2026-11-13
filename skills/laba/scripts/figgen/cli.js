@@ -4,6 +4,8 @@
    node cli.js list                         型の一覧
    node cli.js spec.json [out.svg] [--png] [--density 600] [--width-mm 150] [--step N | --steps]
    node cli.js all specs/ outdir/ [--png]   フォルダの仕様を全部
+   node cli.js batch a.json b.json ... [--outdir DIR] [--png] [--jobs N]   指定した仕様を1回の呼び出しでまとめて（PNG は同時に N 枚まで。既定は CPU の数）
+   all・batch は、SVG を先に全部作ってから PNG を同時に作る。1枚ずつ呼んだときと出力（SVG・PNG・warn）は同じ。誤りのある仕様があっても残りは作り、終了コードは 1。
    node cli.js check spec.json              仕様の検証だけ（必須の項目・知らない項目・参照先のない id）
    仕様に誤りがあれば、図を作らずに理由を出して終了コード 1。warn は図を作ったうえで出す。
    PNG には sharp が要る（npm i sharp）。SVG だけなら依存なし。 */
@@ -99,26 +101,45 @@ async function toPng(svgPath, density, widthMm) {
   const info = await sharp(buf, { density: rd }).resize({ width: px }).flatten({ background: '#ffffff' }).withMetadata({ density: dpi }).png().toFile(out);
   return `${out} ${info.width}x${info.height}`;
 }
-async function one(specPath, outPath, a) {
+/* 仕様1本ぶんの SVG を作る（同期）。PNG は finish で、まとめて同時に作る。 */
+function prep(specPath, outPath, a) {
   let spec; try { spec = JSON.parse(fs.readFileSync(specPath, 'utf8')); } catch (e) { throw new Error(`${specPath} が JSON として読めない：${e.message}（かっこ・カンマ・引用符を確かめる）`); }
   const base = outPath || specPath.replace(/\.json$/, '.svg');
   const steps = a.includes('--steps') ? [...new Set((spec.edges || []).map(e => e.step).filter(s => s != null))].sort((x, y) => x - y) : [a.includes('--step') ? parseInt(a[a.indexOf('--step') + 1], 10) : null];
-  for (const st of steps) {
+  return steps.map(st => {
     const r = render(spec, { step: st }); const out = st != null && a.includes('--steps') ? base.replace(/\.svg$/, `_${st}.svg`) : base;
     fs.mkdirSync(path.dirname(path.resolve(out)), { recursive: true }); fs.writeFileSync(out, r.svg);
-    let msg = `${out}  [${spec.type}] 高さ ${Math.round(r.height)}`;
-    if (a.includes('--png')) { const p = await toPng(out, a.includes('--density') ? parseInt(a[a.indexOf('--density') + 1], 10) : 600, a.includes('--width-mm') ? parseFloat(a[a.indexOf('--width-mm') + 1]) : 150); if (p) msg += `  → ${p}`; }
-    console.log(msg); r.warn.forEach(w => console.log('  warn: ' + w));
-    if (spec.caption && !a.includes('--quiet')) console.log('  図題: ' + spec.caption);
-  }
+    return { out, spec, r };
+  });
+}
+/* PNG を同時に jobs 枚まで作り、結果は並べた順に出す（出力の並びは1枚ずつ作ったときと同じ） */
+async function finish(items, a, jobs) {
+  const png = a.includes('--png'), density = a.includes('--density') ? parseInt(a[a.indexOf('--density') + 1], 10) : 600, wmm = a.includes('--width-mm') ? parseFloat(a[a.indexOf('--width-mm') + 1]) : 150;
+  const res = new Array(items.length); let next = 0;
+  const worker = async () => { while (next < items.length) { const i = next++; res[i] = png ? await toPng(items[i].out, density, wmm) : null; } };
+  await Promise.all(Array.from({ length: Math.max(1, Math.min(jobs, items.length)) }, worker));
+  items.forEach((it, i) => {
+    let msg = `${it.out}  [${it.spec.type}] 高さ ${Math.round(it.r.height)}`; if (res[i]) msg += `  → ${res[i]}`;
+    console.log(msg); it.r.warn.forEach(w => console.log('  warn: ' + w));
+    if (it.spec.caption && !a.includes('--quiet')) console.log('  図題: ' + it.spec.caption);
+  });
+}
+const nJobs = a => a.includes('--jobs') ? Math.max(1, parseInt(a[a.indexOf('--jobs') + 1], 10) || 1) : Math.max(1, require('os').cpus().length);
+async function one(specPath, outPath, a) { await finish(prep(specPath, outPath, a), a, 1); }
+/* 複数の仕様をまとめて。誤りのある仕様は理由を出して飛ばし、残りは作る */
+async function many(list, a) {
+  const items = []; let bad = 0;
+  for (const [f, out] of list) { try { items.push(...prep(f, out, a)); } catch (e) { bad++; console.error(`error: ${f}: ${e.message}`); } }
+  await finish(items, a, nJobs(a)); if (bad) process.exit(1);
 }
 if (require.main === module) (async () => {
   const a = process.argv.slice(2);
   if (!a.length || a[0] === 'help' || a[0] === '--help') { console.log(fs.readFileSync(__filename, 'utf8').split('*/')[0].split('/*')[1]); return; }
   if (a[0] === 'list') { for (const k in TYPES) console.log(k.padEnd(11) + TYPES[k]); return; }
   if (a[0] === 'check') { let bad = 0; for (const f of a.slice(1)) { const v = validate(JSON.parse(fs.readFileSync(f, 'utf8'))); console.log(`${f}: error ${v.err.length} / warn ${v.warn.length}`); v.err.forEach(e => console.log('  error: ' + e)); v.warn.forEach(w => console.log('  warn: ' + w)); bad += v.err.length; } process.exit(bad ? 1 : 0); }
-  if (a[0] === 'all') { const dir = a[1], out = a[2] || a[1]; for (const f of fs.readdirSync(dir).filter(f => f.endsWith('.json')).sort()) await one(path.join(dir, f), path.join(out, f.replace(/\.json$/, '.svg')), a.slice(3)); return; }
-  const pos = a.filter((x, i) => !x.startsWith('--') && !(i > 0 && ['--density', '--step', '--width-mm'].includes(a[i - 1])));
+  const pos = a.filter((x, i) => !x.startsWith('--') && !(i > 0 && ['--density', '--step', '--width-mm', '--outdir', '--jobs'].includes(a[i - 1])));
+  if (a[0] === 'all') { const dir = a[1], out = a[2] && !a[2].startsWith('--') ? a[2] : a[1]; await many(fs.readdirSync(dir).filter(f => f.endsWith('.json')).sort().map(f => [path.join(dir, f), path.join(out, f.replace(/\.json$/, '.svg'))]), a.slice(3)); return; }
+  if (a[0] === 'batch') { const od = a.includes('--outdir') ? a[a.indexOf('--outdir') + 1] : null; await many(pos.slice(1).map(f => [f, od ? path.join(od, path.basename(f).replace(/\.json$/, '.svg')) : null]), a); return; }
   await one(pos[0], pos[1], a);
 })().catch(e => { console.error('error: ' + e.message); process.exit(1); });
 module.exports = { render, validate, TYPES, SCHEMA };

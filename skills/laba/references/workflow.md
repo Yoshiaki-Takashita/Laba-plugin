@@ -36,7 +36,7 @@
 
 ## ② 一覧化
 
-- すること：`scripts/inventory.py work/source.txt --out work/inventory.json --md work/inventory.md` を走らせ、出てきた一覧を目で補正する。機械は見出しとコラムを取りこぼす。
+- すること：`scripts/inventory.py work/source.txt --out work/inventory.json --md work/inventory.md` を走らせ（文体の測定 ③ も同じ回に走らせてよい。互いに独立）、出てきた一覧を目で補正する。機械は見出しとコラムを取りこぼす。
 - 一覧に入れるもの：全見出し（コラム・囲み記事を含む）、全判例（書誌）、全条文、全相互参照、全ての問い（「答えよ」「説明しなさい」「〜か」）、資料の図表。
 - あわせて書くもの：「文章だけでは分かりにくい点」を3つ以上（⑥⑦の置き場所になる）。資料の誤記と思われる箇所（⑫で報告する。本文で黙って直さない）。
 - 通過の条件：一覧を見れば、資料を開かなくても「何が書いてあるか」の骨組みが分かる。
@@ -59,7 +59,7 @@
 ## ⑤ 本文
 
 - `techniques.md` の技法で書く。教科書型は `style-imitation.md`、足した説明は `added-text-safety.md` を守る。
-- 判例は書く前に確認する（`case-verification.md`）。確認できないものは、資料に書かれた範囲にとどめる。
+- 判例は書く前に確認する（`case-verification.md`）。確認できないものは、資料に書かれた範囲にとどめる。確認は、条文・判例・文献を**まとめて呼ぶ**（`speed.md` 2、`scripts/verify_plan.py` で組に分ける）。
 - 問いには、すべて太字の「答え」を付ける。
 - 長い条文の列挙は表にする（号／場面／なぜ）。
 - 資料の範囲外は「範囲外補足」として1段落まで。
@@ -71,7 +71,7 @@
 
 ## ⑦ 図表
 
-- 難所ごとにメッセージを一文で書き、型を選ぶ（`figures.md`、`algorithms/figure-type.md`）。`scripts/figgen/specs/` の用例を写して中身を入れ替え、`figgen/cli.js` で作る。`fig_lint.py` で error 0、`figgen/trace.py` で本文と照合し、PNG を目で見る。エンジンにない形のときだけ `scripts/templates/` のひな形を手で直し、`fig_build.js` で PNG にする。
+- 難所ごとにメッセージを一文で書き、型を選ぶ（`figures.md`、`algorithms/figure-type.md`）。`scripts/figgen/specs/` の用例を写して中身を入れ替え、`figgen/cli.js` で作る。`fig_lint.py` で error 0、`figgen/trace.py` で本文と照合し、PNG を目で見る。図が何枚もあるときは `figgen/cli.js batch 仕様… --outdir DIR --png` で1回に作り、`fig_lint.py` と `trace.py` も全部の図を1回で渡す。エンジンにない形のときだけ `scripts/templates/` のひな形を手で直し、`fig_build.js` で PNG にする。
 - 図の照合表（図の要素→本文の根拠）を作業ファイルに書く。根拠のない要素は消す。
 - 表は、並べると分かるものだけ。判例は本文か表の一方にだけ書く。
 
@@ -82,7 +82,13 @@
 
 ## ⑨ 機械検査
 
-`scripts/build_docx.py` で docx と本文テキストを出し、`scripts/pipeline.py` を走らせる（`run_checks.sh` は基本の検査だけを回す簡易版）。
+`scripts/build_docx.py` で docx と本文テキストを出し、`scripts/pipeline.py` を走らせる（`run_checks.sh` は基本の検査だけを回す簡易版）。`pipeline.py` は互いに独立な検査を同時に走らせる（結果は順に走らせたときと同じ）。**`scripts/build_and_check.py` は、docx の作成・PDF 化・全部の検査を1回の呼び出しで回す**（PDF 化と検査が重なる）。
+
+```
+python3 scripts/build_and_check.py work/blocks.json --out work --source work/source.txt \
+    --figs 'work/figs/*.svg' --default-law 民事訴訟法 --cards work/cards.json --tf work/items.json
+```
+下の `pipeline.py` の例の引数は、`--note`・`--body`・`--blocks`・`--out`・`--pdf` を除いて、そのまま渡せる。
 
 ```
 python3 scripts/pipeline.py --note NOTE.txt --body BODY.txt --out work/checks --source work/source.txt \
@@ -119,11 +125,11 @@ python3 scripts/pipeline.py --note NOTE.txt --body BODY.txt --out work/checks --
 
 ## ⑩ 独立点検
 
-本文を書いていない点検者に、3種の点検をさせる（`verification.md`。指示文のひな形は `reviewer-prompts/`）。自分で照合しただけのものは「未実施」と書く。点検者の指摘のうち記憶に基づくものは、原典で確かめてから直す。
+本文を書いていない点検者に、3種の点検をさせる（`verification.md`。指示文のひな形は `reviewer-prompts/`）。点検の種類は互いに独立なので、**同時に頼む**（Cowork・Claude Code では、`agents/` の点検の担当を同じ回に立てる。`orchestration.md`）。チャットでは担当を立てられないので、`verification.md` 6 に従う。自分で照合しただけのものは「未実施」と書く。点検者の指摘のうち記憶に基づくものは、原典で確かめてから直す。
 
 ## ⑪ 採点
 
-点検者の採点（`reviewer.json`）と機械の結果を `scripts/score.py` に入れ、総合点と判定を出す（`scoring.md`）。次に何を直すかは `algorithms/next-fix.md`。「資料を上回る」が出るまで、指摘を直して⑨〜⑪を回す。回す回数の目安は2〜4回。その先、各指標を9.5まで上げたいときは、`scoring.md` 5 の表と `metrics/` の各ファイルの「9.5 に届く条件」を1項目ずつ満たす（機械の条件と、点検者の採点の両方が要る）。
+点検者の採点（`reviewer.json`）と機械の結果を `scripts/score.py` に入れ、総合点と判定を出す（`scoring.md`）。次に何を直すかは `algorithms/next-fix.md`。指摘を直して⑨〜⑪を回すのは**既定で最大2回**（`speed.md` 5。3回目は優先度1の所見が残るときだけ）。利用者が「資料を上回るまで」「9.5 まで」と求めたときに限り、判定が出るまで（目安は2〜4回）回し、さらに各指標を9.5まで上げたいときは、`scoring.md` 5 の表と `metrics/` の各ファイルの「9.5 に届く条件」を1項目ずつ満たす（機械の条件と、点検者の採点の両方が要る）。
 
 ## ⑫ 渡し方
 
