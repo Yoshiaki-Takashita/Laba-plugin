@@ -166,7 +166,8 @@ def c_heading(a):
     note = gn.load(a.file)
     title = str(note["note"].get("title", ""))
     rows = gn.content_of(note).get("rows") or []
-    if not a.html and not rows and "".join(t.split()) == "".join(title.split()):
+    blank = all(not (isinstance(b, dict) and (b.get("html") or b.get("type"))) for r in rows for b in (r if isinstance(r, list) else [r]))
+    if not a.html and blank and "".join(t.split()) == "".join(title.split()):
         out("省いた：題と同じ見出しは置かない（題は GNOTO とプレビューの一番上に出る）")
         return
     _add(a, [[gn.text_block(t, htype=a.level, html=a.html)]])

@@ -607,5 +607,22 @@ class Rules(unittest.TestCase):
                 self.assertEqual(f.read(4), b"\x89PNG")
 
 
+
+class TitleHeadingTest(unittest.TestCase):
+    def test_same_heading_as_title_is_skipped(self):
+        """題と同じ見出しを本文の先頭に置かない（題が 2 回出るのを防ぐ）。別の見出しは置く。"""
+        import subprocess, tempfile
+        cli = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "scripts", "gnoto.py")
+        with tempfile.TemporaryDirectory() as d:
+            p = os.path.join(d, "a.gnoto")
+            run_ = lambda *a: subprocess.run([sys.executable, cli] + list(a), capture_output=True, text=True)
+            self.assertEqual(run_("new", p, "--title", "題の試験", "--heading").returncode, 0)
+            r = run_("heading", p, "題の試験", "--level", "1")
+            self.assertIn("省いた", r.stdout)
+            self.assertEqual(run_("heading", p, "1 条文", "--level", "1").returncode, 0)
+            txt = run_("text", p).stdout
+            self.assertEqual(txt.count("題の試験"), 1)
+            self.assertIn("1 条文", txt)
+
 if __name__ == "__main__":
     unittest.main()
