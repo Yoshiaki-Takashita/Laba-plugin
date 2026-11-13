@@ -1,0 +1,48 @@
+{
+ "law": {
+  "law_id": "FICT0001",
+  "title": "架空取引法",
+  "law_num": "架空法第1号",
+  "abbrev": null
+ },
+ "revision": {
+  "law_revision_id": "FICT0001_20200401_000",
+  "enforcement_date": "2020-04-01",
+  "promulgate_date": "2019-04-01",
+  "is_current": true
+ },
+ "article_label": "第一条",
+ "caption": "（目的）",
+ "paragraphs": [
+  {
+   "num": 1,
+   "text": "この法律は、架空の取引の公正を図ることを目的とする。",
+   "items": [
+    {
+     "label": "一",
+     "text": "架空の事項その一"
+    },
+    {
+     "label": "二",
+     "text": "架空の事項その二"
+    }
+   ]
+  },
+  {
+   "num": 2,
+   "text": "前項の目的のため、必要な事項を定める。"
+  }
+ ],
+ "text": null,
+ "status": "found",
+ "provenance": {
+  "source": "e-Gov法令API v2（架空の見本）",
+  "source_urls": [
+   "https://example.invalid/law/FICT0001"
+  ],
+  "retrieved_at": "2026-11-13T05:30:00Z",
+  "from_cache": false,
+  "attribution": "出典：架空の見本データ（実在の法令ではない）"
+ },
+ "error": null
+}

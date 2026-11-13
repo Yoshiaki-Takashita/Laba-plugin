@@ -1,0 +1,21 @@
+{
+ "result": "exact",
+ "where": {
+  "part": "summary",
+  "page": null
+ },
+ "matched_text": "架空の裁判要旨。",
+ "nearest": null,
+ "normalizations_applied": [],
+ "status": "found",
+ "provenance": {
+  "source": "裁判所ウェブサイト 裁判例検索（架空の見本）",
+  "source_urls": [
+   "https://example.invalid/case/000000"
+  ],
+  "retrieved_at": "2026-11-13T05:31:00Z",
+  "from_cache": false,
+  "attribution": "出典：架空の見本データ（実在の判例ではない）"
+ },
+ "error": null
+}

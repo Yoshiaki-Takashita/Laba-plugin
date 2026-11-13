@@ -1,0 +1,106 @@
+【草案・所有者の確認が要ります】DRAFT FOR THE OWNER'S REVIEW
+これは法律の助言ではありません。公開の前に、所有者（必要なら弁護士）が内容を確かめて決めてください。
+This is not legal advice. The owner (and, if needed, a lawyer) must review and decide before publication.
+
+確認が要る点 / Open points for the owner:
+  1. 権利者の名前と年（下の [OWNER] [YEAR]）/ The licensor's name and year ([OWNER] [YEAR]).
+  2. 準拠法・裁判管轄 / Governing law and venue (left open).
+  3. Claude のプラグイン一覧が、オープンソース以外のライセンスの掲載を認めるか（不明）/
+     Whether the Claude plugin directory accepts a source-available, non-OSI licence (unknown).
+  4. 技術では複製を防げない（公開プラグインは中身が読める形で出す必要がある）。保護は、設計（法律の知識をクライアント側に持たない）とこの条件の二本立て。
+     Technical copy prevention is impossible for a public plugin (the source must be readable).
+     Protection rests on the design (no law logic on the client side) and on these terms.
+
+======================================================================
+GNOTO Lite ライセンス（日本語）
+======================================================================
+
+Copyright (c) [YEAR] [OWNER]
+
+このライセンスは、LABA プラグインのうち skills/gnoto-lite フォルダの中身（SKILL.md、scripts/、
+references/、tests/、この LICENSE。以下「本ソフトウェア」）にだけ適用されます。プラグインのそのほかの部分は、
+リポジトリ直下の LICENSE（MIT）に従います。
+
+1. 許される使い方
+   次の場合に限り、本ソフトウェアを無償で使い、読み、複製できます。
+   (a) Claude（claude.ai、Claude Code、Claude のアプリなど Anthropic が提供する環境。以下「Claude」）の中で、
+       LABA プラグインの一部として、Claude に本ソフトウェアを読ませ・実行させて使う場合。
+   (b) 変更せず、この LICENSE を付けたまま、LABA プラグインの一部として配布・再配布する場合
+       （プラグインの一覧への掲載を含む）。
+   (c) 試験・検査・セキュリティの確認のために、Claude の外で本ソフトウェアを読み、実行する場合
+       （ノートや法律モードの機能を第三者に提供しないものに限る）。
+
+2. 禁じられること
+   書面による所有者の許諾なしに、次のことをしてはいけません。
+   (a) 本ソフトウェアの全部または一部（ファイルの読み書き、プレビューの描画、検査、手順書 SKILL.md の
+       手順を含む）を取り出し、移植し、翻訳し、再実装し、再利用して、Claude の外で、ノート・スライド・
+       法律モード（条文・判例・引用の取り込み）の機能を提供すること。
+   (b) 他のアプリ・サービス・ライブラリ・拡張機能・スクリプト・他の AI エージェントの環境に組み込むこと。
+   (c) 本ソフトウェアの機能を、サービスとして第三者に提供すること。
+   (d) 著作権表示・この LICENSE・草案の注記を消すこと。
+
+3. あなたのノートと、取り込んだ資料
+   本ソフトウェアで作ったノートの内容（あなたが書いた文章・図）の権利は、あなたにあります。この LICENSE は、
+   あなたのノートの使い方を制限しません。.gnoto ファイルは、GNOTO アプリで開けます。
+   条文・判例・会議録・書誌などの資料は、それぞれの出典（e-Gov、裁判所、国会、NDL など）の利用条件と、
+   使っているコネクタの利用条件に従います。この LICENSE は、それらについての権利を与えるものではありません。
+   この LICENSE は、.gnoto というファイル形式そのものを所有すると主張するものではなく、本ソフトウェアという
+   著作物の使い方を定めるものです。
+
+4. 保証しないこと・責任
+   本ソフトウェアは「現状のまま」提供され、明示・黙示を問わず、いかなる保証もありません。出力は法律の助言では
+   ありません。条文・判例は、必ず出典で確かめてください。本ソフトウェアの使用から生じた損害について、
+   権利者は責任を負いません（法令で免責できない場合を除く）。
+
+5. 終了
+   この LICENSE に違反すると、許諾は自動的に終了します。終了したら、本ソフトウェアの複製を消してください。
+
+6. 位置づけ
+   これは、ソースが読めるが、オープンソース（OSI の定義）ではないライセンスです。
+
+======================================================================
+GNOTO Lite License (English)
+======================================================================
+
+Copyright (c) [YEAR] [OWNER]
+
+This licence applies only to the contents of the skills/gnoto-lite folder of the LABA plugin (SKILL.md,
+scripts/, references/, tests/ and this LICENSE; the "Software"). The rest of the plugin is licensed under the
+MIT licence in the LICENSE file at the repository root.
+
+1. Permitted use
+   You may use, read and copy the Software free of charge, only in these cases:
+   (a) Inside Claude (claude.ai, Claude Code, the Claude apps and other environments provided by Anthropic;
+       "Claude"), as part of the LABA plugin, by having Claude read and run the Software.
+   (b) Distributing or redistributing it unmodified, with this LICENSE, as part of the LABA plugin
+       (including listing in a plugin directory).
+   (c) Reading and running it outside Claude for testing, auditing or security review, provided you do not
+       offer note, slide or law-mode features to anyone else.
+
+2. Prohibited use
+   Without the owner's written permission, you must not:
+   (a) extract, port, translate, reimplement or reuse all or any part of the Software (including its file
+       reading and writing, preview rendering, validation, and the procedures in SKILL.md) to provide note,
+       slide or law-mode (statute, case-law and citation import) features outside Claude;
+   (b) embed it in any other app, service, library, extension, script or other AI-agent environment;
+   (c) offer the Software's functionality to third parties as a service;
+   (d) remove the copyright notice, this LICENSE or the draft notice.
+
+3. Your notes and imported materials
+   You own the content of the notes you create with the Software (your text and figures). This licence does not
+   restrict how you use your notes. A .gnoto file can be opened in the GNOTO app.
+   Statutes, court decisions, Diet records, bibliographic data and similar materials remain subject to the terms
+   of their sources (e-Gov, the courts, the Diet, NDL and others) and of the connector you use. This licence
+   grants no rights in them. This licence does not claim ownership of the .gnoto file format itself; it governs
+   the use of the Software as a copyrighted work.
+
+4. No warranty; liability
+   The Software is provided "as is" without warranty of any kind, express or implied. Its output is not legal
+   advice. Always verify statutes and decisions against the cited source. The licensor is not liable for any
+   damages arising from use of the Software, except where liability cannot be excluded by law.
+
+5. Termination
+   The licence ends automatically if you breach it. On termination, delete your copies of the Software.
+
+6. Status
+   This is a source-available licence. It is not an open-source licence as defined by the OSI.

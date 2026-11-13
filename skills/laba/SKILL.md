@@ -115,6 +115,7 @@ v5 の採点で「直すとよい」とされた任意の5点（索引、全体�
 | 「レジュメに合わせてスライドも」「発表資料を」 | 発表スライド（PowerPoint）。見出しをレジュメの番号と1対1に | `references/slides/README.md` |
 | 「このノートをスライドにして」「復習用に」「勉強会で説明したい」 | 講義ノートから起こす復習スライド（1制度10〜12枚） | `references/slides/07-from-note.md` |
 | 「このスライドを点検して」 | 体裁の検査（17項目）と採点表（10項目） | `references/slides/09-quality-rubric.md` |
+| 「GNOTO のノートにして」「GNOTO のスライドにして」（出力先が GNOTO） | 内容は上の手順で作り、.gnoto に書く（Word と併用も可）。ノーマルとスライドだけ | `skills/gnoto-lite/SKILL.md`（`${CLAUDE_PLUGIN_ROOT}` で指す） |
 | 「図にして」「関係図を描いて」 | 図だけ（仕様から生成し、検査と照合を通す） | `references/figures.md` |
 | 「採点して」「他の本と比べて」 | 16指標の採点（機械と点検者の分担を守る） | `references/scoring.md` |
 | 「今この場で教えて」「簡潔に」 | ファイルを作らず、チャットで「ざっくり理解」の形で答える | `references/zakkuri.md` 7 |

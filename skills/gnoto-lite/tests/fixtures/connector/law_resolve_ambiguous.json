@@ -1,0 +1,32 @@
+{
+ "citations": [
+  {
+   "raw": "1条",
+   "confidence": "ambiguous",
+   "candidates": [
+    {
+     "law_id": "FICT0001",
+     "title": "架空取引法"
+    },
+    {
+     "law_id": "FICT0002",
+     "title": "架空手続法"
+    }
+   ],
+   "notes": [
+    "法令名が無い"
+   ]
+  }
+ ],
+ "status": "multiple",
+ "provenance": {
+  "source": "e-Gov法令API v2（架空の見本）",
+  "source_urls": [
+   "https://example.invalid/law/FICT0001"
+  ],
+  "retrieved_at": "2026-11-13T05:30:00Z",
+  "from_cache": false,
+  "attribution": "出典：架空の見本データ（実在の法令ではない）"
+ },
+ "error": null
+}

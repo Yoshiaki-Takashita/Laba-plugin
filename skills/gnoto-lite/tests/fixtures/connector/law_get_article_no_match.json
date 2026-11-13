@@ -1,0 +1,21 @@
+{
+ "law": null,
+ "revision": null,
+ "article_label": null,
+ "caption": null,
+ "paragraphs": [],
+ "text": null,
+ "status": "no_match",
+ "provenance": {
+  "source": "e-Gov法令API v2（架空の見本）",
+  "source_urls": [
+   "https://example.invalid/law/FICT0001"
+  ],
+  "retrieved_at": "2026-11-13T05:30:00Z",
+  "from_cache": false,
+  "attribution": "出典：架空の見本データ（実在の法令ではない）"
+ },
+ "error": {
+  "message": "該当する条が無い"
+ }
+}
