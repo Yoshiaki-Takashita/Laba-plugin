@@ -2,7 +2,7 @@
 """deck_lint.py の回帰試験：独立の採点で使った「悪い例」32件。
 tests/fixtures の2枚（復習用の見本の1枚、判例研究の見本の1枚。前に表紙と目次を残してある）を python-pptx で1か所ずつ壊し、
 検査が狙いの指摘（target の code）を出すかを調べる。目標は 9 割以上の検出、うち error での検出を優先。
-usage: python3 tests/bad_cases.py [名前 ...] [--out DIR]   （LibreOffice・poppler が要る。1件 10〜20 秒）
+usage: python3 tests/bad_cases.py [名前 ...] [--out DIR]   （LibreOffice・poppler が要る。1件 10〜20 秒。見本の .pptx は先に tests/make_fixtures.py で作る）
 終了コード：検出が 9 割に届かなければ 1。"""
 import sys, os, copy, json, subprocess, re
 from pptx import Presentation
@@ -14,6 +14,8 @@ W = os.path.dirname(os.path.abspath(__file__)); FX = os.path.join(W, 'fixtures')
 BASE = os.path.join(FX, 'bad_base_note.pptx')
 BASE_T = os.path.join(FX, 'bad_base_hanrei.pptx')
 IMG = os.path.join(FX, 'bad_diagram.png')  # 相関図を画像にしたもの
+if not (os.path.exists(BASE) and os.path.exists(BASE_T)):
+    sys.exit('見本の .pptx がありません。先に python3 tests/make_fixtures.py を実行してください（配布物には .pptx を入れていません）。')
 LINT = os.path.join(os.path.dirname(W), 'deck_lint.py')
 SI = 3  # 改変する枚（1枚目は表紙、2枚目は目次）
 OUT = sys.argv[sys.argv.index('--out') + 1] if '--out' in sys.argv else None

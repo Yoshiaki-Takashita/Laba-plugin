@@ -19,12 +19,18 @@
 
 本体の SKILL.md の「スコアボード」を参照（独立採点・機械測定・自己採点を分けて記載）。
 
+## 入れ方
+
+- **claude.ai・デスクトップアプリ**：公式の一覧に載ったあとは、「Customize」→「Plugins」→「Discover」で laba を探して追加する。載る前は、このリポジトリを zip にして「Customize」→「Plugins」→「Add」→「Upload plugin」から入れる。
+- **Claude Code**：公式の一覧に載ったあとは `/plugin directory` から入れる。手元で試すときは `claude --plugin-dir <このフォルダ>`。
+- 条文・判例をツールで確かめたいときは、コネクタを別に登録する（CONNECTORS.md）。登録しなくても動く。
+
 ## 必要なもの
 
-- Python 3（python-docx、python-pptx）
-- Node.js（sharp、pptxgenjs を `npm install -g`）
-- 日本語の書体（無い環境では Noto Sans CJK などを入れる）
-- gnoto-lite だけを使うなら Python 3 の標準ライブラリで足りる（Word に出すときだけ python-docx。PNG のサムネイルは Chromium 系のブラウザがあるときだけ）
+- **Python 3 と Node.js**：Claude Code で自分のパソコンで使うときは、先に入れておく。claude.ai やデスクトップアプリでは、ふつうは Claude の作業用の環境に入っている（無ければ Claude が知らせる）。
+- **python-docx・python-pptx・pptxgenjs・sharp**：足りなければ、Claude が作業の途中で入れる（Claude Code では、入れてよいか聞かれたら許可する）。前もって入れておくなら `pip install python-docx python-pptx`、`npm install -g pptxgenjs sharp`。sharp が無くても図は SVG で出る（PNG にできないだけ）。
+- **日本語の書体**：無い環境では、Noto Sans CJK などを入れる。
+- gnoto-lite だけを使うなら、Python 3 の標準ライブラリで足りる（Word に出すときだけ python-docx。PNG のサムネイルは Chromium 系のブラウザがあるときだけ）。
 
 ## GNOTO Lite（gnoto-lite）の使い方
 
@@ -65,12 +71,18 @@ The four entry skills (laba-hanrei, laba-slides, laba-figures and laba-score) on
 
 See the scoreboard in the main skill's SKILL.md. It keeps three kinds of figures apart: scores given by an independent grader who did not write the note, figures measured by the bundled check scripts, and self-assessment by the author (which is not reported as a result).
 
+## Installation
+
+- **claude.ai and the desktop app**: once the plugin is listed in the directory, find laba under Customize, then Plugins, then Discover, and add it. Before it is listed, zip this repository and add it under Customize, then Plugins, then Add, then Upload plugin.
+- **Claude Code**: once listed, install it from `/plugin directory`. To try it locally, run `claude --plugin-dir <this folder>`.
+- To check statutes and court decisions with tools, register a connector separately (see CONNECTORS.md). The plugin also works without one.
+
 ## Requirements
 
-- Python 3 with python-docx and python-pptx
-- Node.js with sharp and pptxgenjs (installed with `npm install -g`)
-- A Japanese font (for example, Noto Sans CJK if none is installed)
-- gnoto-lite alone needs only the Python 3 standard library (python-docx only for Word export; a Chromium-based browser only for PNG thumbnails)
+- **Python 3 and Node.js**: install them first if you use Claude Code on your own computer. On claude.ai and in the desktop app, Claude's sandbox normally has them (Claude tells you if not).
+- **python-docx, python-pptx, pptxgenjs and sharp**: if any are missing, Claude installs them during the task (in Claude Code, allow it when asked). To install them in advance, run `pip install python-docx python-pptx` and `npm install -g pptxgenjs sharp`. Without sharp, diagrams are still produced as SVG; only the PNG conversion is skipped.
+- **A Japanese font**: install one, for example Noto Sans CJK, if none is available.
+- gnoto-lite alone needs only the Python 3 standard library (python-docx only for Word export; a Chromium-based browser only for PNG thumbnails).
 
 ## What the plugin runs and accesses
 
