@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 351" font-family="Noto Sans CJK JP, Noto Sans JP, sans-serif">
+<desc>訴えを起こすと時効の完成が猶予され、判決が確定すると時効は更新されて新たに進行を始める。</desc>
+<defs><marker id="ah-k" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="12" refX="12.5" refY="6" orient="auto-start-reverse"><path d="M1,1 L13,6 L1,11" fill="none" stroke="#1A1A1A" stroke-width="1.3"/></marker><marker id="ah-a" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="12" refX="12.5" refY="6" orient="auto-start-reverse"><path d="M1,1 L13,6 L1,11" fill="none" stroke="#943522" stroke-width="1.3"/></marker><marker id="ah-g" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="12" refX="12.5" refY="6" orient="auto-start-reverse"><path d="M1,1 L13,6 L1,11" fill="none" stroke="#8C9493" stroke-width="1.3"/></marker></defs>
+<rect x="0" y="0" width="1040" height="351" fill="#FFFFFF" stroke="none"/>
+<text x="223.4" y="48.1" font-size="21" text-anchor="middle" style="text-anchor:middle" fill="#1A1A1A">弁済期</text>
+<line x1="223.4" y1="61" x2="223.4" y2="81" fill="none" stroke="#1A1A1A" stroke-width="0.9"/>
+<text x="223.4" y="107.1" font-size="21" text-anchor="middle" style="text-anchor:middle" fill="#1A1A1A"><tspan x="223.4" dy="0">権利を行使で</tspan><tspan x="223.4" dy="29">きるようになる</tspan></text>
+<text x="466.1" y="48.1" font-size="21" text-anchor="middle" style="text-anchor:middle" fill="#1A1A1A">訴えの提起</text>
+<line x1="466.1" y1="61" x2="466.1" y2="81" fill="none" stroke="#943522" stroke-width="2.5"/>
+<text x="466.1" y="107.1" font-size="21" text-anchor="middle" style="text-anchor:middle" fill="#1A1A1A">裁判上の請求</text>
+<text x="708.8" y="48.1" font-size="21" text-anchor="middle" style="text-anchor:middle" fill="#1A1A1A">判決の確定</text>
+<line x1="708.8" y1="61" x2="708.8" y2="81" fill="none" stroke="#1A1A1A" stroke-width="0.9"/>
+<text x="708.8" y="107.1" font-size="21" text-anchor="middle" style="text-anchor:middle" fill="#1A1A1A">権利が確定する</text>
+<line x1="102" y1="71" x2="1000" y2="71" fill="none" stroke="#1A1A1A" stroke-width="0.9" marker-end="url(#ah-k)"/>
+<text x="61" y="209.7" font-size="21" text-anchor="middle" style="text-anchor:middle" fill="#1A1A1A">時効</text>
+<line x1="226.4" y1="227" x2="463.1" y2="227" fill="none" stroke="#1A1A1A" stroke-width="2.5"/>
+<line x1="226.4" y1="219" x2="226.4" y2="235" fill="none" stroke="#1A1A1A" stroke-width="2.5"/>
+<line x1="463.1" y1="219" x2="463.1" y2="235" fill="none" stroke="#1A1A1A" stroke-width="2.5"/>
+<text x="344.7" y="212" font-size="21" text-anchor="middle" style="text-anchor:middle" fill="#1A1A1A">進行する</text>
+<line x1="469.1" y1="227" x2="705.8" y2="227" fill="none" stroke="#943522" stroke-width="2.5"/>
+<line x1="469.1" y1="219" x2="469.1" y2="235" fill="none" stroke="#943522" stroke-width="2.5"/>
+<line x1="705.8" y1="219" x2="705.8" y2="235" fill="none" stroke="#943522" stroke-width="2.5"/>
+<text x="587.4" y="183" font-size="21" text-anchor="middle" style="text-anchor:middle" fill="#1A1A1A"><tspan x="587.4" dy="0">完成が猶予される</tspan><tspan x="587.4" dy="29">（147条1項）</tspan></text>
+<line x1="711.8" y1="227" x2="997" y2="227" fill="none" stroke="#1A1A1A" stroke-width="2.5"/>
+<line x1="711.8" y1="219" x2="711.8" y2="235" fill="none" stroke="#1A1A1A" stroke-width="2.5"/>
+<text x="854.4" y="183" font-size="21" text-anchor="middle" style="text-anchor:middle" fill="#1A1A1A"><tspan x="854.4" dy="0">更新：新たに進行を</tspan><tspan x="854.4" dy="29">始める（147条2項）</tspan></text>
+<line x1="30" y1="257" x2="1010" y2="257" fill="none" stroke="#8C9493" stroke-width="0.9"/>
+<text x="30" y="287" font-size="21" text-anchor="start" fill="#1A1A1A"><tspan x="30" dy="0">訴えの却下や取下げで手続が終わったときは更新されず、</tspan><tspan x="30" dy="29">終了の時から6か月を経過するまで完成が猶予されるにとどまる（147条1項かっこ書）。</tspan></text>
+</svg>

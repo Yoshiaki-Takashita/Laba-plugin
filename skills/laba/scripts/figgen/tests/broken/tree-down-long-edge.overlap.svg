@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 423" font-family="Noto Sans CJK JP, Noto Sans JP, sans-serif">
+<desc>三層の木。</desc>
+<defs><marker id="ah-k" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="12" refX="12.5" refY="6" orient="auto-start-reverse"><path d="M1,1 L13,6 L1,11" fill="none" stroke="#1A1A1A" stroke-width="1.3"/></marker><marker id="ah-a" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="12" refX="12.5" refY="6" orient="auto-start-reverse"><path d="M1,1 L13,6 L1,11" fill="none" stroke="#943522" stroke-width="1.3"/></marker><marker id="ah-g" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="12" refX="12.5" refY="6" orient="auto-start-reverse"><path d="M1,1 L13,6 L1,11" fill="none" stroke="#8C9493" stroke-width="1.3"/></marker></defs>
+<rect x="0" y="0" width="1040" height="423" fill="#FFFFFF" stroke="none"/>
+<rect x="407.3" y="30" width="225.5" height="51" fill="#FFFFFF" stroke="#1A1A1A" stroke-width="0.9"/>
+<text x="520" y="61.8" font-size="21" text-anchor="middle" style="text-anchor:middle" fill="#1A1A1A" font-weight="700">公開会社か</text>
+<rect x="155.8" y="155" width="225.5" height="51" fill="#FFFFFF" stroke="#1A1A1A" stroke-width="0.9"/>
+<text x="268.5" y="186.8" font-size="21" text-anchor="middle" style="text-anchor:middle" fill="#1A1A1A" font-weight="700">大会社か</text>
+<rect x="30" y="280" width="225.5" height="112.5" fill="#FFFFFF" stroke="#943522" stroke-width="2.5"/>
+<text x="142.8" y="311.8" font-size="21" text-anchor="middle" style="text-anchor:middle" fill="#1A1A1A"><tspan x="142.8" dy="0">監査役会と</tspan><tspan x="142.8" dy="29">会計監査人を置く</tspan></text>
+<text x="142.8" y="373.3" font-size="21" text-anchor="middle" style="text-anchor:middle" fill="#1A1A1A">328条1項</text>
+<rect x="281.5" y="280" width="225.5" height="112.5" fill="#FFFFFF" stroke="#1A1A1A" stroke-width="0.9"/>
+<text x="394.3" y="326.3" font-size="21" text-anchor="middle" style="text-anchor:middle" fill="#1A1A1A">監査役を置く</text>
+<text x="394.3" y="358.8" font-size="21" text-anchor="middle" style="text-anchor:middle" fill="#1A1A1A">327条2項</text>
+<rect x="658.8" y="155" width="225.5" height="51" fill="#FFFFFF" stroke="#1A1A1A" stroke-width="0.9"/>
+<text x="771.5" y="186.8" font-size="21" text-anchor="middle" style="text-anchor:middle" fill="#1A1A1A" font-weight="700">取締役会を置くか</text>
+<rect x="533" y="280" width="225.5" height="112.5" fill="#FFFFFF" stroke="#1A1A1A" stroke-width="0.9"/>
+<text x="645.8" y="311.8" font-size="21" text-anchor="middle" style="text-anchor:middle" fill="#1A1A1A"><tspan x="645.8" dy="0">監査役か</tspan><tspan x="645.8" dy="29">会計参与を置く</tspan></text>
+<text x="645.8" y="373.3" font-size="21" text-anchor="middle" style="text-anchor:middle" fill="#1A1A1A">327条2項</text>
+<rect x="784.5" y="280" width="225.5" height="112.5" fill="#FFFFFF" stroke="#1A1A1A" stroke-width="0.9"/>
+<text x="897.3" y="326.3" font-size="21" text-anchor="middle" style="text-anchor:middle" fill="#1A1A1A">監査役は任意</text>
+<text x="897.3" y="358.8" font-size="21" text-anchor="middle" style="text-anchor:middle" fill="#1A1A1A">326条2項</text>
+<polyline points="520,81 520,103 268.5,103 268.5,149" fill="none" stroke="#1A1A1A" stroke-width="0.9" marker-end="url(#ah-k)"/>
+<polyline points="268.5,206 268.5,228 142.8,228 142.8,274" fill="none" stroke="#1A1A1A" stroke-width="0.9" marker-end="url(#ah-k)"/>
+<polyline points="268.5,206 268.5,228 394.3,228 394.3,274" fill="none" stroke="#1A1A1A" stroke-width="0.9" marker-end="url(#ah-k)"/>
+<polyline points="520,81 520,103 771.5,103 771.5,149" fill="none" stroke="#1A1A1A" stroke-width="0.9" marker-end="url(#ah-k)"/>
+<polyline points="771.5,206 771.5,228 645.8,228 645.8,274" fill="none" stroke="#1A1A1A" stroke-width="0.9" marker-end="url(#ah-k)"/>
+<polyline points="771.5,206 771.5,228 897.3,228 897.3,274" fill="none" stroke="#1A1A1A" stroke-width="0.9" marker-end="url(#ah-k)"/>
+<text x="277.5" y="135" font-size="21" text-anchor="start" fill="#1A1A1A">公開会社</text>
+<text x="151.8" y="260" font-size="21" text-anchor="start" fill="#1A1A1A">大会社</text>
+<text x="403.3" y="260" font-size="21" text-anchor="start" fill="#1A1A1A"><tspan x="403.3" dy="0">大会社で</tspan><tspan x="403.3" dy="29">ない</tspan></text>
+<text x="780.5" y="135" font-size="21" text-anchor="start" fill="#1A1A1A"><tspan x="780.5" dy="0">公開会社</tspan><tspan x="780.5" dy="29">でない</tspan></text>
+<text x="654.8" y="260" font-size="21" text-anchor="start" fill="#1A1A1A">置く</text>
+<text x="906.3" y="260" font-size="21" text-anchor="start" fill="#1A1A1A">置かない</text>
+</svg>

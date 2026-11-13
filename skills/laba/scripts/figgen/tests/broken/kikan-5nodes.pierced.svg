@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 729" font-family="Noto Sans CJK JP, Noto Sans JP, sans-serif">
+<desc>取締役会と監査役・会計監査人を置く会社では、三者とも株主総会が選任し、監査役は取締役の職務の執行を、会計監査人は計算書類を監査する。</desc>
+<defs><marker id="ah-k" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="12" refX="12.5" refY="6" orient="auto-start-reverse"><path d="M1,1 L13,6 L1,11" fill="none" stroke="#1A1A1A" stroke-width="1.3"/></marker><marker id="ah-a" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="12" refX="12.5" refY="6" orient="auto-start-reverse"><path d="M1,1 L13,6 L1,11" fill="none" stroke="#943522" stroke-width="1.3"/></marker><marker id="ah-g" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="12" refX="12.5" refY="6" orient="auto-start-reverse"><path d="M1,1 L13,6 L1,11" fill="none" stroke="#8C9493" stroke-width="1.3"/></marker></defs>
+<rect x="0" y="0" width="1040" height="729" fill="#FFFFFF" stroke="none"/>
+<rect x="444.9" y="30" width="150.3" height="46.9" fill="#FFFFFF" stroke="#1A1A1A" stroke-width="0.9"/>
+<text x="520" y="59.8" font-size="21" text-anchor="middle" style="text-anchor:middle" fill="#1A1A1A" font-weight="700">株主総会</text>
+<rect x="118.2" y="193" width="150.3" height="137.4" fill="#FFFFFF" stroke="#1A1A1A" stroke-width="0.9"/>
+<text x="193.3" y="222.8" font-size="21" text-anchor="middle" style="text-anchor:middle" fill="#1A1A1A" font-weight="700">取締役会</text>
+<text x="193.3" y="255.3" font-size="21" text-anchor="middle" style="text-anchor:middle" fill="#1A1A1A"><tspan x="193.3" dy="0">すべての</tspan><tspan x="193.3" dy="29">取締役で</tspan><tspan x="193.3" dy="29">組織する</tspan></text>
+<rect x="444.9" y="238.3" width="150.3" height="46.9" fill="#FFFFFF" stroke="#1A1A1A" stroke-width="0.9"/>
+<text x="520" y="268" font-size="21" text-anchor="middle" style="text-anchor:middle" fill="#1A1A1A" font-weight="700">監査役</text>
+<rect x="771.5" y="193" width="150.3" height="137.4" fill="#FFFFFF" stroke="#1A1A1A" stroke-width="0.9"/>
+<text x="846.7" y="222.8" font-size="21" text-anchor="middle" style="text-anchor:middle" fill="#1A1A1A" font-weight="700">会計監査人</text>
+<text x="846.7" y="255.3" font-size="21" text-anchor="middle" style="text-anchor:middle" fill="#1A1A1A"><tspan x="846.7" dy="0">公認会</tspan><tspan x="846.7" dy="29">計士又は</tspan><tspan x="846.7" dy="29">監査法人</tspan></text>
+<rect x="118.2" y="446.5" width="150.3" height="137.4" fill="#FFFFFF" stroke="#1A1A1A" stroke-width="0.9"/>
+<text x="193.3" y="476.3" font-size="21" text-anchor="middle" style="text-anchor:middle" fill="#1A1A1A" font-weight="700">代表取締役</text>
+<text x="193.3" y="508.8" font-size="21" text-anchor="middle" style="text-anchor:middle" fill="#1A1A1A"><tspan x="193.3" dy="0">業務を執行</tspan><tspan x="193.3" dy="29">し会社を</tspan><tspan x="193.3" dy="29">代表する</tspan></text>
+<polyline points="520,76.9 520,261.7 274.5,261.7" fill="none" stroke="#1A1A1A" stroke-width="0.9" marker-end="url(#ah-k)"/>
+<line x1="520" y1="76.9" x2="520" y2="232.3" fill="none" stroke="#1A1A1A" stroke-width="0.9" marker-end="url(#ah-k)"/>
+<polyline points="520,76.9 520,261.7 765.5,261.7" fill="none" stroke="#1A1A1A" stroke-width="0.9" marker-end="url(#ah-k)"/>
+<line x1="193.3" y1="330.4" x2="193.3" y2="440.5" fill="none" stroke="#1A1A1A" stroke-width="0.9" marker-end="url(#ah-k)"/>
+<line x1="444.9" y1="261.7" x2="274.5" y2="261.7" fill="none" stroke="#943522" stroke-width="2.5" marker-end="url(#ah-a)"/>
+<polyline points="846.7,330.4 846.7,515.2 274.5,515.2" fill="none" stroke="#943522" stroke-width="2.5" marker-end="url(#ah-a)"/>
+<text x="343.2" y="223.7" font-size="21" text-anchor="middle" style="text-anchor:middle" fill="#1A1A1A"><tspan x="343.2" dy="0">取締役を選任</tspan><tspan x="343.2" dy="29">（329条1項）</tspan></text>
+<text x="529" y="160.9" font-size="21" text-anchor="start" fill="#1A1A1A">選任</text>
+<text x="642.8" y="252.7" font-size="21" text-anchor="middle" style="text-anchor:middle" fill="#1A1A1A">選任</text>
+<text x="202.3" y="377.3" font-size="21" text-anchor="start" fill="#1A1A1A"><tspan x="202.3" dy="0">選定・監督</tspan><tspan x="202.3" dy="29">（362条2項）</tspan></text>
+<text x="359.7" y="288.7" font-size="21" text-anchor="middle" style="text-anchor:middle" fill="#1A1A1A"><tspan x="359.7" dy="0">職務の</tspan><tspan x="359.7" dy="29">執行を監査</tspan><tspan x="359.7" dy="29">（381条1項）</tspan></text>
+<text x="560.6" y="477.2" font-size="21" text-anchor="middle" style="text-anchor:middle" fill="#1A1A1A"><tspan x="560.6" dy="0">計算書類を監査</tspan><tspan x="560.6" dy="29">（396条1項）</tspan></text>
+<line x1="30" y1="601.9" x2="1010" y2="601.9" fill="none" stroke="#8C9493" stroke-width="0.9"/>
+<text x="30" y="632" font-size="21" text-anchor="start" fill="#1A1A1A"><tspan x="30" dy="0">取締役会設置会社は、原則として監査役を置かなければならない（327条2項）。</tspan><tspan x="30" dy="29">会計監査人を置く会社も、監査役を置かなければならない（327条3項）。</tspan></text>
+<text x="30" y="694" font-size="21" text-anchor="start" fill="#1A1A1A">株主総会に提出する会計監査人の選任議案の内容は、監査役が決定する（344条1項）。</text>
+</svg>

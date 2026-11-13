@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 304" font-family="Noto Sans CJK JP, Noto Sans JP, sans-serif">
+<desc>法定地上権が成立すると、土地の価値のうち地上権に当たる部分は建物の側に移る。</desc>
+<defs><marker id="ah-k" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="12" refX="12.5" refY="6" orient="auto-start-reverse"><path d="M1,1 L13,6 L1,11" fill="none" stroke="#1A1A1A" stroke-width="1.3"/></marker><marker id="ah-a" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="12" refX="12.5" refY="6" orient="auto-start-reverse"><path d="M1,1 L13,6 L1,11" fill="none" stroke="#943522" stroke-width="1.3"/></marker><marker id="ah-g" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="12" refX="12.5" refY="6" orient="auto-start-reverse"><path d="M1,1 L13,6 L1,11" fill="none" stroke="#8C9493" stroke-width="1.3"/></marker></defs>
+<rect x="0" y="0" width="1040" height="304" fill="#FFFFFF" stroke="none"/>
+<text x="93" y="52.3" font-size="21" text-anchor="middle" style="text-anchor:middle" fill="#1A1A1A"><tspan x="93" dy="0">更地としての</tspan><tspan x="93" dy="29">土地の価値</tspan></text>
+<rect x="178" y="30" width="832" height="58" fill="none" stroke="#1A1A1A" stroke-width="0.9"/>
+<text x="594" y="66.8" font-size="21" text-anchor="middle" style="text-anchor:middle" fill="#1A1A1A">土地の価値の全部</text>
+<line x1="183" y1="102" x2="1005" y2="102" fill="none" stroke="#1A1A1A" stroke-width="0.9"/>
+<line x1="183" y1="96" x2="183" y2="102" fill="none" stroke="#1A1A1A" stroke-width="0.9"/>
+<line x1="1005" y1="96" x2="1005" y2="102" fill="none" stroke="#1A1A1A" stroke-width="0.9"/>
+<text x="594" y="130.1" font-size="21" text-anchor="middle" style="text-anchor:middle" fill="#1A1A1A">法定地上権が成立しない場合に土地の買受人が得る</text>
+<text x="93" y="191.3" font-size="21" text-anchor="middle" style="text-anchor:middle" fill="#1A1A1A"><tspan x="93" dy="0">法定地上権が</tspan><tspan x="93" dy="29">成立する場合</tspan></text>
+<rect x="178" y="169" width="332.8" height="58" fill="none" stroke="#1A1A1A" stroke-width="0.9"/>
+<text x="344.4" y="205.8" font-size="21" text-anchor="middle" style="text-anchor:middle" fill="#1A1A1A">地上権の負担が付いた土地の価値</text>
+<rect x="510.8" y="169" width="499.2" height="58" fill="none" stroke="#1A1A1A" stroke-width="0.9"/>
+<rect x="514.8" y="173" width="491.2" height="50" fill="none" stroke="#943522" stroke-width="2.5"/>
+<text x="760.4" y="205.8" font-size="21" text-anchor="middle" style="text-anchor:middle" fill="#1A1A1A">法定地上権の価値</text>
+<line x1="183" y1="241" x2="505.8" y2="241" fill="none" stroke="#1A1A1A" stroke-width="0.9"/>
+<line x1="183" y1="235" x2="183" y2="241" fill="none" stroke="#1A1A1A" stroke-width="0.9"/>
+<line x1="505.8" y1="235" x2="505.8" y2="241" fill="none" stroke="#1A1A1A" stroke-width="0.9"/>
+<text x="344.4" y="269.1" font-size="21" text-anchor="middle" style="text-anchor:middle" fill="#1A1A1A">土地の買受人</text>
+<line x1="515.8" y1="241" x2="1005" y2="241" fill="none" stroke="#943522" stroke-width="2.5"/>
+<line x1="515.8" y1="235" x2="515.8" y2="241" fill="none" stroke="#943522" stroke-width="2.5"/>
+<line x1="1005" y1="235" x2="1005" y2="241" fill="none" stroke="#943522" stroke-width="2.5"/>
+<text x="760.4" y="269.1" font-size="21" text-anchor="middle" style="text-anchor:middle" fill="#1A1A1A">建物所有者</text>
+</svg>

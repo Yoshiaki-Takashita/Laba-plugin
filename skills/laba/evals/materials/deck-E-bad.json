@@ -1,0 +1,11 @@
+{"meta":{"title":"点検の試験用（わざと体裁を崩したスライド）","theme":"teal","_comment":"build_deck.js --allow-warn で作り、deck_lint.py と目視で点検させるための構成。内容は scripts/slides/specs/hanrei_sample.json と同じ架空の事件。"},
+ "slides":[
+ {"type":"cover","kind":"判例研究","theme":"〜無断転貸と信頼関係の破壊〜","info":["（架空）最高裁判所　令和○年○月○日第一小法廷判決"]},
+ {"type":"toc","items":[{"title":"１．前提知識","sub":["1　無断転貸と解除"]},{"title":"２．事案","sub":["3　事実の概要"]}]},
+ {"type":"section","name":"１．前提知識"},
+ {"type":"points","heading":"1. 無断転貸と解除について、民法612条の定める規律とその趣旨を確認する","points":["{r:賃借人は、賃貸人の承諾を得なければ、賃借物を転貸することができない}","{r:これに違反して第三者に使用させたときは、賃貸人は契約を解除できる}","{r:賃貸借は人と人との信頼を土台にする契約である}"],"key":["解除できるのが原則","ただし例外がある"]},
+ {"type":"section","name":"２．事案"},
+ {"type":"relation","heading":"3. 事実の概要","diagram":{"actors":[{"id":"X","kind":"person","symbol":"X","role":"賃貸人","col":0,"row":0},{"id":"Y","kind":"person","symbol":"Y","role":"賃借人","col":1,"row":0},{"id":"Z","kind":"company","symbol":"Z","role":"Yが設立した会社","col":2,"row":0},{"id":"T","kind":"house","symbol":"","role":"本件建物","col":0,"row":1}],
+   "relations":[{"from":"X","to":"Y","label":"賃貸借","emphasis":true},{"from":"Y","to":"Z","label":"設立・店を移す","emphasis":true},{"from":"X","to":"T","label":"所有","emphasis":true},{"from":"Z","to":"T","label":"使用（承諾なし）","emphasis":true}]}},
+ {"type":"instance","heading":"5. 上告審","court":"（架空）最高裁判所第一小法廷","claim":{"title":"Xの上告理由","lines":["人格が別である以上、転貸に当たる"]},"judgment":{"title":"判断","lines":["実態に変わりがなければ、特段の事情が認められる","Xは平成30年4月1日に解除を通知した"]}}
+ ]}

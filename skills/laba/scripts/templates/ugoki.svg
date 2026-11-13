@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 321" font-family="Noto Sans CJK JP, Noto Sans JP, sans-serif">
+<desc>通常共同訴訟では、一人の主張は他の共同訴訟人に及ばないが、一人が出した証拠は全員の請求の判断に使われる。</desc>
+<defs><marker id="ah-k" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="12" refX="12.5" refY="6" orient="auto-start-reverse"><path d="M1,1 L13,6 L1,11" fill="none" stroke="#1A1A1A" stroke-width="1.3"/></marker><marker id="ah-a" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="12" refX="12.5" refY="6" orient="auto-start-reverse"><path d="M1,1 L13,6 L1,11" fill="none" stroke="#943522" stroke-width="1.3"/></marker><marker id="ah-g" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="12" refX="12.5" refY="6" orient="auto-start-reverse"><path d="M1,1 L13,6 L1,11" fill="none" stroke="#8C9493" stroke-width="1.3"/></marker></defs>
+<rect x="0" y="0" width="1040" height="321" fill="#FFFFFF" stroke="none"/>
+<rect x="30" y="30" width="210" height="208" fill="#FFFFFF" stroke="#1A1A1A" stroke-width="0.9"/>
+<text x="135" y="124" font-size="21" text-anchor="middle" style="text-anchor:middle" fill="#1A1A1A" font-weight="700">共同被告その一</text>
+<text x="135" y="156.6" font-size="21" text-anchor="middle" style="text-anchor:middle" fill="#1A1A1A">出席して争う</text>
+<rect x="800" y="30" width="210" height="208" fill="#FFFFFF" stroke="#1A1A1A" stroke-width="0.9"/>
+<text x="905" y="124" font-size="21" text-anchor="middle" style="text-anchor:middle" fill="#1A1A1A" font-weight="700">共同被告その二</text>
+<text x="905" y="156.6" font-size="21" text-anchor="middle" style="text-anchor:middle" fill="#1A1A1A">欠席</text>
+<text x="520" y="65.1" font-size="21" text-anchor="middle" style="text-anchor:middle" fill="#1A1A1A">主張（弁済の抗弁）</text>
+<line x1="240" y1="82" x2="587.2" y2="82" fill="none" stroke="#943522" stroke-width="2.5"/>
+<line x1="587.2" y1="71" x2="587.2" y2="93" fill="none" stroke="#943522" stroke-width="2.5"/>
+<text x="520" y="114.1" font-size="21" text-anchor="middle" style="text-anchor:middle" fill="#1A1A1A">共同訴訟人独立の原則（民訴法39条）</text>
+<text x="520" y="169.1" font-size="21" text-anchor="middle" style="text-anchor:middle" fill="#1A1A1A">証拠（弁済の領収書）</text>
+<line x1="240" y1="186" x2="794" y2="186" fill="none" stroke="#1A1A1A" stroke-width="0.9" marker-end="url(#ah-k)"/>
+<text x="520" y="218.1" font-size="21" text-anchor="middle" style="text-anchor:middle" fill="#1A1A1A">共同訴訟人間の証拠共通</text>
+<line x1="30" y1="256" x2="1010" y2="256" fill="none" stroke="#8C9493" stroke-width="0.9"/>
+<text x="30" y="286.1" font-size="21" text-anchor="start" fill="#1A1A1A">主張も及ぶとする見解（主張共通）があるが、判例は当然の補助参加を認めていない。</text>
+</svg>

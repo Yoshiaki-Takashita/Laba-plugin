@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 279" font-family="Noto Sans CJK JP, Noto Sans JP, sans-serif">
+<desc>四者の関係。</desc>
+<defs><marker id="ah-k" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="12" refX="12.5" refY="6" orient="auto-start-reverse"><path d="M1,1 L13,6 L1,11" fill="none" stroke="#1A1A1A" stroke-width="1.3"/></marker><marker id="ah-a" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="12" refX="12.5" refY="6" orient="auto-start-reverse"><path d="M1,1 L13,6 L1,11" fill="none" stroke="#943522" stroke-width="1.3"/></marker><marker id="ah-g" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="12" refX="12.5" refY="6" orient="auto-start-reverse"><path d="M1,1 L13,6 L1,11" fill="none" stroke="#8C9493" stroke-width="1.3"/></marker></defs>
+<rect x="0" y="0" width="1040" height="279" fill="#FFFFFF" stroke="none"/>
+<rect x="162.3" y="30" width="225.4" height="46.9" fill="#FFFFFF" stroke="#1A1A1A" stroke-width="0.9"/>
+<text x="275" y="59.8" font-size="21" text-anchor="middle" style="text-anchor:middle" fill="#1A1A1A" font-weight="700">債権者</text>
+<rect x="652.3" y="30" width="225.4" height="46.9" fill="#FFFFFF" stroke="#1A1A1A" stroke-width="0.9"/>
+<text x="765" y="59.8" font-size="21" text-anchor="middle" style="text-anchor:middle" fill="#1A1A1A" font-weight="700">債務者</text>
+<rect x="162.3" y="193" width="225.4" height="46.9" fill="#FFFFFF" stroke="#1A1A1A" stroke-width="0.9"/>
+<text x="275" y="222.8" font-size="21" text-anchor="middle" style="text-anchor:middle" fill="#1A1A1A" font-weight="700">保証人</text>
+<rect x="652.3" y="193" width="225.4" height="46.9" fill="#FFFFFF" stroke="#1A1A1A" stroke-width="0.9"/>
+<text x="765" y="222.8" font-size="21" text-anchor="middle" style="text-anchor:middle" fill="#1A1A1A" font-weight="700">第三取得者</text>
+<polyline points="275,76.9 275,216.5 646.3,216.5" fill="none" stroke="#943522" stroke-width="2.5" marker-end="url(#ah-a)"/>
+<polyline points="765,76.9 765,216.5 393.7,216.5" fill="none" stroke="#1A1A1A" stroke-width="0.9" marker-end="url(#ah-k)"/>
+<line x1="387.7" y1="53.5" x2="646.3" y2="53.5" fill="none" stroke="#1A1A1A" stroke-width="0.9" marker-end="url(#ah-k)"/>
+<line x1="387.7" y1="216.5" x2="646.3" y2="216.5" fill="none" stroke="#1A1A1A" stroke-width="0.9" marker-end="url(#ah-k)"/>
+<text x="460.7" y="207.5" font-size="21" text-anchor="middle" style="text-anchor:middle" fill="#1A1A1A">抵当権を実行</text>
+<text x="579.4" y="243.5" font-size="21" text-anchor="middle" style="text-anchor:middle" fill="#1A1A1A">保証を委託</text>
+<text x="517" y="44.5" font-size="21" text-anchor="middle" style="text-anchor:middle" fill="#1A1A1A">貸金の返還を請求</text>
+<text x="573.9" y="207.5" font-size="21" text-anchor="middle" style="text-anchor:middle" fill="#1A1A1A">代位</text>
+</svg>

@@ -1,0 +1,17 @@
+{
+ "_comment": "利用者ごとの値。既定はどれも空欄。空欄なら表紙に仮の文字（（所属・演習名）（報告者）（発表日））が入り、作成時に一覧が出る。この見本を config.json の名前で構成（JSON）と同じフォルダに置くか、~/.config/laba/hanrei.json に置く（references/hanrei/README.md の「利用者ごとの値」）。",
+ "_example": {
+  "year": "2026年度",
+  "affiliation": "○○大学法学部専門演習（○○ゼミ）",
+  "presenter": "（報告者の氏名）",
+  "date": "2026.10.○○",
+  "note": "条文番号は特に断りのない限り現行民法による。",
+  "chapter_break": true
+ },
+ "year": "",
+ "affiliation": "",
+ "presenter": "",
+ "date": "",
+ "note": "",
+ "chapter_break": true
+}

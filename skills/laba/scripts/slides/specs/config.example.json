@@ -1,0 +1,18 @@
+{
+ "_comment": "利用者ごとの値。既定はどれも空欄。空欄のままなら表紙に仮の文字（（報告者）（発表日））が入り、作成時に知らせる。この見本を config.json の名前で構成（JSON）と同じフォルダに置くか、~/.config/laba/slides.json に置く。keep は、途中で改行させたくない言い回し（その分野の決まった語）。",
+ "_example": {
+  "affiliation": "○○大学法学部専門演習　○○ゼミ",
+  "presenter": "（報告者の氏名）",
+  "date": "2026.10.○○",
+  "theme": "teal",
+  "keep": [
+   "表見代理",
+   "日常の家事"
+  ]
+ },
+ "affiliation": "",
+ "presenter": "",
+ "date": "",
+ "theme": "teal",
+ "keep": []
+}
