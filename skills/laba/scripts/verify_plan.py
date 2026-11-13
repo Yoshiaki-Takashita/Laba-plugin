@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """条文・判例の確認を「まとめて呼ぶ」ための計画表を作る。確認そのものはしない（ネットワークは使わない）。
-usage: verify_plan.py --statute statute.json [--inventory inventory.json] [--chunk 20] [--out plan.json] [--md plan.md]
+usage: verify_plan.py --statute statute.json [--inventory inventory.json] [--chunk 15] [--out plan.json] [--md plan.md]
   --statute   statute_check.py の出力（ノートが引く条文の一覧）。法令名が欠けている行は「法令名なし」として別に挙げる
   --inventory inventory.py の出力（資料に出る判例）。ノートにだけ出る判例は、ノートを inventory.py にかけたものを渡す
-  --chunk N   1回に同時に出す呼び出しの目安（既定 20）。これを超えたら次の組に分ける
+  --chunk N   1回に同時に出す呼び出しの上限（既定 15。判例は別に 5 件まで）。これを超えたら次の組に分ける（references/connector.md 7：1分30回の上限、裁判所への2秒の間隔と45秒の打ち切り）
 出力：同じ条・同じ判例を1件にまとめ、条文は「法令名つきの表記」（例：民法467条1項）で1件ずつ並べる。
       Claude は、組ごとに、中の呼び出しを同じ回で一緒に出す（条文の組と判例の組は同じ回に並べてよい）（references/connector.md 7）。
       条文の読みの結果は返り値の law_title で確かめる（法令名を省くと別の法令に読まれることがある）。"""
@@ -18,7 +18,8 @@ def chunks(xs, n):
 def main():
     if '--statute' not in sys.argv and '--inventory' not in sys.argv:
         print(__doc__); sys.exit(1)
-    n = max(1, int(arg('--chunk', 20)))
+    n = max(1, int(arg('--chunk', 15)))
+    nc = min(n, 5)   # 判例は裁判所のサイトへ2秒に1回しか取りに行かないので、1回に5件まで
     stat, noname = collections.OrderedDict(), []
     if arg('--statute'):
         for s in json.load(open(arg('--statute'), encoding='utf-8')).get('statutes', []):
@@ -34,13 +35,14 @@ def main():
     ca_items = [{'query': c['key'], 'cites': c['cites']} for c in cases]
     plan = {'statutes': st_items, 'cases': ca_items, 'statute_no_law_name': noname,
             'waves': [
-                {'turn': 1, 'do': '条文の第1組・判例の第1組・文献を同じ回に出す（組が複数なら、次の組も続けて同じように）', 'calls': ['law_get_article（条文ごと）', 'case_verify_citation（判例ごと）', 'biblio_search（文献ごと）']},
-                {'turn': 2, 'do': '1回目で found の判例について全部出す', 'calls': ['case_get（要旨・結果）', 'case_get_fulltext の find（理由を書く判例）', 'case_quote_check（「」で引く箇所）']},
+                {'turn': 1, 'do': f'条文の第1組・判例の第1組（合わせて{n}件まで）を同じ回に出す。文献は余った枠で。組が複数なら、次の回に次の組を同じように', 'calls': ['law_get_article（条文ごと）', 'case_verify_citation（判例ごと）', 'biblio_search（文献ごと）']},
+                {'turn': 2, 'do': f'1回目で found の判例について出す（どれも裁判所のサイトを使うので、1回に{nc}件まで。多いときは回を分ける）', 'calls': ['case_get（要旨・結果）', 'case_get_fulltext の find（理由を書く判例）', 'case_quote_check（「」で引く箇所）']},
                 {'turn': 3, 'do': '1・2回目で no_match・multiple・upstream_error だったものだけ、直して引き直す', 'calls': ['入力（日付・巻号頁・条番号・時点）を直した呼び出し']}],
-            'chunks': {'statutes': chunks([x['query'] for x in st_items], n), 'cases': chunks([x['query'] for x in ca_items], n)}}
+            'chunks': {'statutes': chunks([x['query'] for x in st_items], max(1, n - nc) if ca_items else n),   # 条文の組と判例の組を同じ回に並べても n 件を超えないように
+                       'cases': chunks([x['query'] for x in ca_items], nc)}}
     if arg('--out'):
         json.dump(plan, open(arg('--out'), 'w', encoding='utf-8'), ensure_ascii=False, indent=2)
-    md = ['# 確認の計画（まとめて呼ぶ）', '', f'条文 {len(st_items)} 件・判例 {len(ca_items)} 件。1回に同時に出す目安は {n} 件。', '']
+    md = ['# 確認の計画（まとめて呼ぶ）', '', f'条文 {len(st_items)} 件・判例 {len(ca_items)} 件。1回に同時に出すのは全部で {n} 件まで、うち判例は {nc} 件まで。', '']
     for k, title in (('statutes', '条文'), ('cases', '判例')):
         for i, c in enumerate(plan['chunks'][k], 1):
             md += [f'## {title} 第{i}組（{len(c)}件）'] + [f'- {q}' for q in c] + ['']

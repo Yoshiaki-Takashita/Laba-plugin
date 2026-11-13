@@ -23,11 +23,11 @@ claude.ai のチャットでは、全部の段階を順に回すと時間がか�
 
 - **条文・判例の確認をまとめて呼ぶ**：結果に頼らない呼び出しを、同じ回に全部出す（1件ずつ呼ばない）。
 - **スクリプトを一度に走らせる**：検査（`pipeline.py`）は互いに独立なものを同時に、図（`figgen/cli.js batch`）は何枚も1回で（PNG は同時に変換）、`build_and_check.py` は docx・PDF 化・検査を1回で。
-- **速さ優先**：主題が1つで資料が短い依頼（または「急ぎ」「ざっと」）は、段階を縮める。条文・判例の確認、「未確認」の表示、足した説明の規則、網羅の照合は省かない。
+- **速さ優先**：主題が1つで資料が短い依頼は、段階を縮める（「急ぎ」と言われても、重い依頼は縮めない）。条文・判例の確認、「未確認」の表示、足した説明の規則、網羅の照合は省かない。
 - **⑨〜⑪（検査→直し→採点）は既定で最大2回。**
 - **Cowork・Claude Code では担当（`agents/`）に分けて同時に進める**：確認、節の執筆、図、巻末、統一、点検（法的・足した文・文体・図）。チャットでは `agents/` は読み込まれない（公式の仕様）ので、同じ分担を1人で進める。
 
-測った値（自作の架空の資料。4コアの計算機）：検査20本が 0.87 秒から 0.27 秒、図45本（PNG つき）が 12.2 秒（1本ずつ呼ぶ）から 2.3 秒。Claude 側の往復の減り方（約110回から約25回）は見込みで、実測ではない。詳しくは speed.md の7。
+測った値（自作の架空の資料。4コアの計算機）：検査20本が 0.87 秒から 0.27 秒、図45本（PNG つき）が 12.2 秒（1本ずつ呼ぶ）から 2.3 秒。Claude 側の往復の減り方（約110回から約30回）は見込みで、実測ではない。詳しくは speed.md の7。
 
 ## 到達点
 
@@ -85,13 +85,13 @@ The four entry skills (laba-hanrei, laba-slides, laba-figures and laba-score) on
 
 Running every stage one after another in a claude.ai chat is slow. The plugin now shortens the waiting without weakening the accuracy safeguards (see skills/laba/references/speed.md, written in Japanese):
 
-- **Batched lookups.** Statute, decision and bibliography lookups that do not depend on each other are issued together in one turn instead of one by one.
+- **Batched lookups.** Statute, decision and bibliography lookups that do not depend on each other are issued together in one turn instead of one by one, within the connector limits (at most 15 calls per turn, at most 5 of them for court decisions; the connector allows 30 requests per minute).
 - **Concurrent scripts.** The check pipeline runs its independent checks at the same time; diagram generation and PNG conversion handle many figures in one call; one script builds the Word file, converts it to PDF and runs the checks in one call.
-- **Fast path.** For light requests (one topic, a short source, or when the user asks for speed) some stages are shortened. Statute and decision verification, the "unverified" marking, the rules for added text and the coverage check are never skipped.
+- **Fast path.** For light requests (one topic and a short source; a request for speed alone does not qualify) some stages are shortened. Statute and decision verification, the "unverified" marking, the rules for added text and the coverage check are never skipped.
 - **Capped revision loop.** The check, fix and score loop runs at most twice by default.
 - **Agents in Cowork and Claude Code.** The agents folder defines a verifier, section writers, a figure maker, a back-matter builder, a harmonizer and four independent reviewers. In claude.ai chat, plugin agents and hooks are not loaded (documented platform behaviour), so the same split is done by one assistant.
 
-Measured on a made-up sample on a 4-core machine: the 20 checks went from 0.87 s to 0.27 s, and 45 diagrams with PNG output from 12.2 s (one call per diagram) to 2.3 s. The reduction in assistant round trips (about 110 to about 25) is an estimate, not a measurement.
+Measured on a made-up sample on a 4-core machine: the 20 checks went from 0.87 s to 0.27 s, and 45 diagrams with PNG output from 12.2 s (one call per diagram) to 2.3 s. The reduction in assistant round trips (about 110 to about 30) is an estimate, not a measurement.
 
 ## Results so far
 

@@ -46,9 +46,9 @@ def run_jobs(jobs, workers, timing):
     workers = workers or min(8, os.cpu_count() or 2)
     def go(j):
         t0 = time.time()
-        if j.get('wait_file'):    # 別の工程が作っているファイルを待つ（できてから名前が付く前提。無ければ待たずに進む）
+        if j.get('wait_file'):    # 別の工程が作っているファイルを待つ（できてから名前が付く前提。「名前.failed」が出たら、失敗とみて待たずに進む）
             end = time.time() + j['wait_sec']
-            while not os.path.exists(j['wait_file']) and time.time() < end:
+            while not os.path.exists(j['wait_file']) and not os.path.exists(j['wait_file'] + '.failed') and time.time() < end:
                 time.sleep(0.2)
         j['rc'], j['out'] = j['fn']() if j['fn'] else run(j['name'], *j['args'])
         j['sec'] = time.time() - t0

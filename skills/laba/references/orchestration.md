@@ -9,12 +9,12 @@
 
 | 担当（`agents/`） | 段階 | 数 | 読む／書く |
 |---|---|---|---|
-| `verifier`（確認） | ②⑤の前 | 組ごとに1人（条文20件・判例8件前後ごと） | 書く：`work/verified/*.json` |
+| `verifier`（確認） | ②⑤の前 | 組ごとに1人。ただしコネクタの1分30回の上限は全員で共有なので、**同時に立てるのは1人**（組は順に回す。`connector.md` 7） | 書く：`work/verified/*.json` |
 | `section-writer`（節の執筆） | ⑤⑥⑧の設例 | 節ごとに1人 | 読む：資料・文体の指示・術語表・確認済み／書く：`work/sections/<節>.json` |
 | `figure-maker`（図） | ⑦ | 図ごとに1人 | 読む：節の本文／書く：`work/figures/` |
 | `backmatter-builder`（巻末） | ⑧ | 1人 | 読む：全節・確認済み／書く：`work/backmatter.json` など |
 | `harmonizer`（統一） | ⑤〜⑧のあと | 1人 | 全節・図・巻末→`work/blocks.json` |
-| `legal-reviewer`（法的点検） | ⑩ | 1人 | 読むだけ→`work/review/legal.md` |
+| `legal-reviewer`（法的点検） | ⑩ | 1人 | 読むだけ（返事を親が `work/review/legal.md` に保存） |
 | `added-text-reviewer`（足した文の点検） | ⑩ | 1人 | 同上 |
 | `style-reviewer`（文体の点検） | ⑩ | 1人（教科書型、または節を分けて書いたとき） | 同上 |
 | `figure-reviewer`（図の点検） | ⑩ | 1人（図が3枚以上） | 同上 |
@@ -28,7 +28,7 @@
 | 波 | 誰が | すること | 同時にしてよいこと |
 |---|---|---|---|
 | 0 | 親（1人） | ①取り込み、②一覧化（`inventory.py`）、③文体の測定（`style_profile.py`）、④構成。**`work/outline.json`・`style-guide.md`・`glossary.json` を作る**（4節）。`verify_plan.py` で確認の計画を作る | — |
-| 1 | `verifier` × 組の数 | 条文・判例を確かめる（組ごとに1人。担当の中でも「まとめて呼ぶ」） | 親は、確認が要らない節（判例を引かない節）の `section-writer` を先に立ててよい |
+| 1 | `verifier`（組ごとに1人ずつ順に） | 条文・判例を確かめる（担当の中で「まとめて呼ぶ」。1回15件・判例5件まで） | 親は、確認が要らない節（判例を引かない節）の `section-writer` を先に立ててよい |
 | 2 | `section-writer` × 節の数 | 節の本文（設例の論証・結論、ざっくり理解を含む） | 1人あたりの節は、資料の1〜3頁ぶんを目安に（長い節は分ける）。同時に立てる数は、最初は6人まで（上限は**不明**。失敗が出たら減らす） |
 | 3 | `figure-maker` × 図の数 ＋ `backmatter-builder` | 図と巻末。どちらも本文が先（本文を読んで作る） | 同時 |
 | 4 | `harmonizer`（1人） → 親 | 節・図・巻末を結合し、術語・体・参照・重複をそろえる。続けて親が `build_and_check.py`（⑨） | — |
@@ -50,7 +50,7 @@ work/
   backmatter.json cards.json items.json reasons.json index.json   波3（backmatter-builder）
   blocks.json  harmonize-log.md  harmonize-conflicts.md           波4（harmonizer）
   note.docx note.txt body.txt note.pdf checks/     波4（build_and_check.py）
-  review/legal.md added-text.md style.md figures.md               波5
+  review/legal.md added-text.md style.md figures.md               波5（点検の担当の返事を親が保存。点検の担当は書かない）
 ```
 
 **同じファイルに2人が書かない。** 担当は自分のファイルだけを書く（競合を避けるため）。

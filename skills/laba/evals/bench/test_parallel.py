@@ -64,6 +64,25 @@ class T(unittest.TestCase):
         for f in ('note.docx', 'note.txt', 'body.txt', 'checks/report.md', 'checks/score.json'):
             self.assertTrue(os.path.exists(os.path.join(o, f)), f)
 
+    def test_build_and_check_pdf_failure(self):
+        # PDF 化が失敗しても、頁数の検査は 300 秒待たずに進む。前の回の PDF は消してから作る（古い PDF の頁数を読まない）
+        import time
+        o, shim = os.path.join(self.d, 'bf'), os.path.join(self.d, 'shim')
+        os.makedirs(o, exist_ok=True); os.makedirs(shim, exist_ok=True)
+        with open(os.path.join(o, 'note.pdf'), 'w') as f:
+            f.write('%PDF-1.4 stale')
+        sp = os.path.join(shim, 'soffice')
+        with open(sp, 'w') as f:
+            f.write('#!/bin/sh\nexit 1\n')
+        os.chmod(sp, 0o755)
+        env = dict(os.environ, PATH=shim + os.pathsep + os.environ.get('PATH', ''))
+        t = time.time()
+        r = run([PY, os.path.join(SCR, 'build_and_check.py'), os.path.join(HERE, 'blocks.json'), '--out', o, '--source', os.path.join(HERE, 'source.txt'), '--default-law', '民法'], env=env, timeout=120)
+        self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+        self.assertLess(time.time() - t, 60)
+        self.assertFalse(os.path.exists(os.path.join(o, 'note.pdf')))
+        self.assertFalse(os.path.exists(os.path.join(o, 'note.pdf.failed')))
+
     def test_verify_plan(self):
         st = os.path.join(self.d, 'j1', 'statute.json')
         if not os.path.exists(st):

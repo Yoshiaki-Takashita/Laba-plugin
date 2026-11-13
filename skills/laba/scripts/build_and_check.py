@@ -50,15 +50,25 @@ def main():
     mark('docx')
     # PDF 化と検査を同時に。検査のうち頁数だけが PDF を待つ
     pdf_ok = [False]
+    failed = pdf + '.failed'    # PDF 化に失敗した印。頁数の検査は、これを見たら待つのをやめる
+    for f in (pdf, failed):     # 前の回の PDF が残っていると、頁数の検査が古い PDF を読んでしまうので、先に消す
+        if os.path.exists(f):
+            os.remove(f)
     def to_pdf():
         if nopdf or not shutil.which('soffice'):
             return
         tmp = os.path.join(out, 'pdf_tmp'); os.makedirs(tmp, exist_ok=True)
-        subprocess.run(['soffice', '--headless', '--convert-to', 'pdf', '--outdir', tmp, docx], capture_output=True, text=True, timeout=300)
-        made = os.path.join(tmp, 'note.pdf')
-        if os.path.exists(made):
-            os.replace(made, pdf); pdf_ok[0] = True      # できあがってから名前を付ける（検査はこの名前の出現を待つ）
-        shutil.rmtree(tmp, ignore_errors=True)
+        try:
+            subprocess.run(['soffice', '--headless', '--convert-to', 'pdf', '--outdir', tmp, docx], capture_output=True, text=True, timeout=300)
+            made = os.path.join(tmp, 'note.pdf')
+            if os.path.exists(made):
+                os.replace(made, pdf); pdf_ok[0] = True      # できあがってから名前を付ける（検査はこの名前の出現を待つ）
+        except Exception:
+            pass
+        finally:
+            if not pdf_ok[0]:
+                open(failed, 'w').close()
+            shutil.rmtree(tmp, ignore_errors=True)
     th = threading.Thread(target=to_pdf); th.start()
     use_pdf = not nopdf and shutil.which('soffice')
     cmd = [sys.executable, os.path.join(HERE, 'pipeline.py'), '--note', note, '--body', body, '--blocks', blocks, '--out', os.path.join(out, 'checks')] + a
@@ -68,6 +78,8 @@ def main():
     print((r.stdout + r.stderr).strip())
     mark('検査')
     th.join(); mark('PDF')
+    if os.path.exists(failed):
+        os.remove(failed)
     if use_pdf and not pdf_ok[0]:
         print('PDF にできなかった（頁数の検査は、頁数なしで走った）。LibreOffice を確かめる')
     print('所要（実時間）：' + '／'.join(f'{n} {t:.1f}s' for n, t in marks) + f'／全体 {time.time() - t0:.1f}s')

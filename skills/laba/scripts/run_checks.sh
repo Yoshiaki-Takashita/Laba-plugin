@@ -23,7 +23,7 @@ if [ -n "$SRC" ]; then
   g cert python3 "$HERE/certainty_check.py" "$SRC" "$NOTE" --out "$OUT/certainty.json"
   g dens python3 "$HERE/density.py" "$BODY" --source "$SRC" --out "$OUT/density.json"
 else
-  g style python3 "$HERE/style_check.py" "$BODY" --out "$OUT/style.json"
+  g style bash -c 'python3 "$0/style_check.py" "$1" --out "$2/style.json" | tail -n 8' "$HERE" "$BODY" "$OUT"
   g cover python3 "$HERE/cite_check.py" "$NOTE" --out "$OUT/cite.json"
   g dens python3 "$HERE/density.py" "$BODY" --out "$OUT/density.json"
 fi

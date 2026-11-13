@@ -13,8 +13,8 @@ disallowedTools: Edit
 `LABA/references/connector.md`（ツールの使い分け・status の読み方・引用の照合の注意）。コネクタが無い・`not_covered`・`upstream_error` が続くときは `statute-verification.md`・`case-verification.md` の手作業。
 
 ## 進め方（回数を減らす）
-1. **1回目**：自分の組の全部について、独立した呼び出しを**同じ回に一緒に**出す。条文は `law_get_article`（1件ずつ、**法令名つき**で。法令名を省くと別の法令に読まれる）、判例は `case_verify_citation`、文献は `biblio_search`。同じ上流への呼び出しはコネクタが順番に処理するので、まとめて出してよい。1回に出す数は組の大きさのまま（親が20件前後に分けてある）。
-2. **2回目**：1回目で found だった判例について、`case_get`、理由を書く判例の `case_get_fulltext`（`find` で語の前後だけ）、「」で引く箇所の `case_quote_check`（`scope: "fulltext"`。`where.part` が `fulltext` かを見る）を、また同じ回にまとめて出す。
+1. **1回目**：自分の組の全部について、独立した呼び出しを**同じ回に一緒に**出す。条文は `law_get_article`（1件ずつ、**法令名つき**で。法令名を省くと別の法令に読まれる）、判例は `case_verify_citation`、文献は `biblio_search`。同じ上流への呼び出しはコネクタが順番に処理するので、まとめて出してよい。ただし**1回に全部で15件まで、うち判例（`case_*`）は5件まで**（`connector.md` 7。1分30回の上限と、裁判所への2秒の間隔・45秒の打ち切りのため）。超える分は次の回に出す。`upstream_error`（rate_limited・timeout）は1分待って半分にして引き直す。
+2. **2回目**：1回目で found だった判例について、`case_get`、理由を書く判例の `case_get_fulltext`（`find` で語の前後だけ）、「」で引く箇所の `case_quote_check`（`scope: "fulltext"`。`where.part` が `fulltext` かを見る）を、また同じ回にまとめて出す（どれも裁判所のサイトを使うので、1回に5件まで。多いときは回を分ける）。
 3. **3回目**：`no_match`・`multiple`・`upstream_error` だけ、入力（日付・巻号頁・条番号・時点）を直して引き直す。「存在しない」とは書かない。なお取れないものは `未確認`。
 4. 返り値の `law_title` と条番号を目で見る。取り違えがあれば直して引き直す。
 
