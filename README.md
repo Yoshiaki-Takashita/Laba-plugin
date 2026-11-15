@@ -38,6 +38,10 @@ claude.ai のチャットでは、全部の段階を順に回すと時間がか�
 
 - **claude.ai・デスクトップアプリ**：公式の一覧に載ったあとは、「Customize」→「Plugins」→「Discover」で laba を探して追加する。載る前は、このリポジトリを zip にして「Customize」→「Plugins」→「Add」→「Upload plugin」から入れる。
 - **Claude Code**：公式の一覧に載ったあとは `/plugin directory` から入れる。手元で試すときは `claude --plugin-dir <このフォルダ>`。
+- **フル版（スクリプトつき）を GitHub から入れる**（公式ドキュメント：https://code.claude.com/docs/en/plugins/create-marketplace 、claude.ai・Cowork は https://claude.com/docs/plugins/overview ）：
+  - Claude Code：`/plugin marketplace add Yoshiaki-Takashita/Laba-plugin@release` → `/plugin install laba@laba-marketplace`（シェルでは `claude plugin marketplace add …`・`claude plugin install …`）。`release` は、試験を外した配布版の枝。`main`（開発用）を指定すると試験・試験の資料も入る。
+  - claude.ai・デスクトップアプリ・Cowork：「Customize」→「Plugins」→「Add」→「Add marketplace」に `Yoshiaki-Takashita/Laba-plugin` を入れる、または `bash tools/build-dist.sh out.zip` で作った zip を「Add」→「Upload plugin」から入れる。ブランチの指定が通るかは不明。
+- **公式版（手順書のみ）**：Anthropic のディレクトリには、スクリプトを含まない版（`directory` ブランチ。`bash tools/build-dist.sh --directory [out.zip]` で作る）を出す。内容は同じ手順書で、Word・スライド・図・GNOTO のノートは Claude がその場でコードを書いて作り、機械の検査は確認表で代える。違いは `directory` ブランチの README.md に書いてある。公式版とフル版は同じ名前（laba）なので、両方は入れない。
 - 条文・判例をツールで確かめたいときは、コネクタを別に登録する（CONNECTORS.md）。登録しなくても動く。
 
 ## 必要なもの
@@ -115,6 +119,10 @@ See the scoreboard in the main skill's SKILL.md. It keeps three kinds of figures
 
 - **claude.ai and the desktop app**: once the plugin is listed in the directory, find laba under Customize, then Plugins, then Discover, and add it. Before it is listed, zip this repository and add it under Customize, then Plugins, then Add, then Upload plugin.
 - **Claude Code**: once listed, install it from `/plugin directory`. To try it locally, run `claude --plugin-dir <this folder>`.
+- **Full edition (with scripts) from GitHub** (docs: https://code.claude.com/docs/en/plugins/create-marketplace; claude.ai and Cowork: https://claude.com/docs/plugins/overview):
+  - Claude Code: `/plugin marketplace add Yoshiaki-Takashita/Laba-plugin@release`, then `/plugin install laba@laba-marketplace` (in a shell: `claude plugin marketplace add ...` and `claude plugin install ...`). The `release` branch is the distribution build without tests; `main` is the development branch and also holds the tests and their materials.
+  - claude.ai, the desktop app and Cowork: under Customize, Plugins, Add, choose Add marketplace and enter `Yoshiaki-Takashita/Laba-plugin`, or upload a zip made with `bash tools/build-dist.sh out.zip` through Add, Upload plugin. Whether a branch can be named there is unknown.
+- **Directory edition (instructions only)**: the version submitted to Anthropic's directory contains no scripts (the `directory` branch, built with `bash tools/build-dist.sh --directory [out.zip]`). It has the same instructions; Claude writes its own code in the session to build Word, slide, figure and GNOTO files, and checklists replace the automated checks. Its README.md on the `directory` branch explains the differences. Both editions have the same plugin name (laba), so install only one.
 - To check statutes and court decisions with tools, register a connector separately (see CONNECTORS.md). The plugin also works without one.
 
 ## Requirements
