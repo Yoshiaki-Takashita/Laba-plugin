@@ -47,6 +47,12 @@ claude.ai のチャットでは、全部の段階を順に回すと時間がか�
 - **日本語の書体**：無い環境では、Noto Sans CJK などを入れる。
 - gnoto-lite だけを使うなら、Python 3 の標準ライブラリで足りる（Word に出すときだけ python-docx。PNG のサムネイルは Chromium 系のブラウザがあるときだけ）。
 
+## ネットにつなぐ道具（1 つだけ）
+
+- `skills/laba/scripts/case_lookup.py` だけは、頼まれたときに**裁判所ウェブサイト（www.courts.go.jp）の判例検索**を日付で引き、検索結果の頁と、判決全文の PDF を取ってくる（Python の標準ライブラリで取り、取れない環境ではパソコンに入っている curl で取り直す）。送るのは検索の条件（裁判の年月日・裁判所の種類）だけで、利用者の文章や個人の情報は送らない。
+- 取った PDF は、手元の pdftotext などで**文字にするだけ**で、実行はしない。全文は作業用で、ノートやスキルには貼らない。
+- ほかの道具は、ネットにつながない。
+
 ## レポート・論文（reportkiller）の道具
 
 - `skills/reportkiller/scripts` は、渡された本文・台帳・図（SVG）を読んで所見を出す点検の道具（Node.js と Python 3 標準ライブラリだけ）と、建物のデータ（JSON）から建築図の SVG を書く道具。ネットワークには接続せず、ほかのプログラムも起動しない。
@@ -59,7 +65,7 @@ claude.ai のチャットでは、全部の段階を順に回すと時間がか�
 2. できた .gnoto は GNOTO のノート一覧の読み込みで開く（「インポート」ジャンルに新しいノートができる。上書きはされない）。
 3. 条文・判例は、各自が自分の Claude に登録したコネクタ（CONNECTORS.md）から取り、出典つきで書く。コネクタが無ければ e-Gov・裁判所サイトの頁から、読めた分だけを書く。「全部の条文・全部の判例」は取れない（最高裁で、裁判所のサイトが公開しているものまで）。
 4. laba で作る講義ノートの出力先を、Word のほかに GNOTO のノートにもできる。
-5. スクリプトは作業フォルダのファイルを読み書きするだけで、ネットワークには接続しない。ただし、利用者が https の画像 URL をノートに入れた場合は、プレビュー（や PNG を作るブラウザ）を開いたときに、その画像をブラウザが読み込む。
+5. gnoto-lite のスクリプトは作業フォルダのファイルを読み書きするだけで、ネットワークには接続しない。ただし、利用者が https の画像 URL をノートに入れた場合は、プレビュー（や PNG を作るブラウザ）を開いたときに、その画像をブラウザが読み込む。
 
 ## コネクタ
 
@@ -122,6 +128,7 @@ See the scoreboard in the main skill's SKILL.md. It keeps three kinds of figures
 
 - **Local scripts.** The skills ask Claude to run the Python and Node.js scripts bundled under skills/laba/scripts. They read your source files and write Word documents, slide files, and images in your working folder. Several of them are started at the same time as separate local processes (the check pipeline, and diagram conversion with the sharp library). build_and_check.py also runs LibreOffice (soffice) in headless mode on the Word file it just wrote, to make a PDF, if LibreOffice is installed. None of these make network requests.
 - **Agents.** The agents folder holds fourteen plain-text agent definitions (Markdown files) (a verifier, section writers, a figure maker, a back-matter builder, a harmonizer, reviewers, and five deliberation-panel members). They are loaded only in Cowork and Claude Code. The reviewers and the panel members are given no file-editing tools: they can only read files (the style reviewer can also run the local text checks). They report findings and never change the note. The verifier uses whatever connector you registered, or the public web pages named in the next item.
+- **One script that goes online.** skills/laba/scripts/case_lookup.py, when Claude runs it for you, queries the Courts of Japan case-law search (www.courts.go.jp) by decision date and downloads the result page and the decision's PDF (Python standard library, falling back to your installed curl). It sends only the search conditions (date and court level), never your text or personal data. The PDF is only converted to text locally (pdftotext or a Python PDF library); nothing downloaded is executed. All other bundled scripts make no network connections.
 - **Web access for verification.** To check statutes and court decisions, the skills tell Claude to look up the official e-Gov law database (Japanese Digital Agency) and the Courts of Japan case-law search. They read public pages only and send no personal data.
 - **gnoto-lite scripts.** skills/gnoto-lite/scripts is a plain note-file writer and renderer in Python 3 (standard library only). It reads and writes .gnoto files you name, writes a self-contained static HTML preview, and, only if a Chromium-based browser is installed and you ask for a PNG, starts that browser in headless mode on a temporary local file. For Word export it calls the bundled build_docx.py. The scripts make no network requests and contain no statute or case data and no citation parsing. Statutes and decisions are fetched by Claude through your own connector or the official public pages, saved as JSON by Claude, and the scripts only format that JSON into ordinary note blocks with its provenance.
 - **reportkiller scripts.** skills/reportkiller/scripts holds plain-text checkers in Node.js (no packages) and Python 3 (standard library only). They read the manuscript, ledger or SVG files you name and print findings. One tool, archstudio/cli.js, writes architectural drawings (SVG) from a building-data JSON file to the output folder you give it. None of them make network requests or start other programs. Literature searches (for example J-STAGE, CiNii and publishers' bibliographic pages) are done by Claude, as the skill's instructions describe, and read public pages only; your text and personal data are not sent. The folder also contains reference notes (Markdown and JSON) on two modern architects: summaries of public facts with their source URLs, and no copied drawings or photographs. The notes for each work are plain text read by Claude when needed.
@@ -133,7 +140,7 @@ See the scoreboard in the main skill's SKILL.md. It keeps three kinds of figures
 2. Open the .gnoto file with the import function in the GNOTO note list. It creates a new note in the Imported genre and never overwrites an existing one.
 3. Statutes and decisions come from the connector you registered in your own Claude (see CONNECTORS.md) and are written with their sources. Without a connector, Claude reads the official e-Gov and courts pages and writes only what it could read. "Every statute and every decision" is not available: only what the official sites publish (Supreme Court decisions on the courts site).
 4. The main laba skill can also deliver a lecture note as a GNOTO note, next to Word.
-5. The scripts only read and write files in your working folder and make no network connections. If you put an https image URL into a note, the browser loads that image when you open the preview (or when a PNG is made).
+5. The gnoto-lite scripts only read and write files in your working folder and make no network connections. If you put an https image URL into a note, the browser loads that image when you open the preview (or when a PNG is made).
 
 ## Connector (optional)
 
