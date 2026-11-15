@@ -1,0 +1,4204 @@
+{
+ "schema": "arch-masters/rules v1",
+ "generated_by": "研究ファイルから生成（生成の道具は同梱しない）",
+ "stages": {
+  "V3": "一次資料（実測図・推薦書・本人の文章・財団の記録）で確認",
+  "V2": "信頼できる二次資料で確認",
+  "V1": "一般に言われるが未照合",
+  "V0": "不明・記憶のみ"
+ },
+ "use_policy": {
+  "fact": "V2 以上：寸法として図面・本文に使ってよい（出典を添える）",
+  "reference": "V1：「参考」と表示し、確定の寸法として書かない",
+  "unknown": "V0：寸法・事実として使わない（研究の空白として扱う）",
+  "mixed": "「V3/V2」「V2-V3」のような段階は低い方で扱う"
+ },
+ "units": "ライトは ft-in（1 ft＝0.3048 m・1 in＝25.4 mm）、ル・コルビュジエは cm／m（研究ファイルのまま）",
+ "ref_format": "<研究ファイル名>#<作品 id>（works を参照。目録の id があれば catalog_id）。ファイル名だけのものはそのファイル全体",
+ "deep_files_included": [
+  "corbusier-design-philosophy",
+  "corbusier-housing",
+  "corbusier-public-other",
+  "corbusier-sacred-india",
+  "corbusier-villas",
+  "wright-design-philosophy",
+  "wright-fallingwater-johnson",
+  "wright-japan-california",
+  "wright-late-public",
+  "wright-oakpark",
+  "wright-prairie-houses",
+  "wright-public-early",
+  "wright-robie-martin",
+  "wright-usonian"
+ ],
+ "categories": [
+  "ceiling",
+  "color",
+  "detail",
+  "furniture",
+  "grid",
+  "material",
+  "modulor",
+  "opening",
+  "plan",
+  "section",
+  "stair"
+ ],
+ "curated": [
+  {
+   "id": "flw-grid-prairie-4ft",
+   "architect": "Frank Lloyd Wright",
+   "category": "grid",
+   "rule": "プレーリー後期の住宅は 4'-0\" の単位。主階の柱型 1'-3\"・窓 2'-9\"、上階の柱型 8\"・窓 3'-4\"",
+   "values": {
+    "unit_ft_in": "4'-0\"",
+    "pier_main": "1'-3\"",
+    "sash_main": "2'-9\"",
+    "pier_upper": "8\"",
+    "sash_upper": "3'-4\""
+   },
+   "stage": "V3",
+   "works": [
+    "wright-robie-martin#robie"
+   ],
+   "sources": [
+    "data/arch-masters/deep/wright-robie-martin.json#generator"
+   ],
+   "use": "fact"
+  },
+  {
+   "id": "flw-grid-oakpark-none",
+   "architect": "Frank Lloyd Wright",
+   "category": "grid",
+   "rule": "1887〜1900 年の住宅にグリッドの記載はない。対称の 3 分割と壁割り棒で割る（4ft 単位は 1908 年以降）",
+   "values": {},
+   "stage": "V3",
+   "works": [
+    "wright-oakpark#FLW-0022"
+   ],
+   "sources": [
+    "data/arch-masters/deep/wright-oakpark.json#generator"
+   ],
+   "use": "fact"
+  },
+  {
+   "id": "flw-grid-usonian",
+   "architect": "Frank Lloyd Wright",
+   "category": "grid",
+   "rule": "ユーソニアンの単位を床スラブに刻む：長方形 2×4 ft／正方形 4×4 ft／六角形（13 in の単位）／三角形 1 辺 4'-6\"／放射 6 区画。壁は線上、例外は半モジュール",
+   "values": {
+    "rect_ft": [
+     2,
+     4
+    ],
+    "square_ft": 4,
+    "hex_unit_in": 13,
+    "tri_side": "4'-6\"",
+    "radial_sectors": 6
+   },
+   "stage": "V3",
+   "works": [
+    "wright-usonian#jacobs-1",
+    "wright-usonian#pope-leighey"
+   ],
+   "sources": [
+    "data/arch-masters/deep/wright-usonian.json#R1",
+    "data/arch-masters/wright-late.json#usonian_rules"
+   ],
+   "use": "fact"
+  },
+  {
+   "id": "flw-grid-vertical-13in",
+   "architect": "Frank Lloyd Wright",
+   "category": "grid",
+   "rule": "縦のモジュール 13 in（板＋目板の 1 段）。棚・窓台・窓頭・軒をその倍数に合わせる",
+   "values": {
+    "vertical_unit_in": 13
+   },
+   "stage": "V1+",
+   "works": [
+    "wright-usonian#jacobs-1"
+   ],
+   "sources": [
+    "data/arch-masters/deep/wright-usonian.json#R2",
+    "data/arch-masters/wright-late.json#usonian_rules"
+   ],
+   "note": "wright-late は V1+（Hanna の 13 in）",
+   "use": "reference"
+  },
+  {
+   "id": "flw-grid-diamond",
+   "architect": "Frank Lloyd Wright",
+   "category": "grid",
+   "rule": "菱形グリッド：1 辺 4 ft の正三角形、4'-0\"×6'-11\"、60/120°。長スパンは頂点を通る線上（6.9 ft／3.45 ft）",
+   "values": {
+    "side_ft": 4,
+    "cell": "4'-0\" x 6'-11\"",
+    "angles_deg": [
+     60,
+     120
+    ]
+   },
+   "stage": "V3",
+   "works": [
+    "wright-late-public#unitarian-meeting-house"
+   ],
+   "sources": [
+    "data/arch-masters/deep/wright-late-public.json#WLP-G2",
+    "data/arch-masters/deep/wright-late-public.json#WLP-G4"
+   ],
+   "use": "fact"
+  },
+  {
+   "id": "flw-grid-from-site",
+   "architect": "Frank Lloyd Wright",
+   "category": "grid",
+   "rule": "既存の間隔から正方形グリッドをとる（36 ft の柑橘の植列から 3 ft、Taliesin West は 16 ft）",
+   "values": {
+    "grid_ft": [
+     3,
+     16
+    ]
+   },
+   "stage": "V3",
+   "works": [
+    "wright-late-public#florida-southern",
+    "wright-late-public#taliesin-west"
+   ],
+   "sources": [
+    "data/arch-masters/deep/wright-late-public.json#WLP-G1"
+   ],
+   "use": "fact"
+  },
+  {
+   "id": "flw-grid-textile",
+   "architect": "Frank Lloyd Wright",
+   "category": "grid",
+   "rule": "テキスタイル・ブロック：16 in 角×3.5 in、半ブロック 8×16、グリッド 16/48 in、方立と開き窓の幅 16 in、隅に方立なし、鉄筋を縦横に通す二重壁",
+   "values": {
+    "block_in": [
+     16,
+     16,
+     3.5
+    ],
+    "half_in": [
+     8,
+     16
+    ],
+    "grid_in": [
+     16,
+     48
+    ]
+   },
+   "stage": "V3/V2",
+   "works": [
+    "wright-japan-california"
+   ],
+   "sources": [
+    "data/arch-masters/deep/wright-japan-california.json#generation_rules.textile_block"
+   ],
+   "note": "後期は 36×9×3 in のブロック 2 枚＋空気層 3 in＝壁厚 9 in（WLP-M3, V3）",
+   "use": "fact"
+  },
+  {
+   "id": "flw-grid-imperial",
+   "architect": "Frank Lloyd Wright",
+   "category": "grid",
+   "rule": "帝国ホテルは H＋I の平面、4 ft グリッド",
+   "values": {
+    "grid_ft": 4
+   },
+   "stage": "V1",
+   "works": [
+    "wright-japan-california#imperial-hotel"
+   ],
+   "sources": [
+    "data/arch-masters/deep/wright-japan-california.json#generation_rules.imperial"
+   ],
+   "use": "reference"
+  },
+  {
+   "id": "lc-grid-garches",
+   "architect": "Le Corbusier",
+   "category": "grid",
+   "rule": "ガルシュの柱割り：u＝2.5 m、2:1:2:1:2 × 1/2:1.5:1.5:1.5:1/2、全体 5:8",
+   "values": {
+    "u_m": 2.5,
+    "x": [
+     2,
+     1,
+     2,
+     1,
+     2
+    ],
+    "y": [
+     0.5,
+     1.5,
+     1.5,
+     1.5,
+     0.5
+    ],
+    "ratio": "5:8"
+   },
+   "stage": "V2",
+   "works": [
+    "corbusier-early"
+   ],
+   "sources": [
+    "data/arch-masters/corbusier-early.json#generation_rules"
+   ],
+   "note": "corbusier-early の段階は works ごとの confidence を参照",
+   "use": "fact"
+  },
+  {
+   "id": "lc-grid-savoye",
+   "architect": "Le Corbusier",
+   "category": "grid",
+   "rule": "サヴォワ：4×4 スパン・4.75 m、約 21.5×19×9.4 m、中央に 2 折れの斜路",
+   "values": {
+    "bays": [
+     4,
+     4
+    ],
+    "bay_m": 4.75,
+    "overall_m": [
+     21.5,
+     19,
+     9.4
+    ]
+   },
+   "stage": "V2",
+   "works": [
+    "corbusier-villas",
+    "corbusier-early"
+   ],
+   "sources": [
+    "data/arch-masters/deep/corbusier-villas.json#generation_rules.purist",
+    "data/arch-masters/corbusier-early.json#generation_rules"
+   ],
+   "conflicts": [
+    {
+     "what": "斜路の勾配",
+     "a": "不明（研究では 1:6〜1:8 を仮定）",
+     "stage": "V0"
+    }
+   ],
+   "use": "fact"
+  },
+  {
+   "id": "lc-grid-pessac",
+   "architect": "Le Corbusier",
+   "category": "grid",
+   "rule": "ペサック：5×5 m のセル、半分・4 分の 1 のセル",
+   "values": {
+    "cell_m": 5,
+    "B1L_m": [
+     7.5,
+     5,
+     2
+    ]
+   },
+   "stage": "V2",
+   "works": [
+    "corbusier-housing#pessac"
+   ],
+   "sources": [
+    "data/arch-masters/deep/corbusier-housing.json#generation_rules.pessac",
+    "data/arch-masters/corbusier-early.json#generation_rules"
+   ],
+   "use": "fact"
+  },
+  {
+   "id": "lc-grid-narrow",
+   "architect": "Le Corbusier",
+   "category": "grid",
+   "rule": "狭い敷地：間口 10 m に中央の柱 1 本（クック）、12 m に柱 4 本＋外階段（プラネクス）。帯状の住宅 4×16 m・窓 11 m",
+   "values": {
+    "frontage_m": [
+     10,
+     12
+    ],
+    "strip_m": [
+     4,
+     16
+    ],
+    "window_m": 11
+   },
+   "stage": "V2",
+   "works": [
+    "corbusier-villas"
+   ],
+   "sources": [
+    "data/arch-masters/deep/corbusier-villas.json#generation_rules.purist"
+   ],
+   "use": "fact"
+  },
+  {
+   "id": "lc-grid-unite-cell",
+   "architect": "Le Corbusier",
+   "category": "grid",
+   "rule": "ユニテの住戸：戸境壁の芯々 366、天井 226／吹抜 484、奥行きは建物幅いっぱい（約 24 m）で東西 2 面採光、通路 1 本が 3 層に通じる",
+   "values": {
+    "crosswall_cm": 366,
+    "ceiling_cm": 226,
+    "double_cm": 484,
+    "depth_m": 24,
+    "len_m": 10
+   },
+   "stage": "V2",
+   "works": [
+    "corbusier-housing",
+    "corbusier-late"
+   ],
+   "sources": [
+    "data/arch-masters/deep/corbusier-housing.json#generation_rules.modulor_cell",
+    "data/arch-masters/corbusier-late.json#R3"
+   ],
+   "conflicts": [
+    {
+     "what": "366 の段階",
+     "a": "corbusier-housing・design-philosophy は V2",
+     "b": "corbusier-late R3 は 366 を V1 とする"
+    },
+    {
+     "what": "吹抜の高さ",
+     "a": "484 cm（corbusier-housing）",
+     "b": "226×2＝452 にはならない。床厚込みかは不明"
+    }
+   ],
+   "use": "fact"
+  },
+  {
+   "id": "lc-regulating-lines",
+   "architect": "Le Corbusier",
+   "category": "grid",
+   "rule": "指標線：5:8 の相似な矩形、対角線を平行・直交にそろえる（許容差約 2% は研究の仮定）",
+   "values": {
+    "ratio": "5:8",
+    "tolerance": 0.02
+   },
+   "stage": "V1",
+   "works": [
+    "corbusier-early"
+   ],
+   "sources": [
+    "data/arch-masters/corbusier-early.json#generation_rules"
+   ],
+   "note": "許容差は仮定（V0 相当）",
+   "use": "reference"
+  },
+  {
+   "id": "lc-modulor-series",
+   "architect": "Le Corbusier",
+   "category": "modulor",
+   "rule": "寸法はモデュロールの赤列（へそ 113 起点）・青列（挙手 226 起点＝赤×2）から選ぶ。基準身長 183（初版 175・へそ 108・挙手 216 から 1946 年に変更）",
+   "values": {
+    "red_cm": [
+     27,
+     43,
+     70,
+     113,
+     183,
+     296,
+     479,
+     775,
+     1254,
+     2029
+    ],
+    "blue_cm": [
+     53,
+     86,
+     140,
+     226,
+     366,
+     592,
+     958,
+     1550
+    ],
+    "red_mm_DP": [
+     39,
+     63,
+     102,
+     165,
+     267,
+     432,
+     698,
+     1130,
+     1829,
+     2959,
+     4788
+    ],
+    "blue_mm_DP": [
+     30,
+     48,
+     78,
+     126,
+     204,
+     330,
+     534,
+     863,
+     1397,
+     2260,
+     3658,
+     5918
+    ]
+   },
+   "stage": "V1",
+   "works": [
+    "corbusier-late",
+    "corbusier-design-philosophy"
+   ],
+   "sources": [
+    "data/arch-masters/corbusier-late.json#modulor",
+    "data/arch-masters/deep/corbusier-design-philosophy.json#modulor"
+   ],
+   "conflicts": [
+    {
+     "what": "113 より上の値",
+     "a": "加法則 1254・2029・958・1550（流布値 V1）",
+     "b": "φ のべき乗の丸め 1253・2028・957・1549",
+     "note": "LC の印刷表は未見（V0）。生成ではどちらかにそろえる"
+    },
+    {
+     "what": "小さい値の表",
+     "a": "corbusier-design-philosophy は mm で 1829・2260 など（V2）",
+     "b": "corbusier-late は cm で 183・226"
+    },
+    {
+     "what": "書籍『Le Modulor』の年",
+     "a": "1950（FLC の書誌）",
+     "b": "1948（Wikipedia）"
+    }
+   ],
+   "use": "reference"
+  },
+  {
+   "id": "lc-modulor-confirmed",
+   "architect": "Le Corbusier",
+   "category": "modulor",
+   "rule": "作品で確かめられたモデュロール値：226（カバノン天井・ロンシャンの殻の間隔・チューリッヒ館の立方体・ルゼの天井・トゥーレット神父の僧房幅）、366（カバノン平面・ジャウルのスパン・チャンディガールのベランダ）、183・592（トゥーレット僧房）、70・53・43（カバノンの窓・墓）",
+   "values": {
+    "cm": [
+     226,
+     366,
+     183,
+     592,
+     70,
+     53,
+     43
+    ]
+   },
+   "stage": "V2",
+   "works": [
+    "corbusier-sacred-india#ronchamp",
+    "corbusier-sacred-india#la_tourette"
+   ],
+   "sources": [
+    "data/arch-masters/corbusier-late.json#modulor.dimensions_confirmed_in_works"
+   ],
+   "conflicts": [
+    {
+     "what": "ジャウル邸のスパン",
+     "a": "2.66 m（FLC 本文。どちらの列にもない）",
+     "b": "2.26／3.66 m（corbusier-public-other R3）",
+     "note": "226 の誤記かは不明（V0）"
+    }
+   ],
+   "use": "fact"
+  },
+  {
+   "id": "lc-modulor-tourette-glass",
+   "architect": "Le Corbusier",
+   "category": "modulor",
+   "rule": "波動ガラス（オンデュラトワール）：高さ 366（または 732）。方立間隔はモデュロールの列から細→粗→細の波、押縁の高さにはランダム成分、押縁は金属 25 mm＋ゴム 14 mm。ガラス高さは非モデュロール",
+   "values": {
+    "height_cm": [
+     366,
+     732
+    ],
+    "series_cm": [
+     12.8,
+     16.5,
+     20.4,
+     26.6,
+     33.0,
+     43.2,
+     53.4,
+     60.7,
+     69.8,
+     86.3,
+     102.0
+    ],
+    "bead_mm": [
+     25,
+     14
+    ]
+   },
+   "stage": "V3",
+   "works": [
+    "corbusier-sacred-india#la_tourette"
+   ],
+   "sources": [
+    "data/arch-masters/deep/corbusier-sacred-india.json#undulating_glass",
+    "data/arch-masters/deep/corbusier-design-philosophy.json#modulor.applications"
+   ],
+   "conflicts": [
+    {
+     "what": "方立間隔の段階",
+     "a": "sacred-india：系列つき V3",
+     "b": "corbusier-late R10：具体の間隔は V0",
+     "c": "design-philosophy：モデュロール±1 cm（V2）"
+    }
+   ],
+   "use": "fact"
+  },
+  {
+   "id": "lc-ceiling-default",
+   "architect": "Le Corbusier",
+   "category": "ceiling",
+   "rule": "天井高の既定 226。規制で 250（ベルリン）にされたら「モデュロール違反」と注記",
+   "values": {
+    "default_cm": 226,
+    "berlin_cm": [
+     250,
+     260
+    ]
+   },
+   "stage": "V2",
+   "works": [
+    "corbusier-late",
+    "corbusier-design-philosophy"
+   ],
+   "sources": [
+    "data/arch-masters/corbusier-late.json#R2",
+    "data/arch-masters/deep/corbusier-design-philosophy.json#modulor.applications"
+   ],
+   "conflicts": [
+    {
+     "what": "ベルリン・ユニテの天井高",
+     "a": "2.50 m（corbusier-late・FLC）",
+     "b": "2.60 m（corbusier-design-philosophy）"
+    }
+   ],
+   "use": "fact"
+  },
+  {
+   "id": "lc-ceiling-hierarchy",
+   "architect": "Le Corbusier",
+   "category": "ceiling",
+   "rule": "天井高の階層：個室 226 → 中間 366 → 共同・聖 732（ラ・トゥーレット）",
+   "values": {
+    "cm": [
+     226,
+     366,
+     732
+    ]
+   },
+   "stage": "V3",
+   "works": [
+    "corbusier-sacred-india#la_tourette"
+   ],
+   "sources": [
+    "data/arch-masters/deep/corbusier-sacred-india.json#ceiling_hierarchy"
+   ],
+   "use": "fact"
+  },
+  {
+   "id": "lc-ceiling-types",
+   "architect": "Le Corbusier",
+   "category": "ceiling",
+   "rule": "既定の天井高：カーペンター 3.66 m、セル・小屋 2.26 m、週末住宅 2.60 m（アンフェル）、居間兼アトリエ 2.85 m（ベスニュ）、アトリエ 3.5 m（モリトール）",
+   "values": {
+    "m": {
+     "carpenter": 3.66,
+     "cell": 2.26,
+     "weekend": 2.6,
+     "besnus": 2.85,
+     "molitor_studio": 3.5
+    }
+   },
+   "stage": "V2",
+   "works": [
+    "corbusier-public-other",
+    "corbusier-early"
+   ],
+   "sources": [
+    "data/arch-masters/deep/corbusier-public-other.json#R2",
+    "data/arch-masters/corbusier-early.json#generation_rules"
+   ],
+   "use": "fact"
+  },
+  {
+   "id": "flw-ceiling-usonian-3",
+   "architect": "Frank Lloyd Wright",
+   "category": "ceiling",
+   "rule": "ユーソニアンの 3 段の天井：寝室翼・玄関 7'-1\"〜7'-5\"、居間 9'-4\"〜11'-5\"、コア 11'-7\"〜16'-0\"（高窓・天窓）。基準は Jacobs I の 7'3\"/9'4\"/11'7\"",
+   "values": {
+    "jacobs1": [
+     "7'-3\"",
+     "9'-4\"",
+     "11'-7\""
+    ],
+    "low": [
+     "7'-1\"",
+     "7'-5\""
+    ],
+    "mid": [
+     "9'-4\"",
+     "11'-5\""
+    ],
+    "high": [
+     "11'-7\"",
+     "16'-0\""
+    ]
+   },
+   "stage": "V3",
+   "works": [
+    "wright-usonian#jacobs-1"
+   ],
+   "sources": [
+    "data/arch-masters/deep/wright-usonian.json#R3",
+    "data/arch-masters/wright-late.json#usonian_rules"
+   ],
+   "conflicts": [
+    {
+     "what": "メートル換算",
+     "a": "wright-design-philosophy R15：2.21/2.84/3.53 m（V2）",
+     "b": "7'3\"=2.21・9'4\"=2.84・11'7\"=3.53 で一致"
+    }
+   ],
+   "use": "fact"
+  },
+  {
+   "id": "flw-ceiling-robie",
+   "architect": "Frank Lloyd Wright",
+   "category": "ceiling",
+   "rule": "Robie：地上階 7'-2\"、主階の縁 7'-3\"・中央を 1'-5\" 上げる、上階 7'-6\"。Martin 7'-6\"。玄関の高さ 6'-4\"",
+   "values": {
+    "ground": "7'-2\"",
+    "main_edge": "7'-3\"",
+    "main_raise": "1'-5\"",
+    "upper": "7'-6\"",
+    "martin": "7'-6\"",
+    "entry": "6'-4\""
+   },
+   "stage": "V3",
+   "works": [
+    "wright-robie-martin#robie",
+    "wright-robie-martin#martin"
+   ],
+   "sources": [
+    "data/arch-masters/deep/wright-robie-martin.json#generator"
+   ],
+   "use": "fact"
+  },
+  {
+   "id": "flw-ceiling-prairie",
+   "architect": "Frank Lloyd Wright",
+   "category": "ceiling",
+   "rule": "プレーリー：低い縁と高い中心（平天井 6'-6\" のアルコーブ→寄棟天井 14'-4\"／頂部 16'-11\"）。地上階を 6'-0\"〜6'-1\" に抑え主階を 2 階（床 +6'-8\"〜+7'-0\"）に",
+   "values": {
+    "alcove": "6'-6\"",
+    "hip_wall": "14'-4\"",
+    "hip_top": "16'-11\"",
+    "ground": [
+     "6'-0\"",
+     "6'-1\""
+    ]
+   },
+   "stage": "V3",
+   "works": [
+    "wright-prairie-houses#coonley"
+   ],
+   "sources": [
+    "data/arch-masters/deep/wright-prairie-houses.json#generation_rules"
+   ],
+   "note": "Steffens（IL-1063）と Coonley（IL-1100）の HABS",
+   "use": "fact"
+  },
+  {
+   "id": "flw-ceiling-oakpark",
+   "architect": "Frank Lloyd Wright",
+   "category": "ceiling",
+   "rule": "上の階ほど低く：9'-5\"→8'-10\"→7'-5\"（Charnley）、10'-7\"→8'-11\"（Heller）",
+   "values": {
+    "charnley": [
+     "9'-5\"",
+     "8'-10\"",
+     "7'-5\""
+    ],
+    "heller": [
+     "10'-7\"",
+     "8'-11\""
+    ]
+   },
+   "stage": "V3",
+   "works": [
+    "wright-oakpark#FLW-0006"
+   ],
+   "sources": [
+    "data/arch-masters/deep/wright-oakpark.json#generator"
+   ],
+   "use": "fact"
+  },
+  {
+   "id": "flw-compress-release",
+   "architect": "Frank Lloyd Wright",
+   "category": "section",
+   "rule": "圧縮と解放：低い入口（約 1.8 m、庇約 5'-10\"）から高い主室へ。主室は階段を上りきるまで見せない。低い天井は 6'-8\" の戸の高さにそろえ、軒は 6¾ ft まで下げる",
+   "values": {
+    "entry_m": 1.8,
+    "canopy": "5'-10\"",
+    "door": "6'-8\""
+   },
+   "stage": "V2-V3",
+   "works": [
+    "wright-late-public"
+   ],
+   "sources": [
+    "data/arch-masters/deep/wright-late-public.json#WLP-S1",
+    "data/arch-masters/deep/wright-late-public.json#WLP-S2",
+    "data/arch-masters/deep/wright-design-philosophy.json#R15"
+   ],
+   "use": "fact"
+  },
+  {
+   "id": "flw-entry-rise",
+   "architect": "Frank Lloyd Wright",
+   "category": "section",
+   "rule": "玄関から主室へ 3〜5 段上げる（Winslow 3 段・Charnley 5 段・自邸は床が地面＋4 ft）。主階段は入口から見せない",
+   "values": {
+    "steps": [
+     3,
+     5
+    ]
+   },
+   "stage": "V3",
+   "works": [
+    "wright-oakpark#FLW-0022",
+    "wright-oakpark#FLW-0006"
+   ],
+   "sources": [
+    "data/arch-masters/deep/wright-oakpark.json#generator"
+   ],
+   "use": "fact"
+  },
+  {
+   "id": "flw-usonian-entry",
+   "architect": "Frank Lloyd Wright",
+   "category": "section",
+   "rule": "ユーソニアンの入口は低く（6'-6\"〜7'-1\"）、細く、大きな部屋の片側に沿って着く（中央からは入らない）",
+   "values": {
+    "entry": [
+     "6'-6\"",
+     "7'-1\""
+    ]
+   },
+   "stage": "V3",
+   "works": [
+    "wright-usonian#jacobs-1"
+   ],
+   "sources": [
+    "data/arch-masters/deep/wright-usonian.json#R4",
+    "data/arch-masters/wright-late.json#usonian_rules"
+   ],
+   "use": "fact"
+  },
+  {
+   "id": "flw-prairie-storey",
+   "architect": "Frank Lloyd Wright",
+   "category": "section",
+   "rule": "プレーリーの階高と外壁の水平線：1 階床 +1'-8\"、2 階 +12'-0\"、屋根頂 +27'-2½\"（Bradley）。水切り +1'-5\"、2 階窓台 +10'-0\"、軒下 +14'-4\"（Coonley）",
+   "values": {
+    "bradley": [
+     "+1'-8\"",
+     "+12'-0\"",
+     "+27'-2½\""
+    ],
+    "coonley": [
+     "+1'-5\"",
+     "+10'-0\"",
+     "+14'-4\""
+    ]
+   },
+   "stage": "V3",
+   "works": [
+    "wright-prairie-houses#bradley",
+    "wright-prairie-houses#coonley"
+   ],
+   "sources": [
+    "data/arch-masters/deep/wright-prairie-houses.json#generation_rules"
+   ],
+   "use": "fact"
+  },
+  {
+   "id": "flw-stair",
+   "architect": "Frank Lloyd Wright",
+   "category": "stair",
+   "rule": "蹴上／踏面：Winslow 6½\"/12\"、Steffens 主階段 6¾\"/10¾\"・裏階段 5½\"/11\"、ユーソニアンの段 5〜6\"/12\"",
+   "values": {
+    "winslow": [
+     "6½\"",
+     "12\""
+    ],
+    "steffens_main": [
+     "6¾\"",
+     "10¾\""
+    ],
+    "steffens_back": [
+     "5½\"",
+     "11\""
+    ],
+    "usonian": [
+     "5-6\"",
+     "12\""
+    ]
+   },
+   "stage": "V3",
+   "works": [
+    "wright-oakpark#FLW-0022",
+    "wright-usonian#jacobs-1"
+   ],
+   "sources": [
+    "data/arch-masters/deep/wright-oakpark.json#generator",
+    "data/arch-masters/deep/wright-prairie-houses.json#generation_rules",
+    "data/arch-masters/deep/wright-usonian.json#R4"
+   ],
+   "use": "fact"
+  },
+  {
+   "id": "flw-ramp-guggenheim",
+   "architect": "Frank Lloyd Wright",
+   "category": "stair",
+   "rule": "グッゲンハイムの螺旋斜路：勾配 5%、幅 25→32 ft、手摺壁 36 in、壁の傾き 97°、天井 9.5 ft、30° ごとに厚さ 8 in のフィン",
+   "values": {
+    "grade": 0.05,
+    "width_ft": [
+     25,
+     32
+    ],
+    "parapet_in": 36,
+    "tilt_deg": 97,
+    "ceiling_ft": 9.5
+   },
+   "stage": "V2-V3",
+   "works": [
+    "wright-late-public#guggenheim"
+   ],
+   "sources": [
+    "data/arch-masters/deep/wright-late-public.json#WLP-R1"
+   ],
+   "conflicts": [
+    {
+     "what": "斜路の長さ",
+     "a": "研究ファイルに長さの食い違いの記録（length conflict）",
+     "note": "幅・手摺・天井・傾きは V2"
+    }
+   ],
+   "use": "fact"
+  },
+  {
+   "id": "lc-ramp",
+   "architect": "Le Corbusier",
+   "category": "stair",
+   "rule": "斜路を主役に：入口から主室・屋上まで斜路で直行させ、勾配と曲率を変える。建築の散策路（玄関→分岐・橋→斜路→屋上の眺め）",
+   "values": {},
+   "stage": "V2",
+   "works": [
+    "corbusier-public-other",
+    "corbusier-early"
+   ],
+   "sources": [
+    "data/arch-masters/deep/corbusier-public-other.json#R1",
+    "data/arch-masters/corbusier-early.json#generation_rules"
+   ],
+   "note": "勾配の数値は不明（V0）",
+   "use": "fact"
+  },
+  {
+   "id": "flw-window-casement",
+   "architect": "Frank Lloyd Wright",
+   "category": "opening",
+   "rule": "外開きの開き窓の帯。上げ下げ窓は使わない。1 つの材を上階の窓台まで、上はフリーズ",
+   "values": {},
+   "stage": "V3",
+   "works": [
+    "wright-design-philosophy"
+   ],
+   "sources": [
+    "data/arch-masters/deep/wright-design-philosophy.json#R2",
+    "data/arch-masters/deep/wright-design-philosophy.json#R3"
+   ],
+   "use": "fact"
+  },
+  {
+   "id": "flw-window-prairie-sills",
+   "architect": "Frank Lloyd Wright",
+   "category": "opening",
+   "rule": "部屋ごとの窓台：居間 1'-2\"、食堂 2'-6\"、台所 4'-2\"、寝室 4'-3\"。窓頭 6'-6\"（1 階）／7'-2\"（2 階）",
+   "values": {
+    "sill": {
+     "living": "1'-2\"",
+     "dining": "2'-6\"",
+     "kitchen": "4'-2\"",
+     "bedroom": "4'-3\""
+    },
+    "head": [
+     "6'-6\"",
+     "7'-2\""
+    ]
+   },
+   "stage": "V3",
+   "works": [
+    "wright-prairie-houses"
+   ],
+   "sources": [
+    "data/arch-masters/deep/wright-prairie-houses.json#generation_rules"
+   ],
+   "note": "Steffens（HABS IL-1063）",
+   "use": "fact"
+  },
+  {
+   "id": "flw-facade-aba",
+   "architect": "Frank Lloyd Wright",
+   "category": "opening",
+   "rule": "正面は対称 3 分割：窓幅 5'-9½\"、間の壁 16'-2\"、両端 6'-10\"（Winslow 2 階）。上階の窓はフリーズ帯の中に沈める",
+   "values": {
+    "window": "5'-9½\"",
+    "pier": "16'-2\"",
+    "end": "6'-10\""
+   },
+   "stage": "V3",
+   "works": [
+    "wright-oakpark#FLW-0022"
+   ],
+   "sources": [
+    "data/arch-masters/deep/wright-oakpark.json#generator"
+   ],
+   "use": "fact"
+  },
+  {
+   "id": "flw-artglass",
+   "architect": "Frank Lloyd Wright",
+   "category": "opening",
+   "rule": "アートグラス：鉛線が主、地は透明、色は差し色。下 60% は 90% 以上透明、模様は縁の帯と上 40%、対の戸は鏡か段違い。開き窓 1 枚幅 1'-4\"〜2'-8\"、縦長比約 1:2〜1:3",
+   "values": {
+    "clear_lower": 0.6,
+    "leaf_w": [
+     "1'-4\"",
+     "2'-8\""
+    ],
+    "ratio": [
+     "1:2",
+     "1:3"
+    ]
+   },
+   "stage": "V3",
+   "works": [
+    "wright-robie-martin#robie",
+    "wright-prairie-houses#coonley"
+   ],
+   "sources": [
+    "data/arch-masters/deep/wright-robie-martin.json#generator",
+    "data/arch-masters/deep/wright-design-philosophy.json#R13",
+    "data/arch-masters/deep/wright-prairie-houses.json#generation_rules"
+   ],
+   "use": "fact"
+  },
+  {
+   "id": "flw-usonian-glass",
+   "architect": "Frank Lloyd Wright",
+   "category": "opening",
+   "rule": "庭側は床から天井までのガラス戸の列（1 枚 1'-5\"〜2'-0\"、高さ 7〜9 ft、端は嵌殺し、ピアノ蝶番）。道路側は板壁と高さ 1 ft の高窓（方立 2 ft）か穴あき板",
+   "values": {
+    "leaf": [
+     "1'-5\"",
+     "2'-0\""
+    ],
+    "h_ft": [
+     7,
+     9
+    ],
+    "clerestory_ft": 1
+   },
+   "stage": "V3",
+   "works": [
+    "wright-usonian#jacobs-1",
+    "wright-usonian#pope-leighey"
+   ],
+   "sources": [
+    "data/arch-masters/deep/wright-usonian.json#R5"
+   ],
+   "use": "fact"
+  },
+  {
+   "id": "flw-hollyhock",
+   "architect": "Frank Lloyd Wright",
+   "category": "opening",
+   "rule": "ホリーホック：帯の高さ 78 in・出 11 in、壁の傾き 10°、フレンチドア 78 in",
+   "values": {
+    "belt_h_in": 78,
+    "belt_d_in": 11,
+    "batter_deg": 10,
+    "door_in": 78
+   },
+   "stage": "V3",
+   "works": [
+    "wright-japan-california"
+   ],
+   "sources": [
+    "data/arch-masters/deep/wright-japan-california.json#generation_rules.hollyhock_wall"
+   ],
+   "use": "fact"
+  },
+  {
+   "id": "flw-yamamura",
+   "architect": "Frank Lloyd Wright",
+   "category": "opening",
+   "rule": "山邑邸：入口の絞り 62 cm、小窓 170、採光窓 120（研究ファイルの値。単位と意味は原文を確認）",
+   "values": {
+    "entry_pinch_cm": 62,
+    "small_windows": 170,
+    "daylight_windows": 120
+   },
+   "stage": "V3",
+   "works": [
+    "wright-japan-california#yamamura"
+   ],
+   "sources": [
+    "data/arch-masters/deep/wright-japan-california.json#generation_rules.yamamura"
+   ],
+   "use": "fact"
+  },
+  {
+   "id": "lc-cabanon",
+   "architect": "Le Corbusier",
+   "category": "opening",
+   "rule": "最小住居（カバノン）：平面 366×366、天井 226、窓 70×70 を 2 つと 33×70 を 1 つ、縦の換気スリット 2 本。入口→クローゼット→便所・衣装棚→ベッド→机・本棚と時計回りの帯",
+   "values": {
+    "plan_cm": [
+     366,
+     366
+    ],
+    "ceiling_cm": 226,
+    "windows_cm": [
+     [
+      70,
+      70
+     ],
+     [
+      70,
+      70
+     ],
+     [
+      33,
+      70
+     ]
+    ]
+   },
+   "stage": "V2",
+   "works": [
+    "corbusier-design-philosophy"
+   ],
+   "sources": [
+    "data/arch-masters/corbusier-late.json#R7",
+    "data/arch-masters/deep/corbusier-design-philosophy.json#modulor.applications"
+   ],
+   "conflicts": [
+    {
+     "what": "面積",
+     "a": "FLC 15 m²",
+     "b": "3.66²＝13.4 m²"
+    }
+   ],
+   "note": "design-philosophy は寸法を V3 とする",
+   "use": "fact"
+  },
+  {
+   "id": "lc-light-wall",
+   "architect": "Le Corbusier",
+   "category": "opening",
+   "rule": "光の壁（ロンシャン）：壁厚 0→270〜305 cm、大きさの違う開口を不規則に、抱きは角度を変えて絞る。ガラスは透明・色・手描きを混ぜる",
+   "values": {
+    "wall_cm": [
+     270,
+     305
+    ]
+   },
+   "stage": "V1",
+   "works": [
+    "corbusier-sacred-india#ronchamp"
+   ],
+   "sources": [
+    "data/arch-masters/deep/corbusier-sacred-india.json#light_wall"
+   ],
+   "use": "reference"
+  },
+  {
+   "id": "lc-glass-wall",
+   "architect": "Le Corbusier",
+   "category": "opening",
+   "rule": "ガラス壁を層で分ける：透明の引違い・網入り（腰）・ガラスブロック Nevada、黒い細い鉄骨で補剛（モリトール・クラルテ）",
+   "values": {},
+   "stage": "V2",
+   "works": [
+    "corbusier-public-other"
+   ],
+   "sources": [
+    "data/arch-masters/deep/corbusier-public-other.json#R4"
+   ],
+   "use": "fact"
+  },
+  {
+   "id": "lc-brise-soleil",
+   "architect": "Le Corbusier",
+   "category": "opening",
+   "rule": "日射の強い面（暑い地域では東西）は厚い格子のブリーズ・ソレイユ、側壁はほぼ無窓、卓越風の向きに置く。高さは隣家の軒にそろえる（クルチェット）",
+   "values": {},
+   "stage": "V2",
+   "works": [
+    "corbusier-late",
+    "corbusier-public-other"
+   ],
+   "sources": [
+    "data/arch-masters/corbusier-late.json#R9",
+    "data/arch-masters/deep/corbusier-public-other.json#R6",
+    "data/arch-masters/deep/corbusier-sacred-india.json#hot_office"
+   ],
+   "use": "fact"
+  },
+  {
+   "id": "flw-highback-chair",
+   "architect": "Frank Lloyd Wright",
+   "category": "furniture",
+   "rule": "背の高い椅子：高さ 90／100／140 cm、幅 38〜43、座面 45.7 cm。食堂は高い背を並べ、四隅にランプの柱で囲う",
+   "values": {
+    "h_cm": [
+     90,
+     100,
+     140
+    ],
+    "w_cm": [
+     38,
+     43
+    ],
+    "seat_cm": 45.7
+   },
+   "stage": "V3",
+   "works": [
+    "wright-design-philosophy"
+   ],
+   "sources": [
+    "data/arch-masters/deep/wright-design-philosophy.json#R9",
+    "data/arch-masters/deep/wright-design-philosophy.json#R10"
+   ],
+   "note": "食堂の囲い（R10）は V2",
+   "use": "fact"
+  },
+  {
+   "id": "flw-table",
+   "architect": "Frank Lloyd Wright",
+   "category": "furniture",
+   "rule": "机の高さ：居間 66.8 cm、食堂 72.4〜76.4 cm。Robie の卓 30-1/8\"、卓上ランプの頂 54-1/2\"",
+   "values": {
+    "living_cm": 66.8,
+    "dining_cm": [
+     72.4,
+     76.4
+    ],
+    "robie_table": "30-1/8\"",
+    "robie_lamp": "54-1/2\""
+   },
+   "stage": "V3",
+   "works": [
+    "wright-robie-martin#robie"
+   ],
+   "sources": [
+    "data/arch-masters/deep/wright-design-philosophy.json#R11",
+    "data/arch-masters/deep/wright-robie-martin.json#generator"
+   ],
+   "use": "fact"
+  },
+  {
+   "id": "flw-lamps",
+   "architect": "Frank Lloyd Wright",
+   "category": "furniture",
+   "rule": "四角い照明 41.9 cm を 3／4／6 個くり返す。ユーソニアンは木の箱に埋め込む",
+   "values": {
+    "lamp_cm": 41.9,
+    "repeat": [
+     3,
+     4,
+     6
+    ]
+   },
+   "stage": "V3",
+   "works": [
+    "wright-design-philosophy",
+    "wright-usonian"
+   ],
+   "sources": [
+    "data/arch-masters/deep/wright-design-philosophy.json#R12",
+    "data/arch-masters/deep/wright-usonian.json#R10"
+   ],
+   "use": "fact"
+  },
+  {
+   "id": "flw-usonian-chair",
+   "architect": "Frank Lloyd Wright",
+   "category": "furniture",
+   "rule": "ユーソニアンの合板の椅子 約 28〜29 in（Affleck 29¾×28⅝ in V3。博物館の個体 28×21×28 in V2）。卓は単位の角度（三角の家では 60/120°）",
+   "values": {
+    "chair_h_in": [
+     28,
+     29.75
+    ]
+   },
+   "stage": "V3/V2",
+   "works": [
+    "wright-usonian"
+   ],
+   "sources": [
+    "data/arch-masters/deep/wright-usonian.json#furniture_dims",
+    "data/arch-masters/deep/wright-usonian.json#R11"
+   ],
+   "use": "fact"
+  },
+  {
+   "id": "flw-builtins",
+   "architect": "Frank Lloyd Wright",
+   "category": "furniture",
+   "rule": "作り付けを建物のグリッド上に。1 つの居間を作り付けで仕切る。ユーソニアン：本棚 8 in×6 段、食器棚 12 in×3 段、7/8\" 合板の平らな扉、壁いっぱいの本棚で壁を固める",
+   "values": {
+    "bookshelf_in": 8,
+    "bookshelf_n": 6,
+    "dish_in": 12,
+    "dish_n": 3
+   },
+   "stage": "V3",
+   "works": [
+    "wright-usonian",
+    "wright-design-philosophy"
+   ],
+   "sources": [
+    "data/arch-masters/deep/wright-design-philosophy.json#R1",
+    "data/arch-masters/deep/wright-design-philosophy.json#R7",
+    "data/arch-masters/deep/wright-usonian.json#R10"
+   ],
+   "use": "fact"
+  },
+  {
+   "id": "flw-hearth",
+   "architect": "Frank Lloyd Wright",
+   "category": "furniture",
+   "rule": "暖炉（イングルヌック）を中心に、両脇に造付けベンチを対で、前に丸柱アーケード（Winslow：ヌック奥行 5'-3\"、天井 9'-8½\"、アーケード上端 8'-6½\"）。入口から暖炉が見える軸",
+   "values": {
+    "nook_depth": "5'-3\"",
+    "ceiling": "9'-8½\"",
+    "arcade_top": "8'-6½\""
+   },
+   "stage": "V3",
+   "works": [
+    "wright-oakpark#FLW-0022"
+   ],
+   "sources": [
+    "data/arch-masters/deep/wright-oakpark.json#generator"
+   ],
+   "use": "fact"
+  },
+  {
+   "id": "flw-trim",
+   "architect": "Frank Lloyd Wright",
+   "category": "detail",
+   "rule": "戸に額縁を付けず、戸の上端の帯を部屋一周（鴨居）。壁割り棒は床から約 5 ft か戸の上端。Robie の頭の帯 4-1/2\"、幅木 9\"",
+   "values": {
+    "head_band": "4-1/2\"",
+    "baseboard": "9\"",
+    "picture_rail_ft": 5
+   },
+   "stage": "V3",
+   "works": [
+    "wright-oakpark",
+    "wright-robie-martin#robie"
+   ],
+   "sources": [
+    "data/arch-masters/deep/wright-oakpark.json#generator",
+    "data/arch-masters/deep/wright-robie-martin.json#generator"
+   ],
+   "use": "fact"
+  },
+  {
+   "id": "lc-cell",
+   "architect": "Le Corbusier",
+   "category": "furniture",
+   "rule": "僧房：長さ 592・幅 183（または 226）。外から内へ ロッジア→机→ベッド→衣装棚→洗面",
+   "values": {
+    "len_cm": 592,
+    "w_cm": [
+     183,
+     226
+    ]
+   },
+   "stage": "V2",
+   "works": [
+    "corbusier-sacred-india#la_tourette"
+   ],
+   "sources": [
+    "data/arch-masters/deep/corbusier-sacred-india.json#cell",
+    "data/arch-masters/corbusier-late.json#R8"
+   ],
+   "use": "fact"
+  },
+  {
+   "id": "lc-furniture",
+   "architect": "Le Corbusier",
+   "category": "furniture",
+   "rule": "家具：1928 年以前はトーネット＋作り付けの収納、以後は LC シリーズ。規格収納（casiers）で間仕切る（高さ 113・140 cm V2、75 cm モジュールは復刻品）。LC14 は 43×43×27 cm。チャンディガールの椅子は座 42±2・全高 75〜81（V1）",
+   "values": {
+    "casiers_h_cm": [
+     113,
+     140
+    ],
+    "casiers_module_cm": 75,
+    "lc14_cm": [
+     43,
+     43,
+     27
+    ],
+    "chandigarh_seat_cm": 42
+   },
+   "stage": "V2",
+   "works": [
+    "corbusier-early",
+    "corbusier-design-philosophy"
+   ],
+   "sources": [
+    "data/arch-masters/corbusier-early.json#generation_rules",
+    "data/arch-masters/deep/corbusier-design-philosophy.json#modulor.applications",
+    "data/arch-masters/deep/corbusier-public-other.json#R12",
+    "data/arch-masters/deep/corbusier-sacred-india.json#chair"
+   ],
+   "use": "fact"
+  },
+  {
+   "id": "lc-unite-modules",
+   "architect": "Le Corbusier",
+   "category": "plan",
+   "rule": "住戸を 3 つのモジュール（入口・台所・居間／主寝室・水まわり／子供室 2）で組み、型を作る（マルセイユ 23 型）。台所は居間向きの配膳家具でつなぐ。E2 型の順：赤い戸と間接照明→台所 4.8 m²→吹抜の居間→ロッジア→プルーヴェの階段→親の中二階→子供室 2 室 1.83×8 m",
+   "values": {
+    "kitchen_m2": 4.8,
+    "child_room_m": [
+     1.83,
+     8
+    ],
+    "types": 23
+   },
+   "stage": "V2",
+   "works": [
+    "corbusier-housing",
+    "corbusier-late"
+   ],
+   "sources": [
+    "data/arch-masters/corbusier-late.json#R4",
+    "data/arch-masters/corbusier-late.json#R6",
+    "data/arch-masters/deep/corbusier-housing.json#generation_rules.e2_sequence"
+   ],
+   "note": "台所の部屋寸法は V0（R6）",
+   "use": "fact"
+  },
+  {
+   "id": "flw-plan-core",
+   "architect": "Frank Lloyd Wright",
+   "category": "plan",
+   "rule": "L／T／弧の要に石造のコア（暖炉＋台所＋浴室＋暖房）、最も高い屋根と高窓。居間翼は庭と日へ、寝室翼は道路・北側に細い廊下",
+   "values": {},
+   "stage": "V3",
+   "works": [
+    "wright-usonian#jacobs-1"
+   ],
+   "sources": [
+    "data/arch-masters/wright-late.json#generation_rules",
+    "data/arch-masters/wright-late.json#usonian_rules"
+   ],
+   "note": "wright-late の generation_rules は段階の記載なし。usonian_rules（V3）で裏付け",
+   "use": "fact"
+  },
+  {
+   "id": "flw-plan-oakpark",
+   "architect": "Frank Lloyd Wright",
+   "category": "plan",
+   "rule": "正方形の箱に中央の暖炉。入口→暖炉を一直線の軸に、両脇に図書室と居間。図書室・食堂・塔は八角形（天井の八角形は 45° 回す）。1897 年以降は細長い敷地で部屋を 1 本の軸に並べ長辺の中央から入る、1899 年以降は主階を 2 階に",
+   "values": {},
+   "stage": "V3",
+   "works": [
+    "wright-oakpark"
+   ],
+   "sources": [
+    "data/arch-masters/deep/wright-oakpark.json#generator"
+   ],
+   "use": "fact"
+  },
+  {
+   "id": "flw-prairie-dana",
+   "architect": "Frank Lloyd Wright",
+   "category": "plan",
+   "rule": "東端の対称（Dana）：ポーチ 8'-4½\"：アルコーブ 17'-8\"：居間 13'-7\"：アルコーブ 17'-8\"：ポーチ 8'-3½\"",
+   "values": {
+    "bays": [
+     "8'-4½\"",
+     "17'-8\"",
+     "13'-7\"",
+     "17'-8\"",
+     "8'-3½\""
+    ]
+   },
+   "stage": "V3",
+   "works": [
+    "wright-prairie-houses#dana-thomas"
+   ],
+   "sources": [
+    "data/arch-masters/deep/wright-prairie-houses.json#generation_rules"
+   ],
+   "use": "fact"
+  },
+  {
+   "id": "lc-five-points",
+   "architect": "Le Corbusier",
+   "category": "plan",
+   "rule": "柱＋平らなスラブ。壁は柱の線から外し、縁は持ち出し（自由な平面・自由な立面）。上下逆転：最上階を主、地上をサービス（モリトール）",
+   "values": {},
+   "stage": "V2",
+   "works": [
+    "corbusier-early",
+    "corbusier-public-other"
+   ],
+   "sources": [
+    "data/arch-masters/corbusier-early.json#generation_rules",
+    "data/arch-masters/deep/corbusier-public-other.json#R9"
+   ],
+   "use": "fact"
+  },
+  {
+   "id": "lc-museum-spiral",
+   "architect": "Le Corbusier",
+   "category": "plan",
+   "rule": "美術館は正方形の螺旋（無限成長）。アーメダバード 50 m（上限 84）・柱間 7 m×2、東京は 6.35 m×6×6 間・柱 49 本・三角錐のトップライト・中 3 階の高窓・右回り",
+   "values": {
+    "ahmedabad_m": 50,
+    "bay_m": 7,
+    "tokyo_bay_m": 6.35,
+    "tokyo_cols": 49
+   },
+   "stage": "V3",
+   "works": [
+    "corbusier-sacred-india"
+   ],
+   "sources": [
+    "data/arch-masters/deep/corbusier-sacred-india.json#museum_spiral",
+    "data/arch-masters/corbusier-late.json#R11"
+   ],
+   "use": "fact"
+  },
+  {
+   "id": "lc-capitol",
+   "architect": "Le Corbusier",
+   "category": "plan",
+   "rule": "チャンディガール：800 m 角に 400 m 角を入れ子、車道は 5 m 下・残土で丘。合同庁舎 240×24×50 m、外に斜路 2 本",
+   "values": {
+    "square_m": [
+     800,
+     400
+    ],
+    "secretariat_m": [
+     240,
+     24,
+     50
+    ]
+   },
+   "stage": "V2",
+   "works": [
+    "corbusier-sacred-india"
+   ],
+   "sources": [
+    "data/arch-masters/deep/corbusier-sacred-india.json#capitol_layout",
+    "data/arch-masters/deep/corbusier-sacred-india.json#secretariat"
+   ],
+   "conflicts": [
+    {
+     "what": "合同庁舎の寸法",
+     "a": "240×24 m（FLC）",
+     "b": "254×42 m（二次資料 V1）"
+    }
+   ],
+   "use": "fact"
+  },
+  {
+   "id": "flw-usonian-slab",
+   "architect": "Frank Lloyd Wright",
+   "category": "material",
+   "rule": "スラブ 3½\" を砕石 5½\" の上に、1¼\" の温水管を 2'-0\" ピッチ。縁は小口積みの煉瓦、赤い仕上げ。屋根は 2×4 の積層（根元 12 in→先 4 in）、軒 1〜10 ft、雨樋なし、段の付いた鼻隠し。カーポートの持ち出し 9〜20 ft",
+   "values": {
+    "slab_in": 3.5,
+    "rock_in": 5.5,
+    "pipe_in": 1.25,
+    "pipe_pitch": "2'-0\"",
+    "eave_ft": [
+     1,
+     10
+    ],
+    "carport_ft": [
+     9,
+     20
+    ]
+   },
+   "stage": "V3",
+   "works": [
+    "wright-usonian#jacobs-1",
+    "wright-usonian#pope-leighey"
+   ],
+   "sources": [
+    "data/arch-masters/deep/wright-usonian.json#R6",
+    "data/arch-masters/deep/wright-usonian.json#R8",
+    "data/arch-masters/deep/wright-usonian.json#R9"
+   ],
+   "conflicts": [
+    {
+     "what": "軒の出",
+     "a": "1〜10 ft（wright-usonian R8）",
+     "b": "典型 2〜4 ft・隅で最大 8 ft（wright-late）",
+     "c": "1〜8 ft（wright-late usonian_rules V3）"
+    }
+   ],
+   "use": "fact"
+  },
+  {
+   "id": "flw-walls-joints",
+   "architect": "Frank Lloyd Wright",
+   "category": "material",
+   "rule": "板壁は内外同じ（合板の芯＋紙＋横板と沈めた目板、真鍮ねじ）。煉瓦は横目地を深く・縦目地を平らに（Heller は横目地白・縦目地煉瓦色）。材料は 3 つまで、内外同じ。木は着色して無塗装",
+   "values": {},
+   "stage": "V3",
+   "works": [
+    "wright-usonian",
+    "wright-oakpark"
+   ],
+   "sources": [
+    "data/arch-masters/deep/wright-usonian.json#R7",
+    "data/arch-masters/deep/wright-oakpark.json#generator",
+    "data/arch-masters/wright-late.json#generation_rules",
+    "data/arch-masters/deep/wright-design-philosophy.json#R6"
+   ],
+   "use": "fact"
+  },
+  {
+   "id": "flw-roof",
+   "architect": "Frank Lloyd Wright",
+   "category": "material",
+   "rule": "緩い勾配、深い軒、低く重い煙突。1 つの建物に 1 つのモチーフを床の目地・取手・門・照明・鼻隠しにくり返す",
+   "values": {},
+   "stage": "V3",
+   "works": [
+    "wright-design-philosophy",
+    "wright-late-public"
+   ],
+   "sources": [
+    "data/arch-masters/deep/wright-design-philosophy.json#R4",
+    "data/arch-masters/deep/wright-design-philosophy.json#R8",
+    "data/arch-masters/deep/wright-late-public.json#WLP-O2"
+   ],
+   "use": "fact"
+  },
+  {
+   "id": "lc-vault",
+   "architect": "Le Corbusier",
+   "category": "material",
+   "rule": "煉瓦（平瓦）のカタロニア・ヴォールト＋植栽屋根、煉瓦の耐力壁、各階の連続 RC 梁（ジャウル・サラバイ型）。床石をモデュロールで割り付ける",
+   "values": {},
+   "stage": "V2",
+   "works": [
+    "corbusier-public-other#cpo-jaoul"
+   ],
+   "sources": [
+    "data/arch-masters/deep/corbusier-public-other.json#R3",
+    "data/arch-masters/corbusier-late.json#R12"
+   ],
+   "use": "fact"
+  },
+  {
+   "id": "lc-roof-shell",
+   "architect": "Le Corbusier",
+   "category": "material",
+   "rule": "ロンシャンの屋根：厚さ 6 cm の殻 2 枚を 226 cm 離し、壁から浮かせて点で支持",
+   "values": {
+    "shell_cm": 6,
+    "gap_cm": 226
+   },
+   "stage": "V2",
+   "works": [
+    "corbusier-sacred-india#ronchamp"
+   ],
+   "sources": [
+    "data/arch-masters/deep/corbusier-sacred-india.json#shell_roof"
+   ],
+   "use": "fact"
+  },
+  {
+   "id": "lc-beton-brut",
+   "architect": "Le Corbusier",
+   "category": "material",
+   "rule": "打放しは型枠（木の板・鋼板）で質感を分け、上塗りしない。色はロッジアの袖壁などに限って塗る",
+   "values": {},
+   "stage": "V2",
+   "works": [
+    "corbusier-late"
+   ],
+   "sources": [
+    "data/arch-masters/corbusier-late.json#R13"
+   ],
+   "use": "fact"
+  },
+  {
+   "id": "lc-polychromy",
+   "architect": "Le Corbusier",
+   "category": "color",
+   "rule": "ポリクロミー：1 部屋 1 気分、地の色 3 段階＋差し色 1。青系は後退、朱・橙・céruléen vif は前進。土色と白灰は構造と床。1959 年の 4320 系は小面積・外部。1 面 1 色、外壁は純白にしない",
+   "values": {
+    "colors_total": 63,
+    "keyboards": {
+     "1931": 43,
+     "1959": 20
+    }
+   },
+   "stage": "V2",
+   "works": [
+    "corbusier-design-philosophy",
+    "corbusier-villas"
+   ],
+   "sources": [
+    "data/arch-masters/deep/corbusier-design-philosophy.json#colors",
+    "data/arch-masters/deep/corbusier-villas.json#generation_rules.colour"
+   ],
+   "note": "色番号と名前は corbusier-design-philosophy.json の colors.list（63 色、すべて V2）。気分は 9 のうち 7 だけ確認、残り V0",
+   "use": "fact"
+  },
+  {
+   "id": "flw-color",
+   "architect": "Frank Lloyd Wright",
+   "category": "color",
+   "rule": "大地・秋の色。白は控えめ、内部は象牙色、外部は土の色。チェロキー・レッドの刻み目地のコンクリート床（後期）",
+   "values": {
+    "cherokee_hex": "#9B3426"
+   },
+   "stage": "V2-V3",
+   "works": [
+    "wright-late-public",
+    "wright-design-philosophy"
+   ],
+   "sources": [
+    "data/arch-masters/deep/wright-late-public.json#WLP-C1",
+    "data/arch-masters/deep/wright-late-public.json#WLP-C2",
+    "data/arch-masters/deep/wright-design-philosophy.json#R5"
+   ],
+   "conflicts": [
+    {
+     "what": "チェロキー・レッドの色値",
+     "a": "#9B3426 は V0（記憶。寸法・色番号として使わない）"
+    }
+   ],
+   "use": "fact"
+  }
+ ],
+ "exclude": [
+  {
+   "name": "Ralph S. Baker House（Wilmette, 1913・HABS IL-1097）",
+   "reason": "William Drummond の作でライトではない。ライトの Frank J. Baker 邸（1909）とは別の建物。ライトの規則に数値を入れない",
+   "src": "deep/wright-prairie-houses.md"
+  },
+  {
+   "name": "Unity Chapel（FLW-0001）",
+   "reason": "目録の備考：設計は Silsbee。ライトの役割は小さい",
+   "src": "data/arch-masters/catalog.json"
+  }
+ ],
+ "conflicts_found": [
+  {
+   "at": ".works[unite-marseille].dimension_conflicts",
+   "text": "FLC と sites-le-corbusier はともに 135 m・330 戸。初版で使った 137 m・337 戸は二次資料の値（V1）。FLC 本文は商店街を 7・8 階とし、sites-le-corbusier の英文は 3・4 階とする（食い違いはそのまま記録する）",
+   "file": "data/arch-masters/corbusier-late.json"
+  },
+  {
+   "at": ".works[unite-berlin].verification",
+   "text": "V2（住戸の内訳に『2 室メゾネット』とあり、2 層住戸を削ったという記述と食い違う。FLC の原文どおり）",
+   "file": "data/arch-masters/corbusier-late.json"
+  },
+  {
+   "at": ".works[unite-firminy].verification",
+   "text": "V2（型の数は 2 資料で食い違う）",
+   "file": "data/arch-masters/corbusier-late.json"
+  },
+  {
+   "at": ".works[chandigarh-capitol].buildings.secretariat.note",
+   "text": "斜路 2 本、モデュロールに基づくファサード、屋上テラス。二次資料は 254 m・42 m（V1）で FLC と食い違う",
+   "file": "data/arch-masters/corbusier-late.json"
+  },
+  {
+   "at": ".works[firminy-stadium].verification",
+   "text": "V2（席数は 2 資料で食い違う）",
+   "file": "data/arch-masters/corbusier-late.json"
+  },
+  {
+   "at": ".confidence_scale.V0",
+   "text": "unknown, conflicting or single weak source",
+   "file": "data/arch-masters/wright-late.json"
+  },
+  {
+   "at": ".works[fallingwater].facts[6].k",
+   "text": "living area cited as 45x35, 48x38.5 or 50x40 ft (sources conflict)",
+   "file": "data/arch-masters/wright-late.json"
+  },
+  {
+   "at": ".works[johnson-wax].facts[0].v",
+   "text": "V3 / conflict",
+   "file": "data/arch-masters/wright-late.json"
+  },
+  {
+   "at": ".unbuilt[1].outcome",
+   "text": "資料で食い違い",
+   "file": "data/arch-masters/deep/corbusier-design-philosophy.json"
+  },
+  {
+   "at": ".works[0].quirks[3]",
+   "text": "FLC 15m² と 3.66²=13.4m² の食い違い",
+   "file": "data/arch-masters/deep/corbusier-design-philosophy.json"
+  },
+  {
+   "at": ".works[unite_briey].details[1].level",
+   "text": "conflict",
+   "file": "data/arch-masters/deep/corbusier-housing.json"
+  },
+  {
+   "at": ".works[cpo-jaoul].rooms[3].note",
+   "text": "食い違いとして両方記録",
+   "file": "data/arch-masters/deep/corbusier-public-other.json"
+  },
+  {
+   "at": ".works[ronchamp].materials[3].note",
+   "text": "食い違い",
+   "file": "data/arch-masters/deep/corbusier-sacred-india.json"
+  },
+  {
+   "at": ".works[firminy_stade].capacity[1].note",
+   "text": "食い違い",
+   "file": "data/arch-masters/deep/corbusier-sacred-india.json"
+  },
+  {
+   "at": ".works[nmwa_tokyo].route[1].note",
+   "text": "食い違い",
+   "file": "data/arch-masters/deep/corbusier-sacred-india.json"
+  },
+  {
+   "file": "data/arch-masters/deep/corbusier-villas.json",
+   "work": "fallet",
+   "items": [
+    "FLC EN 1906-1907 vs FR title 1905-1907",
+    "WP-FR claims WHS 2009; likely urban WHS only (V0)"
+   ]
+  },
+  {
+   "file": "data/arch-masters/deep/corbusier-villas.json",
+   "work": "jeanneret-perret",
+   "items": [
+    "'transept' name: LC (FLC) vs father (AMB)",
+    "structure: steel beams/brick piers (SLC) vs RC colonnettes (AMB)"
+   ]
+  },
+  {
+   "file": "data/arch-masters/deep/corbusier-villas.json",
+   "work": "ternisien",
+   "items": [
+    "URL 1923-1927 vs heading 1924-1926"
+   ]
+  },
+  {
+   "at": ".works[johnson-wax].rooms[0].dims",
+   "text": "NHL: '20 ft by 128 ft x 228 ft'; Wikipedia ~130x210 ft (conflict)",
+   "file": "data/arch-masters/deep/wright-fallingwater-johnson.json"
+  },
+  {
+   "at": ".works[hollyhock].details[2].text",
+   "text": "シザーズトラス（HABS 16in／NR 16ft 間隔、食い違い）、屋上テラス、内樋",
+   "file": "data/arch-masters/deep/wright-japan-california.json"
+  },
+  {
+   "at": ".works[guggenheim].rooms[0].note",
+   "text": "length conflict; width/parapet/ceiling/tilt are V2 (GUG-WP)",
+   "file": "data/arch-masters/deep/wright-late-public.json"
+  },
+  {
+   "at": ".works[taliesin-west].overall[1].note",
+   "text": "conflict",
+   "file": "data/arch-masters/deep/wright-late-public.json"
+  },
+  {
+   "at": ".works[beth-sholom].overall[1].note",
+   "text": "conflict",
+   "file": "data/arch-masters/deep/wright-late-public.json"
+  },
+  {
+   "at": ".works[FLW-0003/0042].phases[1].what",
+   "text": "西に新しい台所、旧台所を新食堂に（南へ張り出し）。台所の上に半円筒ヴォールトの遊戯室。HABSは1893/94（Manson）、Trust/Wikipediaは1895。食い違いを併記",
+   "file": "data/arch-masters/deep/wright-oakpark.json"
+  },
+  {
+   "file": "data/arch-masters/deep/wright-public-early.json",
+   "work": "larkin",
+   "items": [
+    "cost: final >$1M vs budget $4M"
+   ]
+  },
+  {
+   "at": ".works[midway-gardens].overall.size",
+   "text": "'300 ft square' vs '360,000 sq ft' (conflict)",
+   "file": "data/arch-masters/deep/wright-public-early.json"
+  },
+  {
+   "at": ".works[martin].furniture[3].spec",
+   "text": "Niedecken-Walbridge (HABS) vs Matthews Brothers (NHL) - conflicting",
+   "file": "data/arch-masters/deep/wright-robie-martin.json"
+  },
+  {
+   "at": ".works[martin].furniture[3].v",
+   "text": "V3 conflict",
+   "file": "data/arch-masters/deep/wright-robie-martin.json"
+  }
+ ],
+ "raw_rules": [
+  {
+   "file": "data/arch-masters/corbusier-early.json",
+   "key": "generation_rules",
+   "rules": [
+    "column + flat slab; walls off column lines; cantilever edges",
+    "Garches type: u=2.5 m, 2:1:2:1:2 x 1/2:1.5:1.5:1.5:1/2, 5:8",
+    "Savoye type: 4x4 at 4.75 m, ~21.5x19x9.4 m",
+    "Pessac type: 5x5 m cell, half/quarter cells",
+    "narrow plot type: 10 m frontage, single central piloti (Cook)",
+    "regulating lines: 5:8 similar rectangles, diagonals parallel/perpendicular, tol ~2% (assumption)",
+    "section: double-height living or central ramp (slope unknown; assume 1:6-1:8)",
+    "ceiling heights: 2.85 m living (Besnus), 3.5 m studio (Molitor)",
+    "promenade: hall -> split/bridge -> ramp -> roof view",
+    "polychromy: Salubra 3-5 colour sets, one per plane",
+    "furniture: pre-1928 Thonet + built-in/fixed storage; post-1928 LC; Casiers 75 cm module (reissue)",
+    "drawings: black columns, furniture in plan, regulating lines + bay ratios on elevations"
+   ]
+  },
+  {
+   "file": "data/arch-masters/corbusier-late.json",
+   "key": "generation_rules",
+   "rules": [
+    {
+     "id": "R1",
+     "rule": "寸法は modulor の赤列・青列（cm）から選ぶ。加法則の値（1254・2029・958・1550）と φ のべき乗の丸めの値の差は 1 cm 以内なので、生成ではどちらか一方に揃える",
+     "basis": "FLC：マルセイユ・サン＝ディエは全体をモデュロールで計算"
+    },
+    {
+     "id": "R2",
+     "rule": "天井高の既定は 226。行政の規制で 250 になる場合は『モデュロール違反』として注記する",
+     "basis": "FLC：ルゼの天井高 2.26、ベルリンでは 2.50 を強制された"
+    },
+    {
+     "id": "R3",
+     "rule": "集合住宅は戸境壁の芯々 366、奥行きは建物の幅いっぱいで東西 2 面採光。内部通路 1 本が 3 層に通じる。居間は 2 層吹抜で中二階に主寝室",
+     "basis": "FLC・sites-le-corbusier（通路と 3 層、吹抜と中二階）、366 は V1"
+    },
+    {
+     "id": "R4",
+     "rule": "住戸は 3 つのモジュール（入口・台所・居間／主寝室・水まわり／子供室 2）を組み合わせて型を作る",
+     "basis": "FLC マルセイユ（3 モジュールで 8 通り、23 型）"
+    },
+    {
+     "id": "R5",
+     "rule": "構造は『瓶棚』（RC の骨組みに住戸を差す）か『靴箱』（プレストレストの箱を積む）のどちらかを選び、住戸を骨組みや隣戸から遮音して切り離す",
+     "basis": "FLC マルセイユ・ルゼ"
+    },
+    {
+     "id": "R6",
+     "rule": "台所は居間に向いた配膳家具でつなぎ、電気レンジ・冷蔵庫・ダストシュート・多数の収納を作り付ける。部屋の寸法は与えない（V0）",
+     "basis": "FLC・Centre Pompidou"
+    },
+    {
+     "id": "R7",
+     "rule": "最小住居：平面 366×366、天井 226、窓 70×70 を 2 つと 33×70 を 1 つ、縦の換気スリット 2 本。入口→クローゼット→便所・衣装棚→ベッド→机・本棚と、時計回りの帯に家具を並べる（並び順は Blanc の凡例番号に従う。座標は出さない）",
+     "basis": "FLC・sites-le-corbusier・Blanc 2006"
+    },
+    {
+     "id": "R8",
+     "rule": "僧房：長さ 592・幅 183（または 226）。外から内へ ロッジア→作業→ベッド→衣装棚→洗面",
+     "basis": "FLC ラ・トゥーレット"
+    },
+    {
+     "id": "R9",
+     "rule": "日射の強い面（暑い地域では東と西）は厚い格子のブリーズ・ソレイユにし、側壁はほぼ無窓にして、卓越風が抜ける向きに置く",
+     "basis": "FLC ATMA"
+    },
+    {
+     "id": "R10",
+     "rule": "波動ガラス：コンクリートの方立の間隔をモデュロールの値の組み合わせで変える（具体の間隔は V0）",
+     "basis": "FLC ラ・トゥーレット・カーペンター・ブラジル館・フィルミニ"
+    },
+    {
+     "id": "R11",
+     "rule": "美術館は正方形の螺旋（無限成長）。中央の吹抜に頂光、斜路で上がり、時計回りに巡る。柱間 7 m の 2 スパン（アーメダバード）が数値の手がかり",
+     "basis": "FLC アーメダバード・東京"
+    },
+    {
+     "id": "R12",
+     "rule": "住宅の床石はモデュロールで割り付ける（optimal paving）。煉瓦壁＋カタラン・ヴォールト＋屋上緑化の組み合わせはジャウル・サラバイ型",
+     "basis": "FLC ショーダン・サラバイ・ジャウル"
+    },
+    {
+     "id": "R13",
+     "rule": "素材の表現：打放しは型枠の種類（木の板・鋼板）で質感を分け、上塗りをしない。色は LC の色の範囲で、ロッジアの袖壁などに限って塗る",
+     "basis": "FLC チャンディガール・アーメダバード美術館・マルセイユ"
+    },
+    {
+     "id": "R14",
+     "rule": "確認段階が V0/V1 の値は『参考』と表示し、確定の寸法として図面に書かない",
+     "basis": "本データの方針"
+    }
+   ]
+  },
+  {
+   "file": "data/arch-masters/wright-late.json",
+   "key": "generation_rules",
+   "rules": [
+    "choose module: 2x4 ft rectangle or 4 ft square (house), 4 ft 60/120 diamond or hexagon (angled sites, assembly), 60 deg parallelogram (tower), radial sector 6-10 deg (hemicycle/circle), 16 in block (textile block)",
+    "snap every wall centerline, pier, door and built-in to the grid; allow half-module only as exception",
+    "place masonry core (hearth + kitchen + bath + heater) at the pivot of an L/T/arc; give it the tallest roof with clerestory",
+    "living wing toward garden/sun with floor-to-ceiling glass doors; bedroom wing with a narrow gallery on the street/north side",
+    "three-height section: ~7'3\" bedrooms, ~9'4\" living, ~11'7\" core (Jacobs I as reference)",
+    "slab floor continuous to terraces; overhangs 2-4 ft typical, up to 8 ft at corners; cantilevered carport",
+    "max three materials, same inside and out (wood board+batten, brick or stone, glass)",
+    "built-in seating/shelves along walls, room centers open; loose furniture shaped to module",
+    "public works: dendriform columns on 20 ft grid, cantilevered floors from cores, spiral ramps, 120 deg wing junctions",
+    "check: every corner on a grid node or line; module visible in floor scoring"
+   ]
+  },
+  {
+   "file": "data/arch-masters/wright-late.json",
+   "key": "usonian_rules",
+   "rules": [
+    {
+     "rule": "plan on a unit system scored into the slab (2x4 ft at Jacobs I and Rosenbaum; 4 ft diamond at Unitarian; hexagon at Hanna; parallelogram at Price Tower)",
+     "v": "V3"
+    },
+    {
+     "rule": "walls centered on grid lines, exceptions at half module",
+     "v": "V3 (Jacobs I)"
+    },
+    {
+     "rule": "slab on sand/gravel with heating pipes beneath (gravity heat); minimal or no basement; no attic; carport not garage",
+     "v": "V3 (Jacobs I, Pope)"
+    },
+    {
+     "rule": "sandwich board walls identical inside and out; brick with raked horizontal, flush vertical joints",
+     "v": "V3 (Jacobs I, Hanna, Pope)"
+    },
+    {
+     "rule": "three ceiling heights: low bedroom wing, middle living, tall masonry core with clerestory over kitchen/bath",
+     "v": "V3 (Jacobs I: 7'3\"/9'4\"/11'7\")"
+    },
+    {
+     "rule": "kitchen ('workspace') in the core beside dining alcove, lit by clerestory only",
+     "v": "V3 (Jacobs I, Hanna)"
+    },
+    {
+     "rule": "entry by narrow low hall, then along one side of the big room (not centrally)",
+     "v": "V3 (Jacobs I)"
+    },
+    {
+     "rule": "street side closed with clerestory bands; garden side floor-to-ceiling glass doors; slab continuous inside to terrace at same level",
+     "v": "V3 (Jacobs I, Pope)"
+    },
+    {
+     "rule": "deep variable overhangs 1-8 ft; roofs stepped fascia",
+     "v": "V3 (Jacobs I)"
+    },
+    {
+     "rule": "built-in and simple loose furniture, often owner-built, echoing the module; lighting recessed in wood boxes",
+     "v": "V3 (Jacobs I, Pope)"
+    },
+    {
+     "rule": "board-and-batten courses set vertical dimensions (e.g. 13 in unit at Hanna)",
+     "v": "V1+"
+    }
+   ]
+  },
+  {
+   "file": "data/arch-masters/deep/corbusier-housing.json",
+   "key": "generation_rules",
+   "rules": {
+    "modulor_cell": {
+     "w": 3.66,
+     "h": 2.26,
+     "double_h": 4.84,
+     "len": 10,
+     "through_depth": 24
+    },
+    "e2_sequence": [
+     "red door+indirect light",
+     "kitchen 4.8 m2 street side",
+     "double-height living",
+     "loggia",
+     "Prouvé stair",
+     "utility wall",
+     "parents mezzanine",
+     "2 child rooms 1.83x8"
+    ],
+    "pessac": {
+     "unit": 5,
+     "B1L": [
+      7.5,
+      5,
+      2
+     ]
+    },
+    "weissenhof_corridor": 0.6,
+    "clarte_galleries": {
+     "S": [
+      1,
+      3,
+      5
+     ],
+     "N": [
+      2,
+      4,
+      6
+     ]
+    },
+    "student_room_m2": {
+     "suisse": 16,
+     "bresil": 18
+    }
+   }
+  },
+  {
+   "file": "data/arch-masters/deep/corbusier-public-other.json",
+   "key": "generation_rules",
+   "rules": [
+    "R1 斜路を主役に：入口から主室・屋上まで斜路で結び、勾配と曲率を変える（ツェントロソユーズ・カーペンター・クルチェット・チューリッヒ）。斜路は他室を経ずに目的室へ直行させる（カーペンター NRHP）。",
+    "R2 天井高の既定値 3.66 m（12 ft、カーペンター）。小屋・セル系は 2.26 m（キャンプ・ユニット 2.26×3.66×2.26、チューリッヒ 226 cm 立方）。週末住宅は 2.60 m（アンフェル）。居間兼アトリエは 2.85 m（ベスニュ）。",
+    "R3 ヴォールト：煉瓦（平瓦）のカタロニア・ヴォールト＋植栽屋根、煉瓦耐力壁、各階の連続 RC 梁（ジャウル・アンフェル）。ベイは 2.26／3.66 m（FLC の 2.66 は要確認）。",
+    "R4 ガラス壁：透明の引違い・網入り（腰）・ガラスブロック Nevada（採光壁・中庭）を層で分け、黒い細い鉄骨で補剛（モリトール・クラルテ）。",
+    "R5 外廊・バルコニーを南北で階をずらして配置（クラルテ：南 1・3・5、北 2・4・6）→二層住戸ごとに毎階バルコニー。",
+    "R6 ブリーズ・ソレイユの高さは隣家の軒に、奥の棟の高さは反対の隣家にそろえる（クルチェット）。",
+    "R7 地元の石・木をあらわしにする 1930 年代の系列：マンドロ（石の基壇＋L 形）、セクスタン（粗石＋木のバルコニー＋バタフライ屋根）、アンフェル（粗石＋ガラスブロック＋ヴォールト）。",
+    "R8 室内の 2 色ルール（クラルテ：柱・扉＝焦茶、ガラス部・手摺内＝淡青）。住宅の内部はピュリスムの限定色（ギエット・バイゾーの列挙を使う）。",
+    "R9 階層の逆転：最上階を主（LC 自宅）、地上をサービス（女中部屋 10 室）にする（モリトール）。",
+    "R10 工場：上から下へ流れる工程（3 階裁断→2 階縫製→1 階保管→地上出荷）、人と物の動線を分離、主立面にブリーズ・ソレイユ、妻壁は再利用石（サン・ディエ）。",
+    "R11 屋根と箱を分離（チューリッヒ：独立の傘屋根＋ボルト組の 226 cm 立方の箱）。",
+    "R12 規格収納（casiers standard）で間仕切る（エスプリ・ヌーヴォー、ベスニュはコンクリートの作り付け棚）。"
+   ]
+  },
+  {
+   "file": "data/arch-masters/deep/corbusier-sacred-india.json",
+   "key": "generation_rules",
+   "rules": [
+    {
+     "id": "shell_roof",
+     "rule": "厚さ6cmの殻2枚を226cm離す。壁から浮かせ、点で支持",
+     "v": "V2"
+    },
+    {
+     "id": "light_wall",
+     "rule": "壁厚0→270-305cmに、大きさの違う開口を不規則に。抱きは角度を変えて絞る。ガラスは透明・色・手描きを混ぜる",
+     "v": "V1"
+    },
+    {
+     "id": "cell",
+     "rule": "592×183/226。ロッジア→机→ベッド→衣装棚→洗面",
+     "v": "V2"
+    },
+    {
+     "id": "undulating_glass",
+     "rule": "高さ366(または732)。方立ての間隔はモデュロールの列から細→粗→細の波で。押縁の高さにはランダムな成分。押縁は金属25mm＋ゴム14mm",
+     "v": "V3",
+     "series_cm": [
+      12.8,
+      16.5,
+      20.4,
+      26.6,
+      33.0,
+      43.2,
+      53.4,
+      60.7,
+      69.8,
+      86.3,
+      102.0
+     ]
+    },
+    {
+     "id": "ceiling_hierarchy",
+     "rule": "個室側226→中間366→共同・聖732",
+     "v": "V3"
+    },
+    {
+     "id": "hyperbolic_church",
+     "rule": "25.5m角から円へ、高さ33m。東面に星座の孔、光の大砲5本",
+     "v": "V2"
+    },
+    {
+     "id": "cable_roof_hall",
+     "rule": "長さ112m、18mの鋼索66本の逆さヴォールト、外壁を傾ける",
+     "v": "V2"
+    },
+    {
+     "id": "capitol_layout",
+     "rule": "800m角に400m角を入れ子。車道は5m下、残土で丘",
+     "v": "V2"
+    },
+    {
+     "id": "secretariat",
+     "rule": "240×24×50m、外に斜路2本",
+     "v": "V2"
+    },
+    {
+     "id": "hot_office",
+     "rule": "東西は厚い格子、南北は閉じる。屋上に水を張った曲面の天井",
+     "v": "V2"
+    },
+    {
+     "id": "hot_house",
+     "rule": "カタラン・ヴォールト＋芝の屋根、チョーク、簾と重い扉、黒い石のモデュロール割付けの床、赤・青・黄・灰",
+     "v": "V2"
+    },
+    {
+     "id": "parasol_house",
+     "rule": "骨組みと別に日傘の屋根。対角から3/4を見せる。2層吹抜の玄関",
+     "v": "V2"
+    },
+    {
+     "id": "museum_spiral",
+     "rule": "四角い螺旋。アーメダバード50m(上限84)・柱間7m×2。東京は6.35m×6×6間・柱49本・三角錐のトップライト・中3階の高窓・右回り",
+     "v": "V3"
+    },
+    {
+     "id": "pebble_pc",
+     "rule": "地元の石を打ち込んだPCの外壁パネル",
+     "v": "V2"
+    },
+    {
+     "id": "downtown",
+     "rule": "4層、スパン5.62m、ベランダ366",
+     "v": "V2"
+    },
+    {
+     "id": "chair",
+     "rule": "チーク＋籐、逆Vのコンパス脚、座の高さ42±2、全高75-81",
+     "v": "V1"
+    }
+   ]
+  },
+  {
+   "file": "data/arch-masters/deep/corbusier-villas.json",
+   "key": "generation_rules",
+   "rules": {
+    "la_chaux_de_fonds": [
+     "style sapin: half-buried stone base, timber hip roof, central double-height hall + gallery",
+     "two-flat type: identical flats, S terrace/balcony",
+     "Maison Blanche type: perimeter walls + 4 piers 50x60 cm, 3x14 m axis ending in apse, walled summer room",
+     "Schwob type: square + 2 semicircular wings, 16 RC pillars/4 slabs, double-height living with gallery"
+    ],
+    "purist": [
+     "studio at ground (sculpture) or top double height + mezzanine",
+     "reversed plan",
+     "narrow plot: 10 m with 1 central column (Cook); 12 m with 4 columns + exterior stair (Planeix)",
+     "strip house 4x16 m, 11 m window",
+     "Savoye 4x4 bays 4.75 m, central 2-flight ramp, slope unknown -> assume 1:6-1:8",
+     "local-material type: stone + RC/timber, rooms from terrace"
+    ],
+    "colour": [
+     "one surface one colour",
+     "gallery: each wall different; brown solids before light blue/grey ground; ceiling natural Siena",
+     "dining: walls+ceiling same pink",
+     "metal/radiator dark grey (lead white + ivory black)",
+     "pigments per Célio list; no bright yellow",
+     "exterior never pure white: sand-yellow Cimentaline, pale green, English green base"
+    ]
+   }
+  },
+  {
+   "file": "data/arch-masters/deep/wright-design-philosophy.json",
+   "key": "generation_rules",
+   "rules": [
+    "R1 one living room screened by built-ins (V3)",
+    "R2 outswinging casement bands, no sash windows (V3)",
+    "R3 one material grade to upper sill, frieze above (V3)",
+    "R4 low pitch, deep eaves, low massive chimney (V3)",
+    "R5 earth/autumn palette; Cherokee red ~#9B3426 (V0)",
+    "R6 stained unvarnished wood (V3)",
+    "R7 built-in furniture on building grid (V3)",
+    "R8 one motif per building (V3)",
+    "R9 high-back chair H 90/100/140 cm, W 38-43, seat 45.7 (V3)",
+    "R10 dining enclosure: aligned high backs + corner lamp posts (V2)",
+    "R11 table H 66.8 living / 72.4-76.4 dining (V3)",
+    "R12 square lamps 41.9 cm, repeated 3/4/6 (V3)",
+    "R13 art glass: came lines dominant, clear field, colored accents (V3)",
+    "R14 units 4 in -> 16 in -> 2x4 ft -> 16x16 ft",
+    "R15 low entry ~1.8 m then tall room; Usonian ceilings 2.21/2.84/3.53 m (V2)",
+    "R16 textiles: 100s print, 500s weave (V3)",
+    "R17 red square signature lower right (V1)",
+    "R18 city: >=1 acre per family, highways (V3)",
+    "R19 tower: central core cantilevered floors (V1/V2)",
+    "R20 inputs are materials/tools/use, not style names (V3)"
+   ]
+  },
+  {
+   "file": "data/arch-masters/deep/wright-japan-california.json",
+   "key": "generation_rules",
+   "rules": {
+    "textile_block": {
+     "module_in": 16,
+     "block_in": [
+      16,
+      16,
+      3.5
+     ],
+     "half_block_in": [
+      8,
+      16
+     ],
+     "grid_in": [
+      16,
+      48
+     ],
+     "mullion_in": 16,
+     "casement_w_in": 16,
+     "corner": "no mullion",
+     "joint": "steel rods both ways, double wythe",
+     "level": "V3/V2"
+    },
+    "hollyhock_wall": {
+     "belt_course_h_in": 78,
+     "belt_depth_in": 11,
+     "batter_deg": 10,
+     "french_door_h_in": 78,
+     "level": "V3"
+    },
+    "yamamura": {
+     "entry_pinch_cm": 62,
+     "small_windows": 170,
+     "daylight_windows": 120,
+     "level": "V3"
+    },
+    "myonichikan": {
+     "chair_back": "hexagon+slot",
+     "colors": {
+      "wall": "cream",
+      "ext_joinery": "green",
+      "int_joinery": "dark brown"
+     },
+     "level": "V3/V2"
+    },
+    "imperial": {
+     "plan": "H+I",
+     "grid_ft": 4,
+     "grid_level": "V1"
+    }
+   }
+  },
+  {
+   "file": "data/arch-masters/deep/wright-late-public.json",
+   "key": "generation_rules",
+   "rules": [
+    {
+     "id": "WLP-G1",
+     "rule": "square grid from existing spacing (3 ft from 36 ft citrus; 16 ft at TW)",
+     "v": "V3"
+    },
+    {
+     "id": "WLP-G2",
+     "rule": "diamond grid 4 ft equilateral triangles, 4'-0\" x 6'-11\", 60/120 deg",
+     "v": "V3"
+    },
+    {
+     "id": "WLP-G3",
+     "rule": "30-60-90 parallelogram grid; quadrants rotated 30 deg",
+     "v": "V3"
+    },
+    {
+     "id": "WLP-G4",
+     "rule": "framing on grid; long spans on lines through diamond tips (6.9 ft / 3.45 ft)",
+     "v": "V3"
+    },
+    {
+     "id": "WLP-G5",
+     "rule": "dimension only off-grid elements",
+     "v": "V3"
+    },
+    {
+     "id": "WLP-R1",
+     "rule": "spiral ramp 5% grade, width 25->32 ft, parapet 36 in, wall tilt 97 deg, ceiling 9.5 ft, fins every 30 deg 8 in thick up to 24 ft deep",
+     "v": "V2-V3"
+    },
+    {
+     "id": "WLP-R2",
+     "rule": "lightwells widen upward",
+     "v": "V2"
+    },
+    {
+     "id": "WLP-S1",
+     "rule": "compress (low vestibule, ~5'-10\" canopy) then release; hide main room until top of stair",
+     "v": "V3"
+    },
+    {
+     "id": "WLP-S2",
+     "rule": "low ceilings keyed to 6'-8\" door; eaves to 6-3/4 ft",
+     "v": "V2-V3"
+    },
+    {
+     "id": "WLP-S3",
+     "rule": "sanctuary floor slopes to bimah; officiant eye level = mid-congregation",
+     "v": "V3"
+    },
+    {
+     "id": "WLP-T1",
+     "rule": "tap-root tower: 4 core fins 18 ft; slab tapers to 3 in; mullions project 9 in",
+     "v": "V3"
+    },
+    {
+     "id": "WLP-T2",
+     "rule": "timber three-hinged trusses 2x4/2x6 up to 64 ft, eave counterbalance",
+     "v": "V3"
+    },
+    {
+     "id": "WLP-M1",
+     "rule": "desert masonry: stones faced in forms, dry mix, battered walls, 2-3 lifts",
+     "v": "V3"
+    },
+    {
+     "id": "WLP-M2",
+     "rule": "redwood frame + white canvas operable panels, 15 deg slope, ~12 bays",
+     "v": "V3"
+    },
+    {
+     "id": "WLP-M3",
+     "rule": "textile block 36x9x3 in, two wythes + 3 in air = 9 in wall, colored glass inserts, 60 deg corner blocks",
+     "v": "V3"
+    },
+    {
+     "id": "WLP-M4",
+     "rule": "copper pre-patinated (acid, water, salt); paint concrete patina color if budget fails",
+     "v": "V3"
+    },
+    {
+     "id": "WLP-C1",
+     "rule": "Cherokee Red scored concrete floors; gold-anodized aluminum accents (1958-64)",
+     "v": "V2-V3"
+    },
+    {
+     "id": "WLP-C2",
+     "rule": "white only sparingly; ivory interiors, earth-tone exteriors",
+     "v": "V2-V3"
+    },
+    {
+     "id": "WLP-O1",
+     "rule": "circle=infinity, triangle=structural unity/aspiration, spiral=organic progress, square=integrity, lozenge=leaf",
+     "v": "V2-V3"
+    },
+    {
+     "id": "WLP-O2",
+     "rule": "repeat plan figure in floor inlays, handles, gates, lights, fascias",
+     "v": "V3"
+    }
+   ]
+  },
+  {
+   "file": "data/arch-masters/deep/wright-oakpark.json",
+   "key": "generator",
+   "rules": {
+    "unit_note": "この時期にグリッドの記載はない（Robie の4ft単位は1908年以降）。代わりに対称の3分割と壁割り棒で割る",
+    "rules": [
+     "plan_type: 正方形の箱に中央の暖炉（イングルヌック）。入口→暖炉を一直線の軸に、両脇に図書室と居間［自邸・Winslow・Goan・Bagley・Parker］",
+     "hearth: 暖炉の両脇に造付けベンチ（薪箱兼用）を対で、前に丸柱アーケード（Winslow: 柱間7、ヌック奥行5'-3\"、天井 9'-8½\"/アーケード上端 8'-6½\"）",
+     "entry_rise: 玄関から主室へ3〜5段上げる（Winslow 3段、Charnley 5段、自邸は床が地面+4ft）",
+     "stair_hidden: 主階段は入口から見えない位置（ヌックの裏・後部の塔）。蹴上/踏面 6½\"/12\"［Winslow］",
+     "facade_ABA: 正面は対称3分割。窓幅 5'-9½\"、間の壁 16'-2\"、両端 6'-10\"［Winslow 2階］",
+     "storey_bands: 下＝煉瓦/石、上階＝暗いフリーズ帯で窓をその中に沈める。帯の境は窓台の石の帯［Winslow］。板張りなら1階〜2階窓台を下見板、上を板葺き［Woolley・Goan］",
+     "ceiling_heights: 上の階ほど低く 9'-5\"→8'-10\"→7'-5\"［Charnley］、10'-7\"→8'-11\"［Heller］",
+     "trim: 戸に額縁を付けず、戸の上端の帯を部屋一周させる（鴨居）。壁割り棒は床から約5ft［自邸居間］か戸の上端まで［スタジオ］",
+     "octagon: 図書室・食堂・塔は八角形（Bagley・Parker・Williams・Furbeck・スタジオ）。天井の八角形は45°回す［スタジオ図書室］",
+     "elongation(1897-): 細長い敷地では部屋を1本の軸に並べ、長辺の中央から入る［Heller 98'-11¼\"×31'-2½\"］。1899 以降は主階を2階に上げる［Husser］",
+     "materials: ローマン煉瓦の横目地を白/深く、縦目地を煉瓦色/浅く［Heller］。内装は四分割白オーク、床と家具を一つの木と色に［Heller］",
+     "check: 入口から暖炉が見えるか／階段が見えていないか／正面が対称か／上階の窓がフリーズ帯の中にあるか"
+    ]
+   }
+  },
+  {
+   "file": "data/arch-masters/deep/wright-prairie-houses.json",
+   "key": "generation_rules",
+   "rules": [
+    {
+     "rule": "2層の主階",
+     "value": "地上階の天井を約 6'-0\"〜6'-1\" に抑え、主階を 2階（床 +6'-8\"〜+7'-0\"）に",
+     "src": "Coonley IL-1100 シート9",
+     "stage": "V3"
+    },
+    {
+     "rule": "低い縁と高い中心",
+     "value": "平天井 6'-6\" のアルコーブ→寄棟天井 14'-4\"（壁際）/16'-11\"（頂部）",
+     "src": "Steffens IL-1063 高さ表",
+     "stage": "V3"
+    },
+    {
+     "rule": "階高",
+     "value": "1階床 +1'-8\"、2階 +12'-0\"（10'-4\"）、屋根頂 +27'-2½\"",
+     "src": "Bradley IL-327 シート11",
+     "stage": "V3"
+    },
+    {
+     "rule": "窓台と窓頭",
+     "value": "居間の窓台 1'-2\"、食堂 2'-6\"、台所 4'-2\"、寝室 4'-3\"；窓頭 6'-6\"（1階）/7'-2\"（2階）",
+     "src": "Steffens",
+     "stage": "V3"
+    },
+    {
+     "rule": "階段",
+     "value": "主階段 踏面 10¾\" × 蹴上 6¾\"、裏階段 11\" × 5½\"",
+     "src": "Steffens",
+     "stage": "V3"
+    },
+    {
+     "rule": "東端の対称",
+     "value": "8'-4½\":17'-8\":13'-7\":17'-8\":8'-3½\"（ポーチ:アルコーブ:居間:アルコーブ:ポーチ）",
+     "src": "Dana IL-1188 シート4",
+     "stage": "V3"
+    },
+    {
+     "rule": "アートグラスの割付け",
+     "value": "開き窓の1枚幅 1'-4\"〜2'-8\"、縦長比 約 1:2〜1:3、模様は縦の帯を片側か中央に寄せる",
+     "src": "Coonley シート12–15",
+     "stage": "V3"
+    },
+    {
+     "rule": "外壁の水平線",
+     "value": "水切り +1'-5\"、2階窓台 +10'-0\"、軒下 +14'-4\"",
+     "src": "Coonley シート7–8",
+     "stage": "V3"
+    }
+   ]
+  },
+  {
+   "file": "data/arch-masters/deep/wright-robie-martin.json",
+   "key": "generator",
+   "rules": {
+    "unit": "4'-0\"",
+    "pier_main": "1'-3\"",
+    "sash_main": "2'-9\"",
+    "pier_upper": "8\"",
+    "sash_upper": "3'-4\"",
+    "ceiling_robie": {
+     "ground": "7'-2\"",
+     "main_edge": "7'-3\"",
+     "main_center_raise": "1'-5\"",
+     "upper": "7'-6\""
+    },
+    "ceiling_martin": "7'-6\"",
+    "head_band": "4-1/2\"",
+    "baseboard": "9\"",
+    "entry_height": "6'-4\"",
+    "glass_rule": "lower 60% >=90% clear; pattern in edge bands and top 40%; paired leaves mirror or offset",
+    "table_lamp_top": "54-1/2\"",
+    "table_top": "30-1/8\""
+   }
+  },
+  {
+   "file": "data/arch-masters/deep/wright-usonian.json",
+   "key": "generation_rules",
+   "rules": [
+    {
+     "id": "R1",
+     "rule": "grid choices: rect 2x4 ft | square 4x4 ft | hex unit 13 in | tri side 4'-6\" | radial 6 sectors; walls on grid lines, exceptions half-module"
+    },
+    {
+     "id": "R2",
+     "rule": "vertical module 13 in (board+batten); shelves, sills, heads, eaves snap to multiples"
+    },
+    {
+     "id": "R3",
+     "rule": "ceilings: low 7'-1\"..7'-5\" (bed/entry/carport), mid 9'-4\"..11'-5\" (living), high 11'-7\"..16'-0\" (core) with clerestory/skylight"
+    },
+    {
+     "id": "R4",
+     "rule": "entry low (6'-6\"..7'-1\"), steps riser 5-6 in tread 12 in, arrive along edge of main room"
+    },
+    {
+     "id": "R5",
+     "rule": "garden side full-height glazed door rows, leaf 1'-5\"..2'-0\", h 7-9 ft, fixed ends, piano hinges; street side boards + 1 ft clerestory (mullions 2 ft) or perforated boards"
+    },
+    {
+     "id": "R6",
+     "rule": "slab 3 1/2\" over 5 1/2\" crushed rock, 1 1/4\" hot-water pipes at 2'-0\" o.c.; rowlock brick edge; red finish"
+    },
+    {
+     "id": "R7",
+     "rule": "wall: vertical board or 3/4\" plywood core + paper + horizontal boards and recessed battens both faces, brass screws; brick raked horizontal joints, flush vertical"
+    },
+    {
+     "id": "R8",
+     "rule": "flat roofs of laminated 2x4s (12in root -> 4in tip), eaves 1-10 ft, no gutters, stepped fascia"
+    },
+    {
+     "id": "R9",
+     "rule": "carport cantilever 9-20 ft, entry at back of carport"
+    },
+    {
+     "id": "R10",
+     "rule": "built-ins: bookshelves 8in x6, dish shelves 12in x3, flush 7/8\" plywood fronts, full-length bookcases stiffen walls, wood box ceiling lights"
+    },
+    {
+     "id": "R11",
+     "rule": "loose: plywood chairs ~28-29 in, hassocks, tables at grid angles (60/120 in triangular houses)"
+    }
+   ]
+  }
+ ],
+ "works": [
+  {
+   "ref": "corbusier-early#fallet",
+   "name": "Villa Fallet"
+  },
+  {
+   "ref": "corbusier-early#stotzer",
+   "name": "Villa Stotzer"
+  },
+  {
+   "ref": "corbusier-early#jacquemet",
+   "name": "Villa Jacquemet"
+  },
+  {
+   "ref": "corbusier-early#jeanneret-perret",
+   "name": "Villa Jeanneret-Perret (Maison Blanche)"
+  },
+  {
+   "ref": "corbusier-early#favre-jacot",
+   "name": "Villa Favre-Jacot"
+  },
+  {
+   "ref": "corbusier-early#schwob",
+   "name": "Villa Schwob (Villa Turque)"
+  },
+  {
+   "ref": "corbusier-early#dom-ino",
+   "name": "Dom-ino (project)"
+  },
+  {
+   "ref": "corbusier-early#citrohan",
+   "name": "Maison Citrohan (project)"
+  },
+  {
+   "ref": "corbusier-early#besnus",
+   "name": "Villa Besnus (Ker-Ka-Ré)"
+  },
+  {
+   "ref": "corbusier-early#ozenfant",
+   "name": "Maison-atelier Ozenfant"
+  },
+  {
+   "ref": "corbusier-early#la-roche-jeanneret",
+   "name": "Maison La Roche-Jeanneret"
+  },
+  {
+   "ref": "corbusier-early#le-lac",
+   "name": "Villa Le Lac (Petite maison)"
+  },
+  {
+   "ref": "corbusier-early#lipchitz-miestchaninoff",
+   "name": "Maisons Lipchitz-Miestchaninoff"
+  },
+  {
+   "ref": "corbusier-early#pessac",
+   "name": "Cité Frugès"
+  },
+  {
+   "ref": "corbusier-early#planeix",
+   "name": "Maison Planeix"
+  },
+  {
+   "ref": "corbusier-early#cook",
+   "name": "Maison Cook"
+  },
+  {
+   "ref": "corbusier-early#garches",
+   "name": "Villa Stein-de Monzie (Les Terrasses)"
+  },
+  {
+   "ref": "corbusier-early#weissenhof",
+   "name": "Weissenhof houses 13, 14/15"
+  },
+  {
+   "ref": "corbusier-early#savoye",
+   "name": "Villa Savoye + gardener's lodge"
+  },
+  {
+   "ref": "corbusier-early#beistegui",
+   "name": "Beistegui apartment"
+  },
+  {
+   "ref": "corbusier-early#de-mandrot",
+   "name": "Villa de Mandrot"
+  },
+  {
+   "ref": "corbusier-early#cite-de-refuge",
+   "name": "Cité de Refuge"
+  },
+  {
+   "ref": "corbusier-early#pavillon-suisse",
+   "name": "Pavillon Suisse"
+  },
+  {
+   "ref": "corbusier-early#clarte",
+   "name": "Immeuble Clarté"
+  },
+  {
+   "ref": "corbusier-early#molitor",
+   "name": "Immeuble Molitor (24 N.C.)"
+  },
+  {
+   "ref": "corbusier-early#others-unresearched",
+   "name": "Guiette (1926), Baizeau (1928-30), Church (1928-), La Celle-Saint-Cloud (1935), Le Sextant (1935), Tsentrosoyuz (1928-36)"
+  },
+  {
+   "ref": "corbusier-late#temps-nouveaux",
+   "name": "Pavillon des Temps Nouveaux（ピエール・ジャンヌレと共同）"
+  },
+  {
+   "ref": "corbusier-late#csmo",
+   "name": "Centre Scientifique de la Main d'Œuvre"
+  },
+  {
+   "ref": "corbusier-late#jeunes-chomeurs",
+   "name": "Centre de réadaptation des jeunes chômeurs"
+  },
+  {
+   "ref": "corbusier-late#saint-die",
+   "name": "Manufacture Claude & Duval（デュヴァル工場）"
+  },
+  {
+   "ref": "corbusier-late#unite-marseille",
+   "name": "Unité d'habitation de Marseille（Cité radieuse）"
+  },
+  {
+   "ref": "corbusier-late#unite-reze",
+   "name": "Unité d'habitation de Rezé（Maison radieuse）"
+  },
+  {
+   "ref": "corbusier-late#unite-berlin",
+   "name": "Unité d'habitation Berlin（Typ Berlin, Corbusierhaus）"
+  },
+  {
+   "ref": "corbusier-late#unite-briey",
+   "name": "Unité d'habitation de Briey-en-Forêt"
+  },
+  {
+   "ref": "corbusier-late#unite-firminy",
+   "name": "Unité d'habitation de Firminy-Vert"
+  },
+  {
+   "ref": "corbusier-late#curutchet",
+   "name": "Maison du Docteur Curutchet"
+  },
+  {
+   "ref": "corbusier-late#ronchamp",
+   "name": "Chapelle Notre-Dame-du-Haut"
+  },
+  {
+   "ref": "corbusier-late#cabanon",
+   "name": "Le Cabanon"
+  },
+  {
+   "ref": "corbusier-late#camping-units",
+   "name": "Unités de camping（Étoile de Mer の休暇用小屋 5 棟）"
+  },
+  {
+   "ref": "corbusier-late#jaoul",
+   "name": "Maisons Jaoul（A 棟・B 棟）"
+  },
+  {
+   "ref": "corbusier-late#atma",
+   "name": "Mill Owners' Association Building（ATMA, Palais des Filateurs）"
+  },
+  {
+   "ref": "corbusier-late#villa-shodhan",
+   "name": "Villa Shodhan"
+  },
+  {
+   "ref": "corbusier-late#villa-sarabhai",
+   "name": "Villa Sarabhai"
+  },
+  {
+   "ref": "corbusier-late#sanskar-kendra",
+   "name": "Museum of the City, Ahmedabad（Sanskar Kendra）"
+  },
+  {
+   "ref": "corbusier-late#chandigarh-capitol",
+   "name": "Capitol Complex, Chandigarh（高等裁判所・議事堂・合同庁舎・記念碑群）"
+  },
+  {
+   "ref": "corbusier-late#chandigarh-city",
+   "name": "Chandigarh（都市計画と市内の LC 作品）"
+  },
+  {
+   "ref": "corbusier-late#la-tourette",
+   "name": "Couvent Sainte-Marie de La Tourette"
+  },
+  {
+   "ref": "corbusier-late#nmwa-tokyo",
+   "name": "国立西洋美術館 本館"
+  },
+  {
+   "ref": "corbusier-late#maison-bresil",
+   "name": "Maison du Brésil（ルシオ・コスタと）"
+  },
+  {
+   "ref": "corbusier-late#doncourt",
+   "name": "Aéroclub de Doncourt（オジェ親子・プルーヴェと）"
+  },
+  {
+   "ref": "corbusier-late#philips-pavilion",
+   "name": "Pavillon Philips（Exposition universelle 1958）"
+  },
+  {
+   "ref": "corbusier-late#carpenter-center",
+   "name": "Carpenter Center for the Visual Arts"
+  },
+  {
+   "ref": "corbusier-late#firminy-maison-culture",
+   "name": "Maison de la Culture de Firminy"
+  },
+  {
+   "ref": "corbusier-late#firminy-stadium",
+   "name": "Stade de Firminy"
+  },
+  {
+   "ref": "corbusier-late#firminy-church",
+   "name": "Église Saint-Pierre de Firminy"
+  },
+  {
+   "ref": "corbusier-late#kembs-niffer",
+   "name": "Bâtiments de l'écluse de Kembs-Niffer"
+  },
+  {
+   "ref": "corbusier-late#zurich-pavilion",
+   "name": "Maison de l'Homme / Pavillon Le Corbusier（Heidi Weber Museum）"
+  },
+  {
+   "ref": "corbusier-late#grave",
+   "name": "ル・コルビュジエとイヴォンヌの墓"
+  },
+  {
+   "ref": "corbusier-late#bhakra",
+   "name": "Bhakra Dam（顧問建築家）"
+  },
+  {
+   "ref": "corbusier-late#baghdad-gym",
+   "name": "Gymnasium, Baghdad（Saddam Hussein Gymnasium）"
+  },
+  {
+   "ref": "wright-late#imperial-hotel",
+   "name": "Imperial Hotel"
+  },
+  {
+   "ref": "wright-late#hollyhock",
+   "name": "Aline Barnsdall House (Hollyhock House)"
+  },
+  {
+   "ref": "wright-late#textile-block",
+   "name": "Textile block houses: Millard (La Miniatura), Storer, Freeman, Ennis"
+  },
+  {
+   "ref": "wright-late#fallingwater",
+   "name": "Fallingwater (Edgar J. Kaufmann House)"
+  },
+  {
+   "ref": "wright-late#johnson-wax",
+   "name": "S.C. Johnson Administration Building and Research Tower"
+  },
+  {
+   "ref": "wright-late#jacobs-1",
+   "name": "Herbert and Katherine Jacobs First House"
+  },
+  {
+   "ref": "wright-late#hanna",
+   "name": "Paul R. and Jean Hanna House (Honeycomb)"
+  },
+  {
+   "ref": "wright-late#taliesin-west",
+   "name": "Taliesin West"
+  },
+  {
+   "ref": "wright-late#pope-leighey",
+   "name": "Loren B. Pope House (Pope-Leighey)"
+  },
+  {
+   "ref": "wright-late#rosenbaum",
+   "name": "Stanley and Mildred Rosenbaum House"
+  },
+  {
+   "ref": "wright-late#jacobs-2",
+   "name": "Jacobs Second House (Solar Hemicycle)"
+  },
+  {
+   "ref": "wright-late#unitarian",
+   "name": "First Unitarian Society Meeting House"
+  },
+  {
+   "ref": "wright-late#guggenheim",
+   "name": "Solomon R. Guggenheim Museum"
+  },
+  {
+   "ref": "wright-late#morris",
+   "name": "V. C. Morris Gift Shop"
+  },
+  {
+   "ref": "wright-late#david-wright",
+   "name": "David and Gladys Wright House"
+  },
+  {
+   "ref": "wright-late#price-tower",
+   "name": "Price Tower"
+  },
+  {
+   "ref": "wright-late#beth-sholom",
+   "name": "Beth Sholom Synagogue"
+  },
+  {
+   "ref": "wright-late#marin",
+   "name": "Marin County Civic Center"
+  },
+  {
+   "ref": "wright-late#wingspread",
+   "name": "Herbert F. Johnson House (Wingspread)"
+  },
+  {
+   "ref": "wright-prairie#flw-home-studio",
+   "name": "Frank Lloyd Wright Home and Studio"
+  },
+  {
+   "ref": "wright-prairie#winslow",
+   "name": "William H. Winslow House"
+  },
+  {
+   "ref": "wright-prairie#hickox",
+   "name": "Warren Hickox House"
+  },
+  {
+   "ref": "wright-prairie#bradley",
+   "name": "B. Harley Bradley House"
+  },
+  {
+   "ref": "wright-prairie#husser",
+   "name": "Joseph Husser House"
+  },
+  {
+   "ref": "wright-prairie#thomas",
+   "name": "Frank W. Thomas House"
+  },
+  {
+   "ref": "wright-prairie#fricke",
+   "name": "William G. Fricke House"
+  },
+  {
+   "ref": "wright-prairie#willits",
+   "name": "Ward W. Willits House"
+  },
+  {
+   "ref": "wright-prairie#heurtley",
+   "name": "Arthur Heurtley House"
+  },
+  {
+   "ref": "wright-prairie#dana",
+   "name": "Susan Lawrence Dana House"
+  },
+  {
+   "ref": "wright-prairie#cheney",
+   "name": "Edwin H. Cheney House"
+  },
+  {
+   "ref": "wright-prairie#larkin",
+   "name": "Larkin Administration Building"
+  },
+  {
+   "ref": "wright-prairie#martin",
+   "name": "Darwin D. Martin House"
+  },
+  {
+   "ref": "wright-prairie#unity-temple",
+   "name": "Unity Temple"
+  },
+  {
+   "ref": "wright-prairie#boynton",
+   "name": "E. E. Boynton House"
+  },
+  {
+   "ref": "wright-prairie#evans",
+   "name": "Robert W. Evans House"
+  },
+  {
+   "ref": "wright-prairie#coonley",
+   "name": "Avery Coonley House"
+  },
+  {
+   "ref": "wright-prairie#robie",
+   "name": "Frederick C. Robie House"
+  },
+  {
+   "ref": "wright-prairie#may",
+   "name": "Meyer S. May House"
+  },
+  {
+   "ref": "wright-prairie#gale-laura",
+   "name": "Mrs. Thomas H. (Laura) Gale House"
+  },
+  {
+   "ref": "wright-prairie#steffens",
+   "name": "Oscar Steffens House"
+  },
+  {
+   "ref": "wright-prairie#park-inn",
+   "name": "Park Inn Hotel / City National Bank"
+  },
+  {
+   "ref": "wright-prairie#taliesin-i",
+   "name": "Taliesin (I)"
+  },
+  {
+   "ref": "wright-prairie#midway",
+   "name": "Midway Gardens"
+  },
+  {
+   "ref": "wright-prairie#bach",
+   "name": "Emil Bach House"
+  },
+  {
+   "ref": "corbusier-design-philosophy#i0",
+   "name": "Cabanon"
+  },
+  {
+   "ref": "corbusier-design-philosophy#i1",
+   "name": "Villa Savoye"
+  },
+  {
+   "ref": "corbusier-design-philosophy#i2",
+   "name": "Unité d'habitation Marseille"
+  },
+  {
+   "ref": "corbusier-design-philosophy#i3",
+   "name": "Couvent de La Tourette"
+  },
+  {
+   "ref": "corbusier-design-philosophy#i4",
+   "name": "Salon d'Automne 1929 Équipement intérieur"
+  },
+  {
+   "ref": "corbusier-design-philosophy#i5",
+   "name": "Chandigarh aérateurs"
+  },
+  {
+   "ref": "corbusier-housing#pessac",
+   "name": "Quartiers Modernes Frugès"
+  },
+  {
+   "ref": "corbusier-housing#weissenhof13",
+   "name": "Weissenhof single house (Citrohan)"
+  },
+  {
+   "ref": "corbusier-housing#weissenhof1415",
+   "name": "Weissenhof double house (maison transformable)"
+  },
+  {
+   "ref": "corbusier-housing#cite_refuge",
+   "name": "Cité de refuge (Salvation Army)"
+  },
+  {
+   "ref": "corbusier-housing#pavillon_suisse",
+   "name": "Fondation suisse"
+  },
+  {
+   "ref": "corbusier-housing#maison_bresil",
+   "name": "Maison du Brésil"
+  },
+  {
+   "ref": "corbusier-housing#clarte",
+   "name": "Immeuble Clarté"
+  },
+  {
+   "ref": "corbusier-housing#molitor",
+   "name": "Immeuble Molitor + LC apartment-studio"
+  },
+  {
+   "ref": "corbusier-housing#unite_marseille",
+   "name": "Unité d'habitation (Cité radieuse)"
+  },
+  {
+   "ref": "corbusier-housing#unite_reze",
+   "name": "Unité d'habitation (Maison radieuse)"
+  },
+  {
+   "ref": "corbusier-housing#unite_berlin",
+   "name": "Unité d'habitation Typ Berlin (Corbusierhaus)"
+  },
+  {
+   "ref": "corbusier-housing#unite_briey",
+   "name": "Unité d'habitation Briey-en-Forêt"
+  },
+  {
+   "ref": "corbusier-housing#unite_firminy",
+   "name": "Unité d'habitation Firminy-Vert"
+  },
+  {
+   "ref": "corbusier-public-other#cpo-centrosoyus",
+   "name": "Centrosoyus (Tsentrosoyuz)",
+   "catalog_id": "LC-0482"
+  },
+  {
+   "ref": "corbusier-public-other#cpo-esprit-nouveau",
+   "name": "Pavillon de l'Esprit Nouveau",
+   "catalog_id": "LC-0466"
+  },
+  {
+   "ref": "corbusier-public-other#cpo-jaoul",
+   "name": "Maisons Jaoul (A & B)",
+   "catalog_id": "LC-0506"
+  },
+  {
+   "ref": "corbusier-public-other#cpo-curutchet",
+   "name": "Maison du Docteur Curutchet",
+   "catalog_id": "LC-0499"
+  },
+  {
+   "ref": "corbusier-public-other#cpo-philips",
+   "name": "Pavillon Philips (Expo 58)",
+   "catalog_id": "LC-0526"
+  },
+  {
+   "ref": "corbusier-public-other#cpo-zurich",
+   "name": "Maison de l'Homme / Heidi Weber Museum – Centre Le Corbusier (Pavillon Le Corbusier)",
+   "catalog_id": "LC-0534"
+  },
+  {
+   "ref": "corbusier-public-other#cpo-carpenter",
+   "name": "Carpenter Center for the Visual Arts",
+   "catalog_id": "LC-0530"
+  },
+  {
+   "ref": "corbusier-public-other#cpo-molitor",
+   "name": "Immeuble locatif à la Porte Molitor (24 N&C) + appartement-atelier LC",
+   "catalog_id": "LC-0491"
+  },
+  {
+   "ref": "corbusier-public-other#cpo-claude-duval",
+   "name": "Usine Claude et Duval (Manufacture à Saint-Dié)",
+   "catalog_id": "LC-0497"
+  },
+  {
+   "ref": "corbusier-public-other#cpo-lipchitz",
+   "name": "Villas Lipchitz–Miestchaninoff",
+   "catalog_id": "LC-0467"
+  },
+  {
+   "ref": "corbusier-public-other#cpo-ternisien",
+   "name": "Maison Ternisien",
+   "catalog_id": "LC-0476"
+  },
+  {
+   "ref": "corbusier-public-other#cpo-planeix",
+   "name": "Maison Planeix",
+   "catalog_id": "LC-0472"
+  },
+  {
+   "ref": "corbusier-public-other#cpo-church",
+   "name": "Villa Church (Ville-d'Avray)",
+   "catalog_id": "LC-0484"
+  },
+  {
+   "ref": "corbusier-public-other#cpo-besnus",
+   "name": "Villa Besnus « Ker-Ka-Ré »",
+   "catalog_id": "LC-0461"
+  },
+  {
+   "ref": "corbusier-public-other#cpo-guiette",
+   "name": "Maison Guiette « Les Peupliers »",
+   "catalog_id": "LC-0475"
+  },
+  {
+   "ref": "corbusier-public-other#cpo-tonkin",
+   "name": "Maison du Tonkin",
+   "catalog_id": "LC-0469"
+  },
+  {
+   "ref": "corbusier-public-other#cpo-lege",
+   "name": "Maisons et cantine de Lège",
+   "catalog_id": "LC-0470"
+  },
+  {
+   "ref": "corbusier-public-other#cpo-henfel",
+   "name": "Maison de week-end Henfel",
+   "catalog_id": "LC-0494"
+  },
+  {
+   "ref": "corbusier-public-other#cpo-clarte",
+   "name": "Immeuble Clarté",
+   "catalog_id": "LC-0489"
+  },
+  {
+   "ref": "corbusier-public-other#cpo-st-nicolas",
+   "name": "Cité ouvrière Saint-Nicolas-d'Aliermont"
+  },
+  {
+   "ref": "corbusier-public-other#cpo-berque",
+   "name": "Aménagement de la villa Berque"
+  },
+  {
+   "ref": "corbusier-public-other#cpo-palais-peuple",
+   "name": "Armée du Salut – Palais du Peuple (annexe)",
+   "catalog_id": "LC-0474"
+  },
+  {
+   "ref": "corbusier-public-other#cpo-louise-catherine",
+   "name": "Asile flottant (Péniche Louise-Catherine)",
+   "catalog_id": "LC-0486"
+  },
+  {
+   "ref": "corbusier-public-other#cpo-mandrot",
+   "name": "Villa de Mme H. de Mandrot (L'Artaude)"
+  },
+  {
+   "ref": "corbusier-public-other#cpo-sextant",
+   "name": "Villa Le Sextant",
+   "catalog_id": "LC-0492"
+  },
+  {
+   "ref": "corbusier-public-other#cpo-tombe",
+   "name": "Tombe de Le Corbusier et Yvonne"
+  },
+  {
+   "ref": "corbusier-public-other#cpo-nestle",
+   "name": "Pavillon Nestlé"
+  },
+  {
+   "ref": "corbusier-public-other#cpo-temps-nouveaux",
+   "name": "Pavillon des Temps Nouveaux",
+   "catalog_id": "LC-0496"
+  },
+  {
+   "ref": "corbusier-public-other#cpo-star",
+   "name": "Pavillon S.T.A.R. (Le Bourget)"
+  },
+  {
+   "ref": "corbusier-public-other#cpo-sensaud",
+   "name": "Garage Sensaud de Lavaud"
+  },
+  {
+   "ref": "corbusier-public-other#cpo-csmo",
+   "name": "Centre scientifique de la main-d'œuvre"
+  },
+  {
+   "ref": "corbusier-public-other#cpo-jeunes-chomeurs",
+   "name": "Centre de réadaptation des jeunes chômeurs (« Atelier de Jeunesse de France »)"
+  },
+  {
+   "ref": "corbusier-public-other#cpo-doncourt",
+   "name": "Aéroclub de Doncourt-lès-Conflans"
+  },
+  {
+   "ref": "corbusier-public-other#cpo-podensac",
+   "name": "Château d'eau de Podensac",
+   "catalog_id": "LC-0460"
+  },
+  {
+   "ref": "corbusier-public-other#cpo-camping",
+   "name": "Unités de camping",
+   "catalog_id": "LC-0525"
+  },
+  {
+   "ref": "corbusier-public-other#cpo-roq-rob",
+   "name": "Projets ROQ et ROB (cité de vacances, Cap-Martin)"
+  },
+  {
+   "ref": "corbusier-public-other#cpo-baizeau",
+   "name": "Villa Baizeau",
+   "catalog_id": "LC-0483"
+  },
+  {
+   "ref": "corbusier-public-other#cpo-beistegui",
+   "name": "Appartement de Charles de Beistegui",
+   "catalog_id": "LC-0490"
+  },
+  {
+   "ref": "corbusier-public-other#cpo-bresil",
+   "name": "Maison du Brésil",
+   "catalog_id": "LC-0521"
+  },
+  {
+   "ref": "corbusier-public-other#cpo-kembs",
+   "name": "Bâtiments de l'écluse de Kembs-Niffer"
+  },
+  {
+   "ref": "corbusier-public-other#cpo-bhakra",
+   "name": "Barrage de Bhakra (consultation)",
+   "catalog_id": "LC-0508"
+  },
+  {
+   "ref": "corbusier-public-other#cpo-baghdad",
+   "name": "Gymnase de Bagdad (Saddam Hussein Gymnasium)",
+   "catalog_id": "LC-0537"
+  },
+  {
+   "ref": "corbusier-public-other#cpo-firminy-stade",
+   "name": "Stade de Firminy",
+   "catalog_id": "LC-0532"
+  },
+  {
+   "ref": "corbusier-public-other#cpo-rio-mes",
+   "name": "Ministry of Education and Health, Rio de Janeiro (consultant)",
+   "catalog_id": "LC-0495"
+  },
+  {
+   "ref": "corbusier-public-other#cpo-un",
+   "name": "United Nations HQ, New York (Board of Design)",
+   "catalog_id": "LC-0501"
+  },
+  {
+   "ref": "corbusier-public-other#cpo-olivetti",
+   "name": "Centre de calcul électronique Olivetti, Rho-Milan",
+   "catalog_id": "LC-0529"
+  },
+  {
+   "ref": "corbusier-public-other#cpo-errazuriz",
+   "name": "Maison Errázuriz, Zapallar",
+   "catalog_id": "LC-0488"
+  },
+  {
+   "ref": "corbusier-public-other#cpo-young-man",
+   "name": "Appartement d'un jeune homme (Expo Bruxelles 1935)",
+   "catalog_id": "LC-0493"
+  },
+  {
+   "ref": "corbusier-public-other#cpo-pelerins",
+   "name": "Maison du gardien / Abri du pèlerin, Ronchamp",
+   "catalog_id": "LC-0503"
+  },
+  {
+   "ref": "corbusier-public-other#cpo-weissenhof-note",
+   "name": "(参考) Pierre Jeanneret との共同作の範囲"
+  },
+  {
+   "ref": "corbusier-sacred-india#ronchamp",
+   "name": "Chapelle Notre-Dame-du-Haut"
+  },
+  {
+   "ref": "corbusier-sacred-india#la_tourette",
+   "name": "Couvent Sainte-Marie de La Tourette"
+  },
+  {
+   "ref": "corbusier-sacred-india#firminy_saint_pierre",
+   "name": "Église Saint-Pierre, Firminy"
+  },
+  {
+   "ref": "corbusier-sacred-india#firminy_mdc",
+   "name": "Maison de la Culture, Firminy"
+  },
+  {
+   "ref": "corbusier-sacred-india#firminy_stade",
+   "name": "Stade, Firminy"
+  },
+  {
+   "ref": "corbusier-sacred-india#chandigarh_capitol_plan",
+   "name": "Capitol Complex (layout)"
+  },
+  {
+   "ref": "corbusier-sacred-india#chandigarh_high_court",
+   "name": "High Court"
+  },
+  {
+   "ref": "corbusier-sacred-india#chandigarh_assembly",
+   "name": "Palace of Assembly"
+  },
+  {
+   "ref": "corbusier-sacred-india#chandigarh_secretariat",
+   "name": "Secretariat"
+  },
+  {
+   "ref": "corbusier-sacred-india#chandigarh_open_hand",
+   "name": "Open Hand Monument & Pit of Consideration"
+  },
+  {
+   "ref": "corbusier-sacred-india#chandigarh_monuments",
+   "name": "Other Capitol monuments"
+  },
+  {
+   "ref": "corbusier-sacred-india#jeanneret_furniture",
+   "name": "Pierre Jeanneret furniture, Chandigarh"
+  },
+  {
+   "ref": "corbusier-sacred-india#atma",
+   "name": "Mill Owners' Association Building (ATMA)"
+  },
+  {
+   "ref": "corbusier-sacred-india#sarabhai",
+   "name": "Villa Sarabhai"
+  },
+  {
+   "ref": "corbusier-sacred-india#shodhan",
+   "name": "Villa Shodhan"
+  },
+  {
+   "ref": "corbusier-sacred-india#sanskar_kendra",
+   "name": "Sanskar Kendra (City Museum)"
+  },
+  {
+   "ref": "corbusier-sacred-india#nmwa_tokyo",
+   "name": "National Museum of Western Art, Main Building"
+  },
+  {
+   "ref": "corbusier-villas#fallet",
+   "name": "Villa Fallet"
+  },
+  {
+   "ref": "corbusier-villas#stotzer",
+   "name": "Villa Stotzer"
+  },
+  {
+   "ref": "corbusier-villas#jaquemet",
+   "name": "Villa Jaquemet"
+  },
+  {
+   "ref": "corbusier-villas#jeanneret-perret",
+   "name": "Villa Jeanneret-Perret (Maison Blanche)"
+  },
+  {
+   "ref": "corbusier-villas#schwob",
+   "name": "Villa Schwob (Villa Turque)"
+  },
+  {
+   "ref": "corbusier-villas#scala",
+   "name": "Cinéma La Scala"
+  },
+  {
+   "ref": "corbusier-villas#besnus",
+   "name": "Villa Besnus (Ker-Ka-Ré)"
+  },
+  {
+   "ref": "corbusier-villas#ozenfant",
+   "name": "Maison-atelier Ozenfant"
+  },
+  {
+   "ref": "corbusier-villas#la-roche-jeanneret",
+   "name": "Maisons La Roche et Jeanneret"
+  },
+  {
+   "ref": "corbusier-villas#le-lac",
+   "name": "Villa Le Lac (Petite villa au bord du lac Léman)"
+  },
+  {
+   "ref": "corbusier-villas#lipchitz-miestchaninoff",
+   "name": "Lipchitz-Miestchaninoff studio-residences"
+  },
+  {
+   "ref": "corbusier-villas#ternisien",
+   "name": "Maison Ternisien"
+  },
+  {
+   "ref": "corbusier-villas#cook",
+   "name": "Maison Cook"
+  },
+  {
+   "ref": "corbusier-villas#planeix",
+   "name": "Maison Planeix"
+  },
+  {
+   "ref": "corbusier-villas#church",
+   "name": "Villa Church"
+  },
+  {
+   "ref": "corbusier-villas#stein-de-monzie",
+   "name": "Villa Stein-de Monzie (Les Terrasses)"
+  },
+  {
+   "ref": "corbusier-villas#baizeau",
+   "name": "Villa Baizeau"
+  },
+  {
+   "ref": "corbusier-villas#savoye",
+   "name": "Villa Savoye and Gardener's Lodge"
+  },
+  {
+   "ref": "corbusier-villas#de-mandrot",
+   "name": "Villa de Mandrot (l'Artaude)"
+  },
+  {
+   "ref": "corbusier-villas#le-sextant",
+   "name": "Villa Le Sextant"
+  },
+  {
+   "ref": "wright-design-philosophy#i0",
+   "name": "1894 propositions / In the Cause of Architecture (1908)"
+  },
+  {
+   "ref": "wright-design-philosophy#i1",
+   "name": "In the Cause of Architecture, second paper (1914)"
+  },
+  {
+   "ref": "wright-design-philosophy#i2",
+   "name": "The Disappearing City / Broadacre City"
+  },
+  {
+   "ref": "wright-design-philosophy#i3",
+   "name": "Gordon Strong Automobile Objective and Planetarium"
+  },
+  {
+   "ref": "wright-design-philosophy#i4",
+   "name": "The Mile High Illinois"
+  },
+  {
+   "ref": "wright-design-philosophy#i5",
+   "name": "High-back chairs"
+  },
+  {
+   "ref": "wright-design-philosophy#i6",
+   "name": "Barrel chair and low armchairs"
+  },
+  {
+   "ref": "wright-design-philosophy#i7",
+   "name": "Office furniture (Larkin, Johnson Wax, Taliesin West)"
+  },
+  {
+   "ref": "wright-design-philosophy#i8",
+   "name": "Prairie tables, stands, lamps (Little houses)"
+  },
+  {
+   "ref": "wright-design-philosophy#i9",
+   "name": "Usonian plywood furniture"
+  },
+  {
+   "ref": "wright-design-philosophy#i10",
+   "name": "Herbert and Katherine Jacobs First House"
+  },
+  {
+   "ref": "wright-design-philosophy#i11",
+   "name": "Taliesin West"
+  },
+  {
+   "ref": "wright-design-philosophy#i12",
+   "name": "Wingspread"
+  },
+  {
+   "ref": "wright-design-philosophy#i13",
+   "name": "Robie House"
+  },
+  {
+   "ref": "wright-design-philosophy#i14",
+   "name": "Fallingwater (color)"
+  },
+  {
+   "ref": "wright-design-philosophy#i15",
+   "name": "Art glass"
+  },
+  {
+   "ref": "wright-design-philosophy#i16",
+   "name": "Schumacher Taliesin Line (1955)"
+  },
+  {
+   "ref": "wright-design-philosophy#i17",
+   "name": "Cherokee red and red square signature"
+  },
+  {
+   "ref": "wright-fallingwater-johnson#fallingwater",
+   "name": "Fallingwater (Edgar J. Kaufmann House)"
+  },
+  {
+   "ref": "wright-fallingwater-johnson#johnson-wax",
+   "name": "S.C. Johnson Administration Building and Research Tower"
+  },
+  {
+   "ref": "wright-fallingwater-johnson#wingspread",
+   "name": "Wingspread (Herbert F. Johnson House)"
+  },
+  {
+   "ref": "wright-fallingwater-johnson#taliesin-iii-hillside",
+   "name": "Taliesin III and Hillside drafting studio"
+  },
+  {
+   "ref": "wright-japan-california#imperial-hotel",
+   "name": "帝国ホテル 二代目本館（ライト館）／明治村 中央玄関"
+  },
+  {
+   "ref": "wright-japan-california#yamamura",
+   "name": "旧山邑家住宅（ヨドコウ迎賓館）"
+  },
+  {
+   "ref": "wright-japan-california#myonichikan",
+   "name": "自由学園明日館（中央棟・西教室棟／東教室棟・講堂は遠藤新）"
+  },
+  {
+   "ref": "wright-japan-california#hayashi",
+   "name": "旧林愛作邸（朋来居）"
+  },
+  {
+   "ref": "wright-japan-california#hollyhock",
+   "name": "Hollyhock House（Aline Barnsdall 邸）"
+  },
+  {
+   "ref": "wright-japan-california#barnsdall-residence-a",
+   "name": "Barnsdall Residence A（監督の家）"
+  },
+  {
+   "ref": "wright-japan-california#barnsdall-residence-b",
+   "name": "Barnsdall Residence B"
+  },
+  {
+   "ref": "wright-japan-california#barnsdall-garage-kennels",
+   "name": "Barnsdall 車庫・運転手室・動物舎"
+  },
+  {
+   "ref": "wright-japan-california#barnsdall-spring-house",
+   "name": "Barnsdall Spring House（ポンプ小屋）と涸れ川"
+  },
+  {
+   "ref": "wright-japan-california#barnsdall-schindler-terrace",
+   "name": "Schindler Terrace（Little Dipper の基礎）"
+  },
+  {
+   "ref": "wright-japan-california#millard",
+   "name": "Millard 邸「La Miniatura」"
+  },
+  {
+   "ref": "wright-japan-california#storer",
+   "name": "Storer 邸"
+  },
+  {
+   "ref": "wright-japan-california#freeman",
+   "name": "Samuel Freeman 邸"
+  },
+  {
+   "ref": "wright-japan-california#ennis",
+   "name": "Ennis 邸"
+  },
+  {
+   "ref": "wright-late-public#guggenheim",
+   "name": "Solomon R. Guggenheim Museum"
+  },
+  {
+   "ref": "wright-late-public#taliesin-west",
+   "name": "Taliesin West"
+  },
+  {
+   "ref": "wright-late-public#price-tower",
+   "name": "Price Tower"
+  },
+  {
+   "ref": "wright-late-public#beth-sholom",
+   "name": "Beth Sholom Synagogue"
+  },
+  {
+   "ref": "wright-late-public#unitarian-meeting-house",
+   "name": "First Unitarian Society Meeting House"
+  },
+  {
+   "ref": "wright-late-public#annunciation",
+   "name": "Annunciation Greek Orthodox Church"
+  },
+  {
+   "ref": "wright-late-public#marin-civic-center",
+   "name": "Marin County Civic Center"
+  },
+  {
+   "ref": "wright-late-public#florida-southern",
+   "name": "Florida Southern College (Child of the Sun)"
+  },
+  {
+   "ref": "wright-late-public#gammage",
+   "name": "Grady Gammage Memorial Auditorium"
+  },
+  {
+   "ref": "wright-late-public#kalita-humphreys",
+   "name": "Kalita Humphreys Theater"
+  },
+  {
+   "ref": "wright-late-public#pilgrim-congregational",
+   "name": "Pilgrim Congregational Church"
+  },
+  {
+   "ref": "wright-late-public#hoffman-showroom",
+   "name": "Hoffman Auto Showroom"
+  },
+  {
+   "ref": "wright-late-public#vc-morris",
+   "name": "V. C. Morris Gift Shop"
+  },
+  {
+   "ref": "wright-late-public#anderton-court",
+   "name": "Anderton Court Shops"
+  },
+  {
+   "ref": "wright-late-public#lindholm-station",
+   "name": "R. W. Lindholm Service Station"
+  },
+  {
+   "ref": "wright-late-public#monona-terrace",
+   "name": "Monona Terrace"
+  },
+  {
+   "ref": "wright-oakpark#FLW-0003/0042",
+   "name": "Frank Lloyd Wright Home and Studio（自邸とスタジオ）",
+   "catalog_id": "FLW-0003/0042"
+  },
+  {
+   "ref": "wright-oakpark#FLW-0022",
+   "name": "William H. Winslow House",
+   "catalog_id": "FLW-0022"
+  },
+  {
+   "ref": "wright-oakpark#FLW-0006",
+   "name": "James Charnley House",
+   "catalog_id": "FLW-0006"
+  },
+  {
+   "ref": "wright-oakpark#FLW-0034",
+   "name": "Isidore H. Heller House",
+   "catalog_id": "FLW-0034"
+  },
+  {
+   "ref": "wright-oakpark#FLW-0028",
+   "name": "Francis Apartments",
+   "catalog_id": "FLW-0028"
+  },
+  {
+   "ref": "wright-oakpark#FLW-0007",
+   "name": "Albert W. Sullivan House",
+   "catalog_id": "FLW-0007"
+  },
+  {
+   "ref": "wright-oakpark#FLW-0004/0005",
+   "name": "Louis Sullivan Bungalow と Charnley(-Norwood) House, Ocean Springs",
+   "catalog_id": "FLW-0004/0005"
+  },
+  {
+   "ref": "wright-oakpark#FLW-0002",
+   "name": "Hillside Home School I",
+   "catalog_id": "FLW-0002"
+  },
+  {
+   "ref": "wright-oakpark#FLW-0001",
+   "name": "Unity Chapel",
+   "catalog_id": "FLW-0001"
+  },
+  {
+   "ref": "wright-oakpark#FLW-0008",
+   "name": "Berry-MacHarg House",
+   "catalog_id": "FLW-0008"
+  },
+  {
+   "ref": "wright-oakpark#FLW-0009",
+   "name": "Dr. Allison W. Harlan House",
+   "catalog_id": "FLW-0009"
+  },
+  {
+   "ref": "wright-oakpark#FLW-0010",
+   "name": "Warren McArthur House",
+   "catalog_id": "FLW-0010"
+  },
+  {
+   "ref": "wright-oakpark#FLW-0011",
+   "name": "George Blossom House",
+   "catalog_id": "FLW-0011"
+  },
+  {
+   "ref": "wright-oakpark#FLW-0012",
+   "name": "Robert G. Emmond House",
+   "catalog_id": "FLW-0012"
+  },
+  {
+   "ref": "wright-oakpark#FLW-0013",
+   "name": "Robert P. Parker House",
+   "catalog_id": "FLW-0013"
+  },
+  {
+   "ref": "wright-oakpark#FLW-0014",
+   "name": "Thomas H. Gale House",
+   "catalog_id": "FLW-0014"
+  },
+  {
+   "ref": "wright-oakpark#FLW-0015",
+   "name": "W. Irving Clark House",
+   "catalog_id": "FLW-0015"
+  },
+  {
+   "ref": "wright-oakpark#FLW-0016",
+   "name": "Lake Mendota Boathouse",
+   "catalog_id": "FLW-0016"
+  },
+  {
+   "ref": "wright-oakpark#FLW-0017",
+   "name": "Walter H. Gale House",
+   "catalog_id": "FLW-0017"
+  },
+  {
+   "ref": "wright-oakpark#FLW-0018",
+   "name": "Robert M. Lamp Cottage (Rocky Roost)",
+   "catalog_id": "FLW-0018"
+  },
+  {
+   "ref": "wright-oakpark#FLW-0019",
+   "name": "Francis J. Woolley House",
+   "catalog_id": "FLW-0019"
+  },
+  {
+   "ref": "wright-oakpark#FLW-0020",
+   "name": "Frederick Bagley House",
+   "catalog_id": "FLW-0020"
+  },
+  {
+   "ref": "wright-oakpark#FLW-0021",
+   "name": "Henry and Lily Mitchell House",
+   "catalog_id": "FLW-0021"
+  },
+  {
+   "ref": "wright-oakpark#FLW-0023",
+   "name": "Robert W. Roloson Houses",
+   "catalog_id": "FLW-0023"
+  },
+  {
+   "ref": "wright-oakpark#FLW-0024",
+   "name": "Peter Goan House",
+   "catalog_id": "FLW-0024"
+  },
+  {
+   "ref": "wright-oakpark#FLW-0025",
+   "name": "Dr. H.W. Bassett House",
+   "catalog_id": "FLW-0025"
+  },
+  {
+   "ref": "wright-oakpark#FLW-0026",
+   "name": "Edward C. Waller Apartments",
+   "catalog_id": "FLW-0026"
+  },
+  {
+   "ref": "wright-oakpark#FLW-0027",
+   "name": "Francisco Terrace Apartments",
+   "catalog_id": "FLW-0027"
+  },
+  {
+   "ref": "wright-oakpark#FLW-0029",
+   "name": "Chauncey L. Williams House",
+   "catalog_id": "FLW-0029"
+  },
+  {
+   "ref": "wright-oakpark#FLW-0030",
+   "name": "Nathan G. Moore House",
+   "catalog_id": "FLW-0030"
+  },
+  {
+   "ref": "wright-oakpark#FLW-0031",
+   "name": "Harrison P. Young House 改修",
+   "catalog_id": "FLW-0031"
+  },
+  {
+   "ref": "wright-oakpark#FLW-0032",
+   "name": "George W. Smith House",
+   "catalog_id": "FLW-0032"
+  },
+  {
+   "ref": "wright-oakpark#FLW-0033",
+   "name": "Romeo and Juliet Windmill",
+   "catalog_id": "FLW-0033"
+  },
+  {
+   "ref": "wright-oakpark#FLW-0035",
+   "name": "Harry C. Goodrich House",
+   "catalog_id": "FLW-0035"
+  },
+  {
+   "ref": "wright-oakpark#FLW-0036",
+   "name": "Charles E. Roberts House 改修",
+   "catalog_id": "FLW-0036"
+  },
+  {
+   "ref": "wright-oakpark#FLW-0037",
+   "name": "Charles E. Roberts Stable",
+   "catalog_id": "FLW-0037"
+  },
+  {
+   "ref": "wright-oakpark#FLW-0038",
+   "name": "George W. Furbeck House",
+   "catalog_id": "FLW-0038"
+  },
+  {
+   "ref": "wright-oakpark#FLW-0039",
+   "name": "Rollin Furbeck House",
+   "catalog_id": "FLW-0039"
+  },
+  {
+   "ref": "wright-oakpark#FLW-0040",
+   "name": "Thomas H. Gale Cottage",
+   "catalog_id": "FLW-0040"
+  },
+  {
+   "ref": "wright-oakpark#FLW-0041",
+   "name": "River Forest Golf Club",
+   "catalog_id": "FLW-0041"
+  },
+  {
+   "ref": "wright-oakpark#FLW-0043",
+   "name": "Joseph & Helen Husser House",
+   "catalog_id": "FLW-0043"
+  },
+  {
+   "ref": "wright-oakpark#FLW-0044",
+   "name": "Edward C. Waller House 改修",
+   "catalog_id": "FLW-0044"
+  },
+  {
+   "ref": "wright-oakpark#FLW-0045",
+   "name": "William & Jessie M. Adams House",
+   "catalog_id": "FLW-0045"
+  },
+  {
+   "ref": "wright-oakpark#FLW-0046",
+   "name": "S.A. Foster House and Stable",
+   "catalog_id": "FLW-0046"
+  },
+  {
+   "ref": "wright-oakpark#FLW-0047/0048",
+   "name": "B. Harley Bradley House / Warren Hickox House",
+   "catalog_id": "FLW-0047/0048"
+  },
+  {
+   "ref": "wright-oakpark#FLW-0049",
+   "name": "E.H. Pitkin Cottage",
+   "catalog_id": "FLW-0049"
+  },
+  {
+   "ref": "wright-oakpark#FLW-0050",
+   "name": "Henry Wallis Cottage",
+   "catalog_id": "FLW-0050"
+  },
+  {
+   "ref": "wright-oakpark#FLW-0051/0052",
+   "name": "Edward C. Waller Gates / Poultry House and Stables",
+   "catalog_id": "FLW-0051/0052"
+  },
+  {
+   "ref": "wright-prairie-houses#coonley",
+   "name": "Avery Coonley House"
+  },
+  {
+   "ref": "wright-prairie-houses#dana-thomas",
+   "name": "Susan Lawrence Dana House (Dana–Thomas)"
+  },
+  {
+   "ref": "wright-prairie-houses#bradley",
+   "name": "B. Harley Bradley House"
+  },
+  {
+   "ref": "wright-prairie-houses#hickox",
+   "name": "Warren Hickox House"
+  },
+  {
+   "ref": "wright-prairie-houses#willits",
+   "name": "Ward W. Willits House"
+  },
+  {
+   "ref": "wright-prairie-houses#thomas",
+   "name": "Frank W. Thomas House"
+  },
+  {
+   "ref": "wright-prairie-houses#heurtley",
+   "name": "Arthur Heurtley House"
+  },
+  {
+   "ref": "wright-prairie-houses#cheney",
+   "name": "Edwin H. Cheney House"
+  },
+  {
+   "ref": "wright-prairie-houses#steffens",
+   "name": "Oscar Steffens House（1963 取り壊し）"
+  },
+  {
+   "ref": "wright-prairie-houses#bach",
+   "name": "Emil Bach House"
+  },
+  {
+   "ref": "wright-prairie-houses#glasner",
+   "name": "W. A. Glasner House"
+  },
+  {
+   "ref": "wright-prairie-houses#tomek",
+   "name": "F. F. Tomek House"
+  },
+  {
+   "ref": "wright-prairie-houses#gale",
+   "name": "Mrs. Thomas H. Gale House"
+  },
+  {
+   "ref": "wright-prairie-houses#may",
+   "name": "Meyer S. May House"
+  },
+  {
+   "ref": "wright-prairie-houses#allen",
+   "name": "Henry J. Allen House"
+  },
+  {
+   "ref": "wright-prairie-houses#henderson",
+   "name": "F. B. Henderson House"
+  },
+  {
+   "ref": "wright-prairie-houses#ziegler",
+   "name": "Rev. Jessie R. Ziegler House"
+  },
+  {
+   "ref": "wright-prairie-houses#bogk",
+   "name": "F. C. Bogk House"
+  },
+  {
+   "ref": "wright-prairie-houses#boynton",
+   "name": "E. E. Boynton House"
+  },
+  {
+   "ref": "wright-prairie-houses#heath",
+   "name": "W. R. Heath House"
+  },
+  {
+   "ref": "wright-prairie-houses#evans",
+   "name": "Robert W. Evans House（Chicago）"
+  },
+  {
+   "ref": "wright-prairie-houses#fricke",
+   "name": "William G. Fricke House（Oak Park）"
+  },
+  {
+   "ref": "wright-prairie-houses#fj-baker",
+   "name": "Frank J. Baker House（Wilmette）"
+  },
+  {
+   "ref": "wright-prairie-houses#stockman",
+   "name": "G. C. Stockman House（Mason City）"
+  },
+  {
+   "ref": "wright-prairie-houses#little",
+   "name": "Francis W. Little House I（Peoria 1903）/ II（Deephaven/Wayzata 1912–14、1972 取り壊し）"
+  },
+  {
+   "ref": "wright-prairie-houses#isabel-roberts",
+   "name": "Isabel Roberts House（River Forest）"
+  },
+  {
+   "ref": "wright-prairie-houses#coonley-playhouse",
+   "name": "Coonley Playhouse（Riverside）"
+  },
+  {
+   "ref": "wright-prairie-houses#husser",
+   "name": "Joseph Husser House（1899、取り壊し）"
+  },
+  {
+   "ref": "wright-prairie-houses#davenport",
+   "name": "E. Arthur Davenport House"
+  },
+  {
+   "ref": "wright-prairie-houses#gridley",
+   "name": "A. W. Gridley House"
+  },
+  {
+   "ref": "wright-prairie-houses#westcott",
+   "name": "Burton J. Westcott House（Springfield, OH）"
+  },
+  {
+   "ref": "wright-prairie-houses#hardy",
+   "name": "Thomas P. Hardy House（Racine）"
+  },
+  {
+   "ref": "wright-prairie-houses#gilmore",
+   "name": "E. A. Gilmore 'Airplane' House（Madison）"
+  },
+  {
+   "ref": "wright-prairie-houses#irving",
+   "name": "E. P. Irving House（Decatur）"
+  },
+  {
+   "ref": "wright-prairie-houses#amberg",
+   "name": "J. H. Amberg House（Grand Rapids）"
+  },
+  {
+   "ref": "wright-prairie-houses#beachy",
+   "name": "P. A. Beachy House"
+  },
+  {
+   "ref": "wright-prairie-houses#cheney-gale-hunt",
+   "name": "Stephen M. B. Hunt House I/II"
+  },
+  {
+   "ref": "wright-prairie-houses#ravine-bluffs",
+   "name": "Ravine Bluffs 住宅群（Glencoe）"
+  },
+  {
+   "ref": "wright-prairie-houses#asbh",
+   "name": "American System-Built Homes（Milwaukee）"
+  },
+  {
+   "ref": "wright-prairie-houses#barton",
+   "name": "George Barton House（Buffalo）"
+  },
+  {
+   "ref": "wright-public-early#unity-temple",
+   "name": "Unity Temple"
+  },
+  {
+   "ref": "wright-public-early#larkin",
+   "name": "Larkin Administration Building"
+  },
+  {
+   "ref": "wright-public-early#midway-gardens",
+   "name": "Midway Gardens"
+  },
+  {
+   "ref": "wright-public-early#city-national-bank-park-inn",
+   "name": "City National Bank & Park Inn Hotel"
+  },
+  {
+   "ref": "wright-public-early#taliesin",
+   "name": "Taliesin I-III"
+  },
+  {
+   "ref": "wright-public-early#hillside-home-school",
+   "name": "Hillside Home School I & II"
+  },
+  {
+   "ref": "wright-robie-martin#robie",
+   "name": "Frederick C. Robie House"
+  },
+  {
+   "ref": "wright-robie-martin#martin",
+   "name": "Darwin D. Martin House"
+  },
+  {
+   "ref": "wright-robie-martin#barton",
+   "name": "George & Delta Barton House"
+  },
+  {
+   "ref": "wright-robie-martin#conservatory_pergola",
+   "name": "Conservatory & Pergola"
+  },
+  {
+   "ref": "wright-robie-martin#carriage_house",
+   "name": "Stable / garage"
+  },
+  {
+   "ref": "wright-robie-martin#greenhouse",
+   "name": "Greenhouse + cold frame"
+  },
+  {
+   "ref": "wright-robie-martin#gardener_cottage",
+   "name": "Gardener's cottage"
+  },
+  {
+   "ref": "wright-robie-martin#graycliff",
+   "name": "Graycliff (Derby NY)"
+  },
+  {
+   "ref": "wright-robie-martin#heath",
+   "name": "William R. Heath House"
+  },
+  {
+   "ref": "wright-robie-martin#davidson",
+   "name": "Walter V. Davidson House"
+  },
+  {
+   "ref": "wright-usonian#pope-leighey",
+   "name": "Pope-Leighey House (Loren B. Pope House)"
+  },
+  {
+   "ref": "wright-usonian#jacobs-1",
+   "name": "Herbert and Katherine Jacobs First House"
+  },
+  {
+   "ref": "wright-usonian#jacobs-2",
+   "name": "Jacobs Second House (Solar Hemicycle)"
+  },
+  {
+   "ref": "wright-usonian#hanna",
+   "name": "Hanna-Honeycomb House"
+  },
+  {
+   "ref": "wright-usonian#rosenbaum",
+   "name": "Rosenbaum House"
+  },
+  {
+   "ref": "wright-usonian#goetsch-winckler",
+   "name": "Goetsch-Winckler House"
+  },
+  {
+   "ref": "wright-usonian#schwartz",
+   "name": "Bernard Schwartz House (Still Bend)"
+  },
+  {
+   "ref": "wright-usonian#affleck",
+   "name": "Gregor S. and Elizabeth B. Affleck House"
+  },
+  {
+   "ref": "wright-usonian#baird",
+   "name": "Theodore and Frances Baird House"
+  },
+  {
+   "ref": "wright-usonian#zimmerman",
+   "name": "Isadore J. and Lucille Zimmerman House"
+  },
+  {
+   "ref": "wright-usonian#kentuck-knob",
+   "name": "I.N. and Bernardine Hagan House (Kentuck Knob)"
+  },
+  {
+   "ref": "wright-usonian#weltzheimer-johnson",
+   "name": "Weltzheimer/Johnson House"
+  },
+  {
+   "ref": "wright-usonian#palmer",
+   "name": "William and Mary Palmer House"
+  },
+  {
+   "ref": "wright-usonian#walker",
+   "name": "Mrs. Clinton Walker House"
+  },
+  {
+   "ref": "wright-usonian#kalil",
+   "name": "Toufic H. Kalil House (Usonian Automatic)"
+  },
+  {
+   "ref": "wright-usonian#tonkens",
+   "name": "Gerald B. and Beverley Tonkens House (Usonian Automatic)"
+  },
+  {
+   "ref": "wright-usonian#adelman",
+   "name": "Benjamin Adelman House"
+  }
+ ],
+ "source_files": [
+  "data/arch-masters/corbusier-early.json",
+  "data/arch-masters/corbusier-late.json",
+  "data/arch-masters/wright-late.json",
+  "data/arch-masters/wright-prairie.json",
+  "data/arch-masters/deep/corbusier-design-philosophy.json",
+  "data/arch-masters/deep/corbusier-housing.json",
+  "data/arch-masters/deep/corbusier-public-other.json",
+  "data/arch-masters/deep/corbusier-sacred-india.json",
+  "data/arch-masters/deep/corbusier-villas.json",
+  "data/arch-masters/deep/wright-design-philosophy.json",
+  "data/arch-masters/deep/wright-fallingwater-johnson.json",
+  "data/arch-masters/deep/wright-japan-california.json",
+  "data/arch-masters/deep/wright-late-public.json",
+  "data/arch-masters/deep/wright-oakpark.json",
+  "data/arch-masters/deep/wright-prairie-houses.json",
+  "data/arch-masters/deep/wright-public-early.json",
+  "data/arch-masters/deep/wright-robie-martin.json",
+  "data/arch-masters/deep/wright-usonian.json"
+ ]
+}
