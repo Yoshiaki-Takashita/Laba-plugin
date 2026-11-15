@@ -103,7 +103,7 @@ python3 scripts/build_and_check.py work/blocks.json --out work --source work/sou
 
 ## 7. 測った値と見込み
 
-### 7.1 スクリプトの時間（実測。`evals/bench/bench.py` で再現できる）
+### 7.1 スクリプトの時間（実測。`evals/bench/bench.py` で再現できる）（試験は開発用の main ブランチにだけあり、配布版には入っていない。無ければこの項は飛ばす）
 
 測った環境：CPU 4 個、Python 3.11、Node 22、sharp あり。見本は自作の架空の資料（`evals/bench/`）。各 3 回の中央値。数値は計算機と負荷で変わる。
 

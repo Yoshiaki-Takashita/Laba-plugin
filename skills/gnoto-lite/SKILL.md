@@ -103,4 +103,4 @@ GNOTO（法学生向けのノートアプリ）のノートを、Claude が書�
 ## 参照
 
 - `references/SPEC.md`：.gnoto の形式・ブロックとスライドの模型・法律モードの機能対応・落としたもの・不明点。
-- `tests/`：`python3 -m unittest discover -s tests`（架空の見本で試験）。`tests/app_roundtrip.js` は手元の GNOTO に読み込ませる任意の確認。
+- `tests/`：`python3 -m unittest discover -s tests`（架空の見本で試験）。`tests/app_roundtrip.js` は手元の GNOTO に読み込ませる任意の確認。（試験は開発用の main ブランチにだけあり、配布版には入っていない）

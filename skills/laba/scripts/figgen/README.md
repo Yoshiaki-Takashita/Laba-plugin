@@ -237,7 +237,7 @@ python3 trace.py spec.json --body 本文.md --dismiss 退ける所見.md       #
 ## 9　回帰試験
 
 ```
-python3 -B scripts/figgen/tests/run_tests.py        # laba のフォルダで。-v で一本ずつ表示
+python3 -B scripts/figgen/tests/run_tests.py        # laba のフォルダで。-v で一本ずつ表示（試験は開発用の main ブランチにだけあり、配布版には入っていない。無ければこの項は飛ばす）
 ```
 
 過去に実際に起きた失敗を、二度と通さないための試験（129 本）。エンジン・検査を直したら必ず回す。

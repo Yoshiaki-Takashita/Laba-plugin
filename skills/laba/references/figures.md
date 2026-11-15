@@ -24,7 +24,7 @@
 | 出す前の確認表 | `checklists/04-figures.md` |
 | 別の点検役に頼む指示文 | `reviewer-prompts/figure-check.md` |
 | エンジンの使い方・最小の仕様・項目の一覧・よくある間違い | `../scripts/figgen/README.md` |
-| エンジンを直したときの回帰試験（38 本） | `../scripts/figgen/tests/run_tests.py` |
+| エンジンを直したときの回帰試験（38 本） | `../scripts/figgen/tests/run_tests.py` （試験は開発用の main ブランチにだけあり、配布版には入っていない。無ければこの項は飛ばす） |
 | スライドの図 | `slides/03-diagram-on-slide.md`、`slides/04-step-reveal.md` |
 
 急ぐときは、`00-principles.md` と、使う型の `02-types/NN-*.md` の二つを読めば一枚作れる。

@@ -105,7 +105,7 @@ python3 scripts/hanrei/sync_check.py work/resume.json work/deck.json
 
 ## 確かめ方（直したあとの回帰）
 
-- 検査：`sample_blocks.json`・`sample_cards.json` と `../evals/materials/` の資料で `pipeline.py` を通す。
+- 検査：`sample_blocks.json`・`sample_cards.json` と `../evals/materials/` の資料で `pipeline.py` を通す。（試験は開発用の main ブランチにだけあり、配布版には入っていない。無ければこの項は飛ばす）
 - 図：`figgen/specs/` の43本を全部生成し、`fig_lint.py` で error 0 を確かめ、PNG を目で見る。
 - スライド：`slides/specs/` の見本3本を作り、`deck_lint.py` で error 0 を確かめ、全枚を画像にして見る。
 - 判例研究：`hanrei/samples/` の見本で、`resume_build.py`→`ledger.py`→`sync_check.py`。

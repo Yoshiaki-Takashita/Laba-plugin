@@ -81,7 +81,7 @@
 - 改行を1つも指定していない資料（ほかの道具で作った資料）でも、render-break と render-short は error にする。例外は、条文の引用（「民法824条［…］」で始まる 60 字以上の箱、または statute）の中の折り返しで、keep 語・条文番号・判例の表記に触れないものだけ（warn）。条文は長い地の文で、和文の組版では字の間で折り返すのが普通だからである。完成版の 7・8・15 枚目の 5 件がこれに当たり、画像で確かめると、枠の幅いっぱいの地の文の折り返しだった（完成版の不備ではない）。
 - 書体が置き換わっているとき（Yu Gothic が無く、Noto Sans CJK になる、など）は、その旨を出す。実機とは改行の位置が違うことがある。
 - LibreOffice か pdftotext が無いと、この検査はできない（その旨を出し、見積りの検査 text-overflow に切り替える）。そのときは、画像にして目で確かめる。
-- 回帰試験：`scripts/slides/tests/textfit_test.js`（改行の決まり）、`tests/lint_regress.py`（検査が見つけること）、`tests/bad_cases.py`（独立の採点で使った悪い例 34 件。9 割以上の検出を求める。現在 34 件すべてを検出し、うち 33 件が error）。
+- 回帰試験：`scripts/slides/tests/textfit_test.js`（改行の決まり）、`tests/lint_regress.py`（検査が見つけること）、`tests/bad_cases.py`（独立の採点で使った悪い例 34 件。9 割以上の検出を求める。現在 34 件すべてを検出し、うち 33 件が error）。（試験は開発用の main ブランチにだけあり、配布版には入っていない。無ければこの項は飛ばす）
 
 ## 5. 余白が多すぎる枚（deck_lint.py の sparse、frame-empty）
 
