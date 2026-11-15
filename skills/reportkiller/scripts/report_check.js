@@ -1,4 +1,4 @@
-/* report_check.js — 学術文章の点検（laba-report）。依存なし。ブラウザでも node でも動く。
+/* report_check.js — 学術文章の点検（reportkiller）。依存なし。ブラウザでも node でも動く。
  * 機械的・粗い判定。内容の正しさ・引用の実在・数値の再計算は判定しない。指摘は「直す候補」であって、人の文を「AI が書いた」と判定する道具ではない。
  *   checkReport(text, {level, field, ledger, lang}) -> { level, lang, field, pass, score, findings:[{rule, severity, message, at, count}], stats, level_table }
  *   LEVELS   : 6 段（高校生→学部生→大学院生→専門家→論文→学会）のしきい値と、本体が指示文に差し込む短い要件の文（spec）。

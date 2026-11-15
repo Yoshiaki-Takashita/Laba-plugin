@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/* prose_check.js — 本文の文体・構成・台帳を、レベル（段）としきい値の型で点検する（laba-report）。依存なし。
+/* prose_check.js — 本文の文体・構成・台帳を、レベル（段）としきい値の型で点検する（reportkiller）。依存なし。
  *   node prose_check.js [--level ug|grad|paper|...] [--lang ja|en] [--field law|imrad|hum] [--ledger 台帳.txt] [--json] 本文.txt
  * 中身は同じフォルダの report_check.js（しきい値の唯一の元は references/levels.md）。
  * 所見は「直す候補」。内容の正しさ・引用の実在・数値の再計算は判定しない。人の文を「AI が書いた」と判定する道具ではない。 */

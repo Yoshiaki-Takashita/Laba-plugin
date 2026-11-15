@@ -15,6 +15,6 @@ description: 判例研究・判例評釈・ゼミ報告のレジュメ（Word）
 
 6. 「検討」（判旨に賛成か反対か、射程はどこまでか）は、合議（`${CLAUDE_PLUGIN_ROOT}/skills/laba/references/gogi.md`）を材料にできる：立場の違う5人の意見から、多数意見を報告者の採る立場の候補に、反対意見を想定される批判に使う。報告者の結論は利用者が決める。合議の意見を、学説・判例として引用しない。
 
-学術レポート・小論文など判例研究でない文章は laba-report（`${CLAUDE_PLUGIN_ROOT}/skills/laba-report/SKILL.md`）の仕事で、ここでは扱わない。
+学術レポート・小論文など判例研究でない文章は reportkiller（`${CLAUDE_PLUGIN_ROOT}/skills/reportkiller/SKILL.md`）の仕事で、ここでは扱わない。
 
 共通の規則（足した説明、条文の確認、渡し方、独立採点と自己採点を混ぜないこと）は `${CLAUDE_PLUGIN_ROOT}/skills/laba/SKILL.md` に従う。

@@ -11,10 +11,10 @@
 | **laba-slides** | 発表スライド・復習スライドの作成と点検（型32種・検査28項目） | 「スライドにして」「このスライドを点検して」 |
 | **laba-figures** | 図を仕様から生成し、本文と照合（型25種） | 「図にして」「関係図を描いて」 |
 | **laba-score** | 16指標で採点し、教科書や他の本と比べる | 「採点して」「教科書と比べて」 |
-| **laba-report** | 学術レポート・小論文・論文・研究報告を、どの分野でも書く・直す（Word＋図）。読んでいない文献は書かない引用台帳（V0〜V3）、レベル6段（高校生〜学会）、文体と図の点検、建築の作品研究・建築図（ライトとル・コルビュジエの研究つき） | 「レポートを書いて」「論文を直して」「AI っぽさを消して」「この図を直して」 |
+| **reportkiller** | 学術レポート・小論文・論文・研究報告を、どの分野でも書く・直す（Word＋図）。読んでいない文献は書かない引用台帳（V0〜V3）、レベル6段（高校生〜学会）、文体と図の点検、建築の作品研究・建築図（ライトとル・コルビュジエの研究つき） | 「レポートを書いて」「論文を直して」「AI っぽさを消して」「この図を直して」 |
 | **gnoto-lite** | GNOTO のノート（.gnoto。ノーマルとスライドだけ）を Claude の中で作る・直す・見る。法律モードは、コネクタ（なければ e-Gov・裁判所サイト）から条文・判例を取り、出典つきで書く | 「ノートを作って」「このノートに条文を入れて」「判例を入れて」 |
 
-4つの入口スキル（laba-hanrei・laba-slides・laba-figures・laba-score）は、本体（skills/laba）の該当部分を開くための入口で、規則と道具は本体に一つだけある。laba-report は独立したスキルで、自分の規則と道具を持つ（講義ノート・判例研究・スライドの依頼には使わず、それらは上の各スキルが受ける）。判例研究とスライドの「ゼミ報告の型」（引用の格付け・文体・体裁）と、講義ノートの「請求→抗弁→再抗弁」の型は、それぞれ laba-hanrei・laba・laba-slides の中にある。ゼミ名・報告者名・教員名は、スキルに決め打ちせず、利用者が答えるか設定ファイルに書く。
+4つの入口スキル（laba-hanrei・laba-slides・laba-figures・laba-score）は、本体（skills/laba）の該当部分を開くための入口で、規則と道具は本体に一つだけある。reportkiller は独立したスキルで、自分の規則と道具を持つ（講義ノート・判例研究・スライドの依頼には使わず、それらは上の各スキルが受ける）。判例研究とスライドの「ゼミ報告の型」（引用の格付け・文体・体裁）と、講義ノートの「請求→抗弁→再抗弁」の型は、それぞれ laba-hanrei・laba・laba-slides の中にある。ゼミ名・報告者名・教員名は、スキルに決め打ちせず、利用者が答えるか設定ファイルに書く。
 
 Cowork と Claude Code では、`agents/` の14の担当（確認・節の執筆・図・巻末・統一・法的点検・足した文の点検・文体の点検・図の点検と、合議の裁判官5人）が読み込まれ、段階を分けて同時に進められる（claude.ai のチャットでは読み込まれない）。
 
@@ -47,9 +47,9 @@ claude.ai のチャットでは、全部の段階を順に回すと時間がか�
 - **日本語の書体**：無い環境では、Noto Sans CJK などを入れる。
 - gnoto-lite だけを使うなら、Python 3 の標準ライブラリで足りる（Word に出すときだけ python-docx。PNG のサムネイルは Chromium 系のブラウザがあるときだけ）。
 
-## レポート・論文（laba-report）の道具
+## レポート・論文（reportkiller）の道具
 
-- `skills/laba-report/scripts` は、渡された本文・台帳・図（SVG）を読んで所見を出す点検の道具（Node.js と Python 3 標準ライブラリだけ）と、建物のデータ（JSON）から建築図の SVG を書く道具。ネットワークには接続せず、ほかのプログラムも起動しない。
+- `skills/reportkiller/scripts` は、渡された本文・台帳・図（SVG）を読んで所見を出す点検の道具（Node.js と Python 3 標準ライブラリだけ）と、建物のデータ（JSON）から建築図の SVG を書く道具。ネットワークには接続せず、ほかのプログラムも起動しない。
 - 文献の検索（J-STAGE・CiNii・出版社の書誌頁など）は Claude が手順書に従って行い、公開の頁を読むだけで、利用者の文章や個人の情報は送らない。
 - `references/arch-masters-data` は、ライトとル・コルビュジエについての公開資料の事実・数値の要約（出典つき。図や写真は入れていない）。
 
@@ -67,7 +67,7 @@ CONNECTORS.md を参照。コネクタなしでも動く。コネクタの URL�
 
 ## ライセンス
 
-プラグイン全体は MIT（LICENSE）。これには skills/laba-report（レポート・論文の規則と道具、建築図の道具、ライトとル・コルビュジエの研究ノート）も含まれる。建築の研究ノートは公開資料の事実・数値の要約で、図や写真は含まない（出典は各ファイルに書いてある）。ただし **skills/gnoto-lite フォルダには別のライセンス**（skills/gnoto-lite/LICENSE。ソースは読めるが、Claude の外での再利用を禁じる条件）がある。
+プラグイン全体は MIT（LICENSE）。これには skills/reportkiller（レポート・論文の規則と道具、建築図の道具、ライトとル・コルビュジエの研究ノート）も含まれる。建築の研究ノートは公開資料の事実・数値の要約で、図や写真は含まない（出典は各ファイルに書いてある）。ただし **skills/gnoto-lite フォルダには別のライセンス**（skills/gnoto-lite/LICENSE。ソースは読めるが、Claude の外での再利用を禁じる条件）がある。
 
 ---
 
@@ -84,10 +84,10 @@ LABA is a plugin that turns Japanese law course materials (lecture handouts, tex
 | **laba-slides** | Creates and checks presentation and review slides (32 layout types, 28 checks) | "Make slides from this", "Check these slides" |
 | **laba-figures** | Generates diagrams from a specification and checks them against the text (25 diagram types) | "Make a diagram", "Draw a relationship chart" |
 | **laba-score** | Scores a note on 16 measures and compares it with a textbook or another book | "Score this", "Compare it with the textbook" |
-| **laba-report** | Writes and revises academic reports, essays and papers in any field (Word plus figures): a citation ledger that forbids citing what was not read (levels V0 to V3), six levels from high school to conference paper, style and figure checks, and architecture case studies with drawings (with notes on Frank Lloyd Wright and Le Corbusier) | "Write a report", "Fix this paper", "Remove the AI tone", "Fix this figure" |
+| **reportkiller** | Writes and revises academic reports, essays and papers in any field (Word plus figures): a citation ledger that forbids citing what was not read (levels V0 to V3), six levels from high school to conference paper, style and figure checks, and architecture case studies with drawings (with notes on Frank Lloyd Wright and Le Corbusier) | "Write a report", "Fix this paper", "Remove the AI tone", "Fix this figure" |
 | **gnoto-lite** | Creates, edits and previews GNOTO notes (.gnoto files; normal and slide styles only) inside Claude. Its law mode fetches statutes and court decisions through a connector (or, without one, the official e-Gov and courts pages) and writes them with their sources | "Make a note", "Add this article to the note", "Add this decision" |
 
-The four entry skills (laba-hanrei, laba-slides, laba-figures and laba-score) only open the relevant part of the main skill (skills/laba). The rules and tools exist in one place, in the main skill. laba-report is a separate skill with its own rules and tools; it is not used for lecture notes, case studies or slides, which the skills above handle. The seminar-report conventions (citation grading, style, layout), the slide style and the claim-defence-rebuttal rules for worked cases live inside laba-hanrei, laba-slides and laba; seminar, presenter and teacher names are never built in but asked for or read from a settings file.
+The four entry skills (laba-hanrei, laba-slides, laba-figures and laba-score) only open the relevant part of the main skill (skills/laba). The rules and tools exist in one place, in the main skill. reportkiller is a separate skill with its own rules and tools; it is not used for lecture notes, case studies or slides, which the skills above handle. The seminar-report conventions (citation grading, style, layout), the slide style and the claim-defence-rebuttal rules for worked cases live inside laba-hanrei, laba-slides and laba; seminar, presenter and teacher names are never built in but asked for or read from a settings file.
 
 ## Faster runs (1.3.0)
 
@@ -124,7 +124,7 @@ See the scoreboard in the main skill's SKILL.md. It keeps three kinds of figures
 - **Agents.** The agents folder holds fourteen plain-text agent definitions (Markdown files) (a verifier, section writers, a figure maker, a back-matter builder, a harmonizer, reviewers, and five deliberation-panel members). They are loaded only in Cowork and Claude Code. The reviewers and the panel members are given no file-editing tools: they can only read files (the style reviewer can also run the local text checks). They report findings and never change the note. The verifier uses whatever connector you registered, or the public web pages named in the next item.
 - **Web access for verification.** To check statutes and court decisions, the skills tell Claude to look up the official e-Gov law database (Japanese Digital Agency) and the Courts of Japan case-law search. They read public pages only and send no personal data.
 - **gnoto-lite scripts.** skills/gnoto-lite/scripts is a plain note-file writer and renderer in Python 3 (standard library only). It reads and writes .gnoto files you name, writes a self-contained static HTML preview, and, only if a Chromium-based browser is installed and you ask for a PNG, starts that browser in headless mode on a temporary local file. For Word export it calls the bundled build_docx.py. The scripts make no network requests and contain no statute or case data and no citation parsing. Statutes and decisions are fetched by Claude through your own connector or the official public pages, saved as JSON by Claude, and the scripts only format that JSON into ordinary note blocks with its provenance.
-- **laba-report scripts.** skills/laba-report/scripts holds plain-text checkers in Node.js (no packages) and Python 3 (standard library only). They read the manuscript, ledger or SVG files you name and print findings. One tool, archstudio/cli.js, writes architectural drawings (SVG) from a building-data JSON file to the output folder you give it. None of them make network requests or start other programs. Literature searches (for example J-STAGE, CiNii and publishers' bibliographic pages) are done by Claude, as the skill's instructions describe, and read public pages only; your text and personal data are not sent. The folder also contains reference notes (Markdown and JSON) on two modern architects: summaries of public facts with their source URLs, and no copied drawings or photographs. The notes for each work are plain text read by Claude when needed.
+- **reportkiller scripts.** skills/reportkiller/scripts holds plain-text checkers in Node.js (no packages) and Python 3 (standard library only). They read the manuscript, ledger or SVG files you name and print findings. One tool, archstudio/cli.js, writes architectural drawings (SVG) from a building-data JSON file to the output folder you give it. None of them make network requests or start other programs. Literature searches (for example J-STAGE, CiNii and publishers' bibliographic pages) are done by Claude, as the skill's instructions describe, and read public pages only; your text and personal data are not sent. The folder also contains reference notes (Markdown and JSON) on two modern architects: summaries of public facts with their source URLs, and no copied drawings or photographs. The notes for each work are plain text read by Claude when needed.
 - **No hooks, no bundled servers.** The plugin contains no hooks and no MCP server configuration. It sends nothing anywhere on its own.
 
 ## Using gnoto-lite
@@ -141,4 +141,4 @@ The plugin works without any connector. If you have a connector for Japanese leg
 
 ## License
 
-The plugin as a whole is MIT (see LICENSE), including skills/laba-report (its rules and tools, the architectural drawing tool, and the research notes on Wright and Le Corbusier, which summarize public facts with sources and contain no copied drawings or photographs). The skills/gnoto-lite folder has its own, separate licence (skills/gnoto-lite/LICENSE): a source-available licence that allows use inside Claude as part of this plugin and forbids extracting, porting or reusing it to provide note or law-mode features outside Claude.
+The plugin as a whole is MIT (see LICENSE), including skills/reportkiller (its rules and tools, the architectural drawing tool, and the research notes on Wright and Le Corbusier, which summarize public facts with sources and contain no copied drawings or photographs). The skills/gnoto-lite folder has its own, separate licence (skills/gnoto-lite/LICENSE): a source-available licence that allows use inside Claude as part of this plugin and forbids extracting, porting or reusing it to provide note or law-mode features outside Claude.

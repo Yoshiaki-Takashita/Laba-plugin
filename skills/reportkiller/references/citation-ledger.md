@@ -50,4 +50,4 @@ R14 | 乙川二郎「〇〇」ジュリスト 0000 号（2024） | https://cir.n
 
 ## 5. 台帳の検査（`scripts/ledger_check.js`）
 
-`node ${CLAUDE_PLUGIN_ROOT}/skills/laba-report/scripts/ledger_check.js 本文.txt [--ledger 台帳.txt] [--level grad]`：V0 の行、ID の重複、本文で引いたのに台帳に無い ID、台帳にあって本文で一度も使わない行、V3 でない行への「」引用と頁数、同じ ID の頁数の食い違い、V2 以上で URL が空の行、使い方の欄の印の有無、段ごとの文献数・V1 の上限・V3 の下限・一次か査読の数。
+`node ${CLAUDE_PLUGIN_ROOT}/skills/reportkiller/scripts/ledger_check.js 本文.txt [--ledger 台帳.txt] [--level grad]`：V0 の行、ID の重複、本文で引いたのに台帳に無い ID、台帳にあって本文で一度も使わない行、V3 でない行への「」引用と頁数、同じ ID の頁数の食い違い、V2 以上で URL が空の行、使い方の欄の印の有無、段ごとの文献数・V1 の上限・V3 の下限・一次か査読の数。

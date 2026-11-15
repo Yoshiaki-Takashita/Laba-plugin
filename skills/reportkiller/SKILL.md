@@ -1,17 +1,17 @@
 ---
-name: laba-report
-description: "学術レポート・小論文・論文・研究報告（どの分野でも。建築の作品研究・ポートフォリオを含む）を、読んでいない文献は書かない引用台帳つきで、Word・図つきで書く、または書き直す。「レポートを書いて」「論文を作って」「課題文はこれ（字数・引用形式つき）」「論文を直して」「AI っぽさを消して」「この図を直して」「/laba-report」で使う。英語の論文・エッセイにも使う。講義レジュメや教科書のまとめ（laba）、判例研究のレジュメ（laba-hanrei）、発表スライド（laba-slides）の依頼には使わない。"
+name: reportkiller
+description: "学術レポート・小論文・論文・研究報告（どの分野でも。建築の作品研究・ポートフォリオを含む）を、読んでいない文献は書かない引用台帳つきで、Word・図つきで書く、または書き直す。「レポートを書いて」「論文を作って」「課題文はこれ（字数・引用形式つき）」「論文を直して」「AI っぽさを消して」「この図を直して」「/reportkiller」で使う。英語の論文・エッセイにも使う。講義レジュメや教科書のまとめ（laba）、判例研究のレジュメ（laba-hanrei）、発表スライド（laba-slides）の依頼には使わない。"
 ---
 
-# LABA レポート（laba-report）
+# LABA レポート（reportkiller）
 
-このスキルのフォルダは `${CLAUDE_PLUGIN_ROOT}/skills/laba-report/`。下の `references/`・`scripts/` はすべてこの下にある。
+このスキルのフォルダは `${CLAUDE_PLUGIN_ROOT}/skills/reportkiller/`。下の `references/`・`scripts/` はすべてこの下にある。
 
 原則は一つ。**自分で読んでいないものは書かない。読めなかったことは隠さずに報告する。** 読者（教授・査読者）は引用元を知っている前提で書く。判例研究は laba-hanrei（構成・引用の格付け・体裁）、スライドは laba-slides の仕事。判例研究の文章を直すときだけ、このスキルの検証・文体・図の規則を上に載せて使ってよい。
 
 ## 0. レベルを決める（1 語で切り替える）
 
-`/laba-report 〔レベル〕〔分野〕 課題文`。レベルは 高校生 hs／学部生 ug（既定）／大学院生 grad／専門家 pro／論文 paper／学会 conf。何を変えるかは `references/levels.md` §1（文献の数・根拠の格・反論と射程・査読の回数）。**文体の数値は段ではなく「型」で決まる**：高校生＝意見文、学部生＝発表レジュメ（較正用の完成版で較正）、大学院生以上＝論文（人の公開論文の分布）。上の段ほど文を短くそろえる、という設計はしない（それが AI の文の形だと研究で分かった）。
+`/reportkiller 〔レベル〕〔分野〕 課題文`。レベルは 高校生 hs／学部生 ug（既定）／大学院生 grad／専門家 pro／論文 paper／学会 conf。何を変えるかは `references/levels.md` §1（文献の数・根拠の格・反論と射程・査読の回数）。**文体の数値は段ではなく「型」で決まる**：高校生＝意見文、学部生＝発表レジュメ（較正用の完成版で較正）、大学院生以上＝論文（人の公開論文の分布）。上の段ほど文を短くそろえる、という設計はしない（それが AI の文の形だと研究で分かった）。
 
 ## 1. 手順（どの段も同じ。段は厳しさだけを変える）
 
@@ -30,10 +30,10 @@ description: "学術レポート・小論文・論文・研究報告（どの分
 ## 2. 機械の点検（直す候補を出す。人の文を「AI が書いた」と判定する道具ではない）
 
 ```
-node ${CLAUDE_PLUGIN_ROOT}/skills/laba-report/scripts/prose_check.js --level grad 本文.txt            # 文体・構成・台帳の所見（日本語は型・英語は段で数値が変わる）
-node ${CLAUDE_PLUGIN_ROOT}/skills/laba-report/scripts/prose_check.js --level paper --lang en --ledger 台帳.txt draft.txt
-node ${CLAUDE_PLUGIN_ROOT}/skills/laba-report/scripts/ledger_check.js 本文.txt --ledger 台帳.txt       # V0・ID の重複・本文に無い ID・頁数の食い違い・V3 でない行の「」と頁
-python3 ${CLAUDE_PLUGIN_ROOT}/skills/laba-report/scripts/fig_check.py 図.svg --width-mm 156           # 図の 22 項目＋建築の図の 6 項目（PNG は色と dpi だけ）
+node ${CLAUDE_PLUGIN_ROOT}/skills/reportkiller/scripts/prose_check.js --level grad 本文.txt            # 文体・構成・台帳の所見（日本語は型・英語は段で数値が変わる）
+node ${CLAUDE_PLUGIN_ROOT}/skills/reportkiller/scripts/prose_check.js --level paper --lang en --ledger 台帳.txt draft.txt
+node ${CLAUDE_PLUGIN_ROOT}/skills/reportkiller/scripts/ledger_check.js 本文.txt --ledger 台帳.txt       # V0・ID の重複・本文に無い ID・頁数の食い違い・V3 でない行の「」と頁
+python3 ${CLAUDE_PLUGIN_ROOT}/skills/reportkiller/scripts/fig_check.py 図.svg --width-mm 156           # 図の 22 項目＋建築の図の 6 項目（PNG は色と dpi だけ）
 ```
 
 所見は error が 0 になるまで直す。warn は残す理由を書けるなら残す。1 つの印だけで書き直さない。指摘は「どの文が・何字で・どこで分けるか」から始め、書き直しは利用者が選ぶ。

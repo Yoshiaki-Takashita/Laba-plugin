@@ -4,10 +4,10 @@
 
 ## 手順
 1. **建物のデータを決める**：利用者の作品（図面・寸法）か、巨匠の作品の再現（`scripts/archstudio/models/` のもの、または `references/arch-masters.md` の規則集から作る）。値は出典と確かめの段階（V0〜V3）を付ける。推定の値は推定と書く。作品をでっち上げない（利用者の入力が無いとき、見本として作るなら「見本（架空）」と明記）。
-2. `node ${CLAUDE_PLUGIN_ROOT}/skills/laba-report/scripts/archstudio/cli.js validate model.json`：誤りを直す。
-3. **図を作る**：`node ${CLAUDE_PLUGIN_ROOT}/skills/laba-report/scripts/archstudio/cli.js render …`（平面は各階、断面は 2 本、立面は 4 面、展開は主な室、アクソメ、配置、詳細）。同じ種類の図は共通の縮尺。
+2. `node ${CLAUDE_PLUGIN_ROOT}/skills/reportkiller/scripts/archstudio/cli.js validate model.json`：誤りを直す。
+3. **図を作る**：`node ${CLAUDE_PLUGIN_ROOT}/skills/reportkiller/scripts/archstudio/cli.js render …`（平面は各階、断面は 2 本、立面は 4 面、展開は主な室、アクソメ、配置、詳細）。同じ種類の図は共通の縮尺。
 4. **目で見る**：PNG にして Read で見る。全体→気になる所を拡大。重なり・切れ・縮尺の不揃い・文字の小ささを列挙する。
-5. **点検**：`python3 ${CLAUDE_PLUGIN_ROOT}/skills/laba-report/scripts/archstudio/arch_check.py 図.svg --kind plan`（図の種類は plan・section・elevation・axon など）。誤りと警告を 0 にする。
+5. **点検**：`python3 ${CLAUDE_PLUGIN_ROOT}/skills/reportkiller/scripts/archstudio/arch_check.py 図.svg --kind plan`（図の種類は plan・section・elevation・axon など）。誤りと警告を 0 にする。
 6. **直す**：データか `--scale`・`--opt` を変えて 3 に戻る。最大 3 往復。
 7. **紙面に組む**：A3 見開き（左右の頁）を基本に、12 列の格子、余白（とじ側 20・小口 15・上 15・下 18 mm）、図は共通の縮尺で基線をそろえる、文字は 2.0／2.5／3.5 mm の 3 段、図題は図の下に「図n 主題（縮尺）。読み方。出典」の完全な文。1 頁に図は多くしない（白が 6〜8 割）。
 8. **書き出し**：HTML は SVG を**インラインで埋め込む**（画像ファイルを相対パスで指さない）。PDF は SVG から。
