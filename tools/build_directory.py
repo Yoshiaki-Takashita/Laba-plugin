@@ -61,6 +61,22 @@ def main():
         if not os.listdir(d) and d != tree:
             os.rmdir(d)
 
+    with open(os.path.join(dist, "plugin-patch.json"), encoding="utf-8") as fh:
+        patch = json.load(fh)
+    for rel in patch.get("drop_files", []):
+        os.remove(os.path.join(tree, rel))
+        dropped.setdefault("開発用の記録（drop_files）", []).append(rel)
+    for rel, pairs in patch.get("replace", {}).items():
+        fp = os.path.join(tree, rel)
+        with open(fp, encoding="utf-8") as fh:
+            txt = fh.read()
+        for old, new in pairs:
+            if old not in txt:
+                print("失敗：%s に置き換え前の文がない：%s" % (rel, old[:30])); return 1
+            txt = txt.replace(old, new)
+        with open(fp, "w", encoding="utf-8", newline="\n") as fh:
+            fh.write(txt)
+
     # overlay：丸ごと置き換える文書
     for name in ("README.md", "PRIVACY.md"):
         shutil.copyfile(os.path.join(overlay, name), os.path.join(tree, name))
@@ -88,8 +104,6 @@ def main():
         print("失敗：差し込みの文書がないスキル：%s" % sorted(missing)); return 1
 
     # plugin.json：main のものから作る（版・名前は main と同じ）
-    with open(os.path.join(dist, "plugin-patch.json"), encoding="utf-8") as fh:
-        patch = json.load(fh)
     pj = dict(main_pj)
     pj["description"] = patch["description_prefix"] + main_pj["description"]
     for k in ("documentationUrl", "privacyPolicyUrl", "termsOfServiceUrl"):

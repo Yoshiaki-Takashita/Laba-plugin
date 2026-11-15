@@ -1,5 +1,16 @@
 {
   "description_prefix": "公式版（手順書のみ。スクリプトは含まない）：",
   "link_branch_from": "release",
-  "link_branch_to": "directory"
+  "link_branch_to": "directory",
+  "drop_files": [
+    "BUILD_NOTES.md"
+  ],
+  "replace": {
+    "CONNECTORS.md": [
+      [
+        "スクリプトはネットワークに接続せず、コネクタの返答（Claude が JSON に保存したもの）を普通のブロックと出典に整形するだけ。",
+        "公式版にはスクリプトは入っていない。Claude がコネクタの返答を読み、普通のブロックと出典として書く。"
+      ]
+    ]
+  }
 }
