@@ -1,0 +1,9 @@
+{
+  "_about": "build_deck.js（作成時の知らせ）と deck_lint.py（検査）が同じ重さで判定するための共通の決まり。値を変えるときはここだけを直す。",
+  "sparse": {
+    "warn": 0.35,
+    "error": 0.45,
+    "warn_only_kinds": ["refs"],
+    "warn_only_heading": "参考文献|参考判例|参考資料|文献一覧"
+  }
+}

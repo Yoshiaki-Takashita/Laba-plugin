@@ -1,0 +1,24 @@
+{
+ "law": {
+  "law_id": "FICT0001",
+  "title": "架空取引法",
+  "law_num": "架空法第1号",
+  "abbrev": null
+ },
+ "revision": {
+  "law_revision_id": "FICT0001_20200401_000",
+  "enforcement_date": "2020-04-01",
+  "promulgate_date": "2019-04-01",
+  "is_current": true
+ },
+ "article_label": "第一条",
+ "caption": null,
+ "paragraphs": [
+  {
+   "num": 1,
+   "text": "本文"
+  }
+ ],
+ "text": null,
+ "status": "found"
+}

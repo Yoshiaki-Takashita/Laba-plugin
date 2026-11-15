@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 497" font-family="Noto Sans CJK JP, Noto Sans JP, sans-serif">
+<desc>二人の被告への請求が両立しないとき、証明責任の置かれ方によって、原告が両方に負ける危険があるかどうかが分かれる。</desc>
+<defs><marker id="ah-k" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="12" refX="12.5" refY="6" orient="auto-start-reverse"><path d="M1,1 L13,6 L1,11" fill="none" stroke="#1A1A1A" stroke-width="1.3"/></marker><marker id="ah-a" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="12" refX="12.5" refY="6" orient="auto-start-reverse"><path d="M1,1 L13,6 L1,11" fill="none" stroke="#943522" stroke-width="1.3"/></marker><marker id="ah-g" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="12" refX="12.5" refY="6" orient="auto-start-reverse"><path d="M1,1 L13,6 L1,11" fill="none" stroke="#8C9493" stroke-width="1.3"/></marker></defs>
+<rect x="0" y="0" width="1040" height="497" fill="#FFFFFF" stroke="none"/>
+<text x="357.3" y="54" font-size="24" text-anchor="middle" style="text-anchor:middle" fill="#1A1A1A">無権代理型（法律上併存しない）</text>
+<text x="805.8" y="54" font-size="24" text-anchor="middle" style="text-anchor:middle" fill="#1A1A1A">相手方不明型（事実上併存しない）</text>
+<text x="82.5" y="124.8" font-size="21" text-anchor="middle" style="text-anchor:middle" fill="#1A1A1A">請求</text>
+<rect x="153" y="76" width="408.5" height="82" fill="#FFFFFF" stroke="#1A1A1A" stroke-width="0.9"/>
+<text x="357.3" y="108.8" font-size="21" text-anchor="middle" style="text-anchor:middle" fill="#1A1A1A"><tspan x="357.3" dy="0">本人には契約の履行を、</tspan><tspan x="357.3" dy="29">代理人には無権代理人の責任を求める</tspan></text>
+<rect x="601.5" y="76" width="408.5" height="82" fill="#FFFFFF" stroke="#1A1A1A" stroke-width="0.9"/>
+<text x="805.8" y="108.8" font-size="21" text-anchor="middle" style="text-anchor:middle" fill="#1A1A1A"><tspan x="805.8" dy="0">甲には契約の履行を、</tspan><tspan x="805.8" dy="29">乙にも同じ契約の履行を求める</tspan></text>
+<text x="82.5" y="252.7" font-size="21" text-anchor="middle" style="text-anchor:middle" fill="#1A1A1A">証明責任</text>
+<rect x="153" y="204" width="408.5" height="82" fill="#FFFFFF" stroke="#1A1A1A" stroke-width="0.9"/>
+<text x="357.3" y="236.8" font-size="21" text-anchor="middle" style="text-anchor:middle" fill="#1A1A1A"><tspan x="357.3" dy="0">代理権の存在：本人との関係では原告、</tspan><tspan x="357.3" dy="29">代理人との関係では代理人が負う</tspan></text>
+<rect x="601.5" y="204" width="408.5" height="82" fill="#FFFFFF" stroke="#943522" stroke-width="2.5"/>
+<text x="805.8" y="236.8" font-size="21" text-anchor="middle" style="text-anchor:middle" fill="#1A1A1A"><tspan x="805.8" dy="0">契約の相手方であること：甲との</tspan><tspan x="805.8" dy="29">関係でも乙との関係でも原告が負う</tspan></text>
+<line x1="357.3" y1="158" x2="357.3" y2="198" fill="none" stroke="#1A1A1A" stroke-width="0.9" marker-end="url(#ah-k)"/>
+<line x1="805.8" y1="158" x2="805.8" y2="198" fill="none" stroke="#1A1A1A" stroke-width="0.9" marker-end="url(#ah-k)"/>
+<text x="82.5" y="351.7" font-size="21" text-anchor="middle" style="text-anchor:middle" fill="#1A1A1A"><tspan x="82.5" dy="0">真偽不明の</tspan><tspan x="82.5" dy="29">とき</tspan></text>
+<rect x="153" y="332" width="408.5" height="53" fill="#FFFFFF" stroke="#1A1A1A" stroke-width="0.9"/>
+<text x="357.3" y="364.8" font-size="21" text-anchor="middle" style="text-anchor:middle" fill="#1A1A1A">原告は本人に負けるが、代理人には勝つ</text>
+<rect x="601.5" y="332" width="408.5" height="53" fill="#FFFFFF" stroke="#943522" stroke-width="2.5"/>
+<text x="805.8" y="364.8" font-size="21" text-anchor="middle" style="text-anchor:middle" fill="#1A1A1A">原告は甲にも乙にも負ける</text>
+<line x1="357.3" y1="286" x2="357.3" y2="326" fill="none" stroke="#1A1A1A" stroke-width="0.9" marker-end="url(#ah-k)"/>
+<line x1="805.8" y1="286" x2="805.8" y2="326" fill="none" stroke="#1A1A1A" stroke-width="0.9" marker-end="url(#ah-k)"/>
+<line x1="581.5" y1="70" x2="581.5" y2="391" fill="none" stroke="#8C9493" stroke-width="0.9"/>
+<line x1="30" y1="403" x2="1010" y2="403" fill="none" stroke="#8C9493" stroke-width="0.9"/>
+<text x="30" y="433" font-size="21" text-anchor="start" fill="#1A1A1A"><tspan x="30" dy="0">左の型だけが同時審判の申出（民訴41条）の対象になる。右の型は条文の対象外だが、</tspan><tspan x="30" dy="29">運用上は弁論を分離しないことが要請されるとする説明がある（補足）。</tspan></text>
+</svg>

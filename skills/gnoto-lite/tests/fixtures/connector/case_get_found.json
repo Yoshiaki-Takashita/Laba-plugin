@@ -1,0 +1,40 @@
+{
+ "case": {
+  "brief": {
+   "case_id": "000000",
+   "case_number": "令和2年(受)第0号",
+   "case_name": "架空事件",
+   "date": {
+    "wareki": "令和2年3月4日",
+    "iso": "2020-03-04"
+   },
+   "bench": "架空最高裁判所第一小法廷",
+   "type": "判決",
+   "result": "棄却",
+   "detail_url": "https://example.invalid/case/000000"
+  },
+  "reporter": {
+   "name": "架空民集",
+   "volume": 1,
+   "issue": 2,
+   "page": 3,
+   "raw": "架空民集1巻2号3頁"
+  },
+  "lower_court": null,
+  "holdings": "架空の判示事項（見本）",
+  "summary": "架空の裁判要旨。これは見本であり実在の判決の文ではない。",
+  "statutes": "架空取引法1条",
+  "fulltext_pdf_url": null
+ },
+ "status": "found",
+ "provenance": {
+  "source": "裁判所ウェブサイト 裁判例検索（架空の見本）",
+  "source_urls": [
+   "https://example.invalid/case/000000"
+  ],
+  "retrieved_at": "2026-11-13T05:31:00Z",
+  "from_cache": false,
+  "attribution": "出典：架空の見本データ（実在の判例ではない）"
+ },
+ "error": null
+}

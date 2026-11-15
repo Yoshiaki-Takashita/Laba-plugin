@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 777" font-family="Noto Sans CJK JP, Noto Sans JP, sans-serif">
+<desc>取消訴訟は、訴訟要件を一つでも欠けば却下され、すべて満たして初めて本案の審理に入る。</desc>
+<defs><marker id="ah-k" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="12" refX="12.5" refY="6" orient="auto-start-reverse"><path d="M1,1 L13,6 L1,11" fill="none" stroke="#1A1A1A" stroke-width="1.3"/></marker><marker id="ah-a" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="12" refX="12.5" refY="6" orient="auto-start-reverse"><path d="M1,1 L13,6 L1,11" fill="none" stroke="#943522" stroke-width="1.3"/></marker><marker id="ah-g" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="12" refX="12.5" refY="6" orient="auto-start-reverse"><path d="M1,1 L13,6 L1,11" fill="none" stroke="#8C9493" stroke-width="1.3"/></marker></defs>
+<rect x="0" y="0" width="1040" height="777" fill="#FFFFFF" stroke="none"/>
+<rect x="105" y="30" width="430" height="108.4" fill="#FFFFFF" stroke="#1A1A1A" stroke-width="0.9"/>
+<text x="320" y="59.8" font-size="21" text-anchor="middle" style="text-anchor:middle" fill="#1A1A1A" font-weight="700">処分性</text>
+<text x="320" y="92.3" font-size="21" text-anchor="middle" style="text-anchor:middle" fill="#1A1A1A"><tspan x="320" dy="0">処分その他公権力の行使に</tspan><tspan x="320" dy="29">当たる行為か（行訴法3条2項）</tspan></text>
+<rect x="105" y="196.4" width="430" height="79.5" fill="#FFFFFF" stroke="#1A1A1A" stroke-width="0.9"/>
+<text x="320" y="226.2" font-size="21" text-anchor="middle" style="text-anchor:middle" fill="#1A1A1A" font-weight="700">原告適格</text>
+<text x="320" y="258.7" font-size="21" text-anchor="middle" style="text-anchor:middle" fill="#1A1A1A">法律上の利益を有する者か（9条）</text>
+<line x1="320" y1="138.4" x2="320" y2="190.4" fill="none" stroke="#1A1A1A" stroke-width="0.9" marker-end="url(#ah-k)"/>
+<text x="329" y="170.7" font-size="21" text-anchor="start" fill="#1A1A1A">満たす</text>
+<rect x="105" y="333.9" width="430" height="108.4" fill="#FFFFFF" stroke="#1A1A1A" stroke-width="0.9"/>
+<text x="320" y="363.6" font-size="21" text-anchor="middle" style="text-anchor:middle" fill="#1A1A1A" font-weight="700">訴えの利益</text>
+<text x="320" y="396.2" font-size="21" text-anchor="middle" style="text-anchor:middle" fill="#1A1A1A"><tspan x="320" dy="0">取消しによって回復すべき利益が</tspan><tspan x="320" dy="29">残っているか（9条1項かっこ書）</tspan></text>
+<line x1="320" y1="275.9" x2="320" y2="327.9" fill="none" stroke="#1A1A1A" stroke-width="0.9" marker-end="url(#ah-k)"/>
+<text x="329" y="308.2" font-size="21" text-anchor="start" fill="#1A1A1A">満たす</text>
+<rect x="105" y="500.3" width="430" height="79.5" fill="#FFFFFF" stroke="#1A1A1A" stroke-width="0.9"/>
+<text x="320" y="530.1" font-size="21" text-anchor="middle" style="text-anchor:middle" fill="#1A1A1A" font-weight="700">被告適格・管轄・出訴期間など</text>
+<text x="320" y="562.6" font-size="21" text-anchor="middle" style="text-anchor:middle" fill="#1A1A1A">11条、12条、14条ほか</text>
+<line x1="320" y1="442.3" x2="320" y2="494.3" fill="none" stroke="#1A1A1A" stroke-width="0.9" marker-end="url(#ah-k)"/>
+<text x="329" y="474.6" font-size="21" text-anchor="start" fill="#1A1A1A">満たす</text>
+<rect x="105" y="637.8" width="430" height="108.4" fill="#FFFFFF" stroke="#943522" stroke-width="2.5"/>
+<text x="320" y="667.5" font-size="21" text-anchor="middle" style="text-anchor:middle" fill="#1A1A1A" font-weight="700">本案審理</text>
+<text x="320" y="700.1" font-size="21" text-anchor="middle" style="text-anchor:middle" fill="#1A1A1A"><tspan x="320" dy="0">処分は違法か。違法なら請求認容</tspan><tspan x="320" dy="29">（事情判決を除く）</tspan></text>
+<line x1="320" y1="579.8" x2="320" y2="631.8" fill="none" stroke="#1A1A1A" stroke-width="0.9" marker-end="url(#ah-k)"/>
+<text x="329" y="612.1" font-size="21" text-anchor="start" fill="#1A1A1A">満たす</text>
+<rect x="705" y="637.8" width="230" height="108.4" fill="#FFFFFF" stroke="#1A1A1A" stroke-width="0.9"/>
+<text x="820" y="698.3" font-size="21" text-anchor="middle" style="text-anchor:middle" fill="#1A1A1A" font-weight="700">訴えの却下</text>
+<polyline points="535,84.2 820,84.2 820,631.8" fill="none" stroke="#1A1A1A" stroke-width="0.9" marker-end="url(#ah-k)"/>
+<text x="667.5" y="75.2" font-size="21" text-anchor="middle" style="text-anchor:middle" fill="#1A1A1A">当たらない</text>
+<line x1="535" y1="236.2" x2="820" y2="236.2" fill="none" stroke="#1A1A1A" stroke-width="0.9"/>
+<text x="667.5" y="227.2" font-size="21" text-anchor="middle" style="text-anchor:middle" fill="#1A1A1A">有しない</text>
+<line x1="535" y1="388.1" x2="820" y2="388.1" fill="none" stroke="#1A1A1A" stroke-width="0.9"/>
+<text x="667.5" y="379.1" font-size="21" text-anchor="middle" style="text-anchor:middle" fill="#1A1A1A">消滅した</text>
+<line x1="535" y1="540" x2="820" y2="540" fill="none" stroke="#1A1A1A" stroke-width="0.9"/>
+<text x="667.5" y="531" font-size="21" text-anchor="middle" style="text-anchor:middle" fill="#1A1A1A">欠ける</text>
+</svg>
