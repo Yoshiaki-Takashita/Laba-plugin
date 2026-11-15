@@ -13,4 +13,6 @@ description: 判例研究・判例評釈・ゼミ報告のレジュメ（Word）
 4. レジュメは `python3 ${CLAUDE_PLUGIN_ROOT}/skills/laba/scripts/hanrei/resume_build.py` で作る。スライドも作るなら `resume_to_deck.py` で下書きし、`sync_check.py` でレジュメと照合する。
 5. 書く前に `${CLAUDE_PLUGIN_ROOT}/skills/laba/references/hanrei/failure-catalog.md` を読み、渡す前に `${CLAUDE_PLUGIN_ROOT}/skills/laba/references/hanrei/10-checklist.md` で確かめる。独立点検（`${CLAUDE_PLUGIN_ROOT}/skills/laba/references/verification.md`）は省かない。
 
+6. 「検討」（判旨に賛成か反対か、射程はどこまでか）は、合議（`${CLAUDE_PLUGIN_ROOT}/skills/laba/references/gogi.md`）を材料にできる：立場の違う5人の意見から、多数意見を報告者の採る立場の候補に、反対意見を想定される批判に使う。報告者の結論は利用者が決める。合議の意見を、学説・判例として引用しない。
+
 共通の規則（足した説明、条文の確認、渡し方、独立採点と自己採点を混ぜないこと）は `${CLAUDE_PLUGIN_ROOT}/skills/laba/SKILL.md` に従う。
