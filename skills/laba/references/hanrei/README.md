@@ -61,7 +61,7 @@
 
 1. 作成時の `--config` の指定
 2. 構成（JSON）と同じフォルダの `config.json`（その案件だけの値）
-3. 環境変数 `LABA_CONFIG` が指すファイル
+3. （環境変数は読まない。1.5.0 で外した）
 4. `~/.config/laba/hanrei.json`（レジュメ）・`~/.config/laba/slides.json`（スライド）。利用者ごとの値を一度書いておく場所
 
 見本は `scripts/hanrei/samples/config.example.json` と `scripts/slides/specs/config.example.json`。同じ利用者の2件目からは、聞き直さずに 4 を使う（発表日だけは毎回確かめる）。

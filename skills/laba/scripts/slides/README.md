@@ -63,7 +63,7 @@ python3 note_to_deck.py ノート.json draft.json --only 12-3 --tf 正誤.json  
 
 表紙の報告者・発表日が未設定のときは、仮の文字を入れて知らせるだけで止まらない。`--draft`・`--allow-warn` で作ったものは渡さない。
 
-指定：`--config ファイル`（探す順：指定 → 構成と同じフォルダの `config.json` → 環境変数 `LABA_CONFIG` → `~/.config/laba/slides.json`）、`--theme teal|mono`、`--kit kit_profile.json`（利用者の完成版に色と書体を合わせる。`scripts/hanrei/kit_measure.py` で作る）、`--outline 進行表.md`（枚ごとの文字数・本文の最小 pt・原稿の字数・目安の秒）。構成の `meta.keep` に、途中で改行させたくない言い回しを書ける。
+指定：`--config ファイル`（探す順：指定 → 構成と同じフォルダの `config.json` → `~/.config/laba/slides.json`）、`--theme teal|mono`、`--kit kit_profile.json`（利用者の完成版に色と書体を合わせる。`scripts/hanrei/kit_measure.py` で作る）、`--outline 進行表.md`（枚ごとの文字数・本文の最小 pt・原稿の字数・目安の秒）。構成の `meta.keep` に、途中で改行させたくない言い回しを書ける。
 
 文字数の数え方は、`build_deck.js`（進行表）と `deck_lint.py` で同じ（見出し・大項目名・頁番号を除き、空白を数えない）。
 

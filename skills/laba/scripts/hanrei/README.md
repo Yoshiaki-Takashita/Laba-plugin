@@ -31,7 +31,7 @@ python3 resume_build.py samples/resume_sample.json resume.docx --strip-ids --con
 
 ブロックは `build_docx.py` のもの（P・P2・T・SS・C・B・F など）に加えて、`["Q","…"]`（条文・判旨の引用。左に罫線）、`["QS","出典"]`、`["G","…"]`（専門用語の注。小さい灰色の字）が使える。
 
-config.json を探す順：`--config` → 構成と同じフォルダの `config.json` → 環境変数 `LABA_CONFIG` → `~/.config/laba/hanrei.json`。
+config.json を探す順：`--config` → 構成と同じフォルダの `config.json` → `~/.config/laba/hanrei.json`。
 
 ## スライドへ
 
