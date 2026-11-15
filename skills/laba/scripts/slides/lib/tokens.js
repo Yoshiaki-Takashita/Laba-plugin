@@ -10,8 +10,8 @@ const THEMES = {
   mono: { ink: "1A1A1A", base: "1A1A1A", dark: "1A1A1A", accent: "943522", band: "EDEFEF", gray: "8C9493", rule: "C9CECD", paper: "FFFFFF", headFill: "EDEFEF", headText: "1A1A1A" },
 };
 
-// 書体。利用者のキットに合わせるときは、build_deck.js の --kit が環境変数 LABA_SLIDE_FONT で差し替える。
-const FONT = process.env.LABA_SLIDE_FONT || "Yu Gothic";
+// 書体。利用者のキットに合わせるときは、build_deck.js の --kit が globalThis.LABA_SLIDE_FONT で差し替える（環境変数は読まない）。
+const FONT = globalThis.LABA_SLIDE_FONT || "Yu Gothic";
 
 // 文字サイズの段階。実測では 15〜18pt が約 7 割、太字が 96%。
 const SIZE = {

@@ -22,7 +22,7 @@ RESUME.json の項目（どれも省略可。順番は references/hanrei/03-stru
   blocks の中身は build_docx.py のブロック（["P","…"], ["T",rows,表題], ["P2","事案：…"], ["SS","(1) …"]）に加えて、
   ["Q","…"]（条文・判旨の引用。左に罫線）、["QS","出典"]（引用の出典。小さい字で右寄せ）、["G","…"]（専門用語の注。小さい灰色の字）を書ける。
 config.json：{year, affiliation, presenter, date, note, chapter_break（章ごとに改頁するか。既定 true）}。空欄なら表紙に「（報告者）」などの仮の文字を入れ、一覧を出す。
-  探す順：--config → 構成と同じフォルダの config.json → 環境変数 LABA_CONFIG → ~/.config/laba/hanrei.json（利用者ごとの置き場所）。
+  探す順：--config → 構成と同じフォルダの config.json → ~/.config/laba/hanrei.json（利用者ごとの置き場所）。
 文体の決まり：本文は である調。発表でそのまま読む段落だけ です・ます にしてよい（references/hanrei/08-style.md）。"""
 import sys, os, json, re
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
@@ -265,7 +265,7 @@ def blocks_from(spec):
 
 def find_config(explicit, spec_path, name='hanrei.json'):
     """利用者ごとの値の置き場所を順に探す"""
-    cands = [explicit, os.path.join(os.path.dirname(os.path.abspath(spec_path)), 'config.json'), os.environ.get('LABA_CONFIG'),
+    cands = [explicit, os.path.join(os.path.dirname(os.path.abspath(spec_path)), 'config.json'),
              os.path.join(os.path.expanduser('~'), '.config', 'laba', name)]
     for c in cands:
         if c and os.path.exists(c): return c

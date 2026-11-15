@@ -13,7 +13,7 @@ const fs = require("fs");
 const path = require("path");
 // --kit：利用者の完成版を scripts/hanrei/kit_measure.py で測った値。書体と色をそれに合わせる（tokens を読む前に書体を決める）
 const KIT = (() => { const i = process.argv.indexOf("--kit"); if (i < 0) return null; try { return (JSON.parse(fs.readFileSync(process.argv[i + 1], "utf8")).pptx || {}).apply || {}; } catch (e) { console.error(`--kit を読めない：${e.message}`); process.exit(2); } })();
-if (KIT && KIT.font) process.env.LABA_SLIDE_FONT = KIT.font;
+if (KIT && KIT.font) globalThis.LABA_SLIDE_FONT = KIT.font;  // 環境変数は使わない（ディレクトリの規則）
 let pptxgen;
 try { pptxgen = require("pptxgenjs"); } catch (e) { console.error("pptxgenjs が見つからない。`npm install -g pptxgenjs` を実行し、NODE_PATH に `npm root -g` の出力を入れる（README.md 参照）。"); process.exit(2); }
 const { SLIDE, THEMES, FONT, SIZE, GRID, DENSITY, SPEECH } = require("./lib/tokens");
@@ -28,8 +28,8 @@ const pos = argv.filter((a, i) => !a.startsWith("--") && !(i > 0 && VALUED.inclu
 if (pos.length < 2) { console.error("usage: node build_deck.js SPEC.json OUT.pptx [--config config.json] [--theme teal|mono] [--outline outline.md] [--draft] [--allow-warn]"); process.exit(2); }
 const DRAFT = argv.includes("--draft"), ALLOW = argv.includes("--allow-warn");
 const spec = JSON.parse(fs.readFileSync(pos[0], "utf8"));
-// 利用者ごとの値（所属・報告者・発表日・配色）を探す順：--config → 構成と同じフォルダの config.json → 環境変数 LABA_CONFIG → ~/.config/laba/slides.json
-const cfgPath = [flag("--config"), path.join(path.dirname(pos[0]), "config.json"), process.env.LABA_CONFIG, path.join(require("os").homedir(), ".config", "laba", "slides.json")].find((p) => p && fs.existsSync(p));
+// 利用者ごとの値（所属・報告者・発表日・配色）を探す順：--config → 構成と同じフォルダの config.json → ~/.config/laba/slides.json
+const cfgPath = [flag("--config"), path.join(path.dirname(pos[0]), "config.json"), path.join(require("os").homedir(), ".config", "laba", "slides.json")].find((p) => p && fs.existsSync(p));
 const cfg = cfgPath ? JSON.parse(fs.readFileSync(cfgPath, "utf8")) : {};
 const themeName = flag("--theme") || (spec.meta && spec.meta.theme) || cfg.theme || "teal";
 let K = THEMES[themeName];

@@ -49,7 +49,7 @@ python3 scripts/slides/note_to_deck.py ノートのブロック.json 下書き�
 
 ## 利用者ごとの値
 
-所属・報告者名・発表日・配色は `config.json` に書く（見本 `scripts/slides/specs/config.example.json`。既定はどれも空欄）。探す順は、`--config` の指定 → 構成と同じフォルダの `config.json` → 環境変数 `LABA_CONFIG` → `~/.config/laba/slides.json`（利用者ごとの置き場所）。空欄なら表紙に「（報告者）」「（発表日）」の仮の文字が入り、作成時に知らせる。値を推測で埋めない。スキルの中に、特定の人の名前・所属を書かない。
+所属・報告者名・発表日・配色は `config.json` に書く（見本 `scripts/slides/specs/config.example.json`。既定はどれも空欄）。探す順は、`--config` の指定 → 構成と同じフォルダの `config.json` → `~/.config/laba/slides.json`（利用者ごとの置き場所）。空欄なら表紙に「（報告者）」「（発表日）」の仮の文字が入り、作成時に知らせる。値を推測で埋めない。スキルの中に、特定の人の名前・所属を書かない。
 
 利用者が前に仕上げた資料（キット）があれば、`scripts/hanrei/kit_measure.py` で色・書体を測り、`--kit` で合わせられる（`../hanrei/README.md` の「キットの再利用」）。
 

@@ -257,9 +257,6 @@ def render(note):
 # PNG（ブラウザがあるときだけ）
 # ---------------------------------------------------------------------------
 def find_browser():
-    env = os.environ.get("GNOTO_BROWSER")
-    if env and os.path.exists(env):
-        return env
     for name in ("chromium", "chromium-browser", "google-chrome", "google-chrome-stable", "chrome", "msedge"):
         p = shutil.which(name)
         if p:
