@@ -19,7 +19,7 @@
 
 ## 2. 呼び方
 
-`/laba-report 〔レベル〕〔分野〕 課題文`。レベルの語：高校生・高校・hs／学部生・学部・大学生・ug・undergrad／大学院生・院生・修士・博士・grad・phd／専門家・実務・報告書・pro／論文・査読・投稿・paper・journal／学会・発表・予稿・conf・conference。省けば既定（学部生）。
+`/reportkiller 〔レベル〕〔分野〕 課題文`。レベルの語：高校生・高校・hs／学部生・学部・大学生・ug・undergrad／大学院生・院生・修士・博士・grad・phd／専門家・実務・報告書・pro／論文・査読・投稿・paper・journal／学会・発表・予稿・conf・conference。省けば既定（学部生）。
 
 ## 3. 文体の型（数値はここが唯一の元）
 
@@ -37,7 +37,7 @@
 `scripts/report_check.js` の `LEVELS` と、`references/` の prose-ja・prose-ja-law・prose-en・figures の数値は、この JSON の写し。**数値を変えるときはここを直してから写す。**
 
 ```json
-{"_": "laba-report-thresholds-v2.1",
+{"_": "reportkiller-thresholds-v2.1",
  "ja": {
   "essay":  {"profile": "essay",  "avgMax": 55, "avgTarget": null, "over100Max": 0.05, "over120Max": null, "para24Min": 0.5,  "para24Max": null, "plainMin": 0.8,  "hedgeMax": 1,   "enumMax": 5, "signpostMax": 3},
   "resume": {"profile": "resume", "avgMax": 55, "avgTarget": 48,   "over100Max": 0.02, "over120Max": 0,    "para24Min": 0.6,  "para24Max": 0.9,  "plainMin": 0.85, "hedgeMax": 0.5, "enumMax": 5, "signpostMax": 3},

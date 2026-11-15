@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/* ledger_check.js — 引用台帳（ID | 書誌 | URL | V0〜V3 | 使い方）と本文の突き合わせ（laba-report）。依存なし。
+/* ledger_check.js — 引用台帳（ID | 書誌 | URL | V0〜V3 | 使い方）と本文の突き合わせ（reportkiller）。依存なし。
  *   node ledger_check.js 本文.txt [--ledger 台帳.txt] [--level grad] [--json]
  * 見るもの：V0 の行／ID の重複／本文で引いたのに台帳に無い ID／台帳にあって本文で使わない行／V3 でない行への「」引用と頁数／同じ ID の頁数の食い違い／
  *   V2 以上で URL が空（論文・学会）／使い方の欄の印／段ごとの文献数・V1 の上限・V3 の下限・一次か査読の数。

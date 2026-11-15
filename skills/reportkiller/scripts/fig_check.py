@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""fig_check.py — 図（SVG、PNG は一部）の機械点検（laba-report）。標準ライブラリだけ。
+"""fig_check.py — 図（SVG、PNG は一部）の機械点検（reportkiller）。標準ライブラリだけ。
 
 使い方:
   python3 fig_check.py 図.svg [--width-mm 156] [--kind diagram|chart|map|ortho|process|flow] [--caption "図 1 …"] [--json]

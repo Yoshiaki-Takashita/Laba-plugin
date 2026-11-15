@@ -23,9 +23,9 @@
 
 ## 4. 文体の機械チェック
 
-`node ${CLAUDE_PLUGIN_ROOT}/skills/laba-report/scripts/prose_check.js --level 〔段〕 本文.txt`（台帳が別なら `--ledger`）。日本語は型（意見文・発表レジュメ・論文）で数値が変わり、英語は段で変わる（`levels.md`）。所見は「直す候補」で、どの文が・何字で・分ける候補はどこか、から始め、書き直しは利用者が選ぶ。error が 0 になるまで。warn は残す理由を書けるなら残す。
+`node ${CLAUDE_PLUGIN_ROOT}/skills/reportkiller/scripts/prose_check.js --level 〔段〕 本文.txt`（台帳が別なら `--ledger`）。日本語は型（意見文・発表レジュメ・論文）で数値が変わり、英語は段で変わる（`levels.md`）。所見は「直す候補」で、どの文が・何字で・分ける候補はどこか、から始め、書き直しは利用者が選ぶ。error が 0 になるまで。warn は残す理由を書けるなら残す。
 
-図：`python3 ${CLAUDE_PLUGIN_ROOT}/skills/laba-report/scripts/fig_check.py 図.svg --width-mm 156 --caption "図 1 …"`。禁止要素（角丸・影・グラデーション・凡例だけの色分け・色の文字・4 色以上）が 0、文字 8 pt 以上、線 0.35〜1.0 pt、灰と強調の明度差 20 以上。v2.1：記号だけのラベル（F23）・枠の有無の不揃い（F24）・流れを示す図に矢印が無い（F25。`--kind process`）・関係の種類の混在（AR-L5）・図題に読み方の文が無い／断片（AR-N2・N3）。
+図：`python3 ${CLAUDE_PLUGIN_ROOT}/skills/reportkiller/scripts/fig_check.py 図.svg --width-mm 156 --caption "図 1 …"`。禁止要素（角丸・影・グラデーション・凡例だけの色分け・色の文字・4 色以上）が 0、文字 8 pt 以上、線 0.35〜1.0 pt、灰と強調の明度差 20 以上。v2.1：記号だけのラベル（F23）・枠の有無の不揃い（F24）・流れを示す図に矢印が無い（F25。`--kind process`）・関係の種類の混在（AR-L5）・図題に読み方の文が無い／断片（AR-N2・N3）。
 
 ## 5. 使ってはいけない使い方
 
