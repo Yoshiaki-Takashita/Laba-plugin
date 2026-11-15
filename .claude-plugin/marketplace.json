@@ -1,0 +1,14 @@
+{
+  "name": "laba-marketplace",
+  "description": "LABA（法的学術書アルゴリズム）プラグインの配布用マーケットプレイス。フル版（スクリプトつき）は release ブランチから入れる。",
+  "owner": {
+    "name": "LABA"
+  },
+  "plugins": [
+    {
+      "name": "laba",
+      "source": "./",
+      "description": "法学のレジュメ・教科書・判例資料から講義ノート・判例研究・スライド・図を作り、採点する。学術レポート・論文（reportkiller）、GNOTO ノート（gnoto-lite）つき。"
+    }
+  ]
+}
