@@ -34,3 +34,4 @@
 - 1.5.0 の追記（2026-11-15）：所有者の希望でスキルの名前を `laba-report` から元の `reportkiller` に戻した（フォルダ・文書・道具の中の名前をすべて置き換え）。建築の研究ノートは所有者から判断を任され、事実を日本語で書き直した要約で原文・図・写真を含まないことを確かめて（長い引用の検索で 0 件）、同梱のままとし、`arch-masters-data/README.md` に出典と扱いを書いた。
 - 1.5.0 の追記 2（2026-11-15）：ディレクトリの検証で「Uses a credential from the user's machine」（Policy hold）が出たため、配布するコードから環境変数の読み取りをすべて外した（`LABA_CONFIG`：resume_build.py・build_deck.js、`GNOTO_BROWSER`：gnoto_render.py、`LABA_SLIDE_FONT`：build_deck.js→tokens.js の受け渡しは globalThis に）。設定は `--config`・構成と同じフォルダの config.json・`~/.config/laba/` で引き続き渡せる。ブラウザは自動で探す。
 - 1.5.0 の追記 3（2026-11-15）：ディレクトリの検証の警告（download-and-run）を受けて確かめ、ネットにつなぐ唯一の道具 case_lookup.py（裁判所の判例検索と判決 PDF の取得。PDF は文字にするだけ）を README の日英に明記した。ほかの指摘（fig_check.py・archstudio-axon.js・sokan_sample.png）は、文字列の見かけによる誤検知（ダウンロードも実行もしない）。
+- 1.5.0 の追記 4（2026-11-15）：掲載の Links のため plugin.json に homepage・repository・documentationUrl・supportUrl・privacyPolicyUrl・termsOfServiceUrl を足し、PRIVACY.md（日英）を新しく書いた。

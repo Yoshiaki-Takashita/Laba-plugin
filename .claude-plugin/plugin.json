@@ -5,6 +5,12 @@
   "author": {
     "name": "LABA"
   },
+  "homepage": "https://github.com/Yoshiaki-Takashita/Laba-plugin",
+  "repository": "https://github.com/Yoshiaki-Takashita/Laba-plugin",
+  "documentationUrl": "https://github.com/Yoshiaki-Takashita/Laba-plugin/blob/release/README.md",
+  "supportUrl": "https://github.com/Yoshiaki-Takashita/Laba-plugin/issues",
+  "privacyPolicyUrl": "https://github.com/Yoshiaki-Takashita/Laba-plugin/blob/release/PRIVACY.md",
+  "termsOfServiceUrl": "https://github.com/Yoshiaki-Takashita/Laba-plugin/blob/release/LICENSE",
   "keywords": [
     "法学",
     "講義ノート",
