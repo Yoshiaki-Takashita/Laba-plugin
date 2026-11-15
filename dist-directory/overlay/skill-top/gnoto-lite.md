@@ -1,0 +1,13 @@
+## 公式版（道具なし）での進め方
+
+**最初に** `${CLAUDE_PLUGIN_ROOT}/skills/gnoto-lite/scripts/gnoto.py` があるかを確かめる。あれば（フル版）この節は飛ばし、下の「道具」の表のとおり進める。**無ければ（公式版）**、下の `gnoto.py` の命令（`new`・`add-text`・`check`・`render`・`law-statute` など）は使えない。**Claude が .gnoto ファイルを直接書く**。形式の全部は `references/SPEC.md`（1 章：形式、2 章：ノーマルとスライド、3.3：条文・判例ブロックの書き方）にある。要点は次のとおり。
+
+1. **入れ物**：UTF-8（BOM なし）の JSON 1 つ。`{"glyph":"note","version":1,"app":"GNOTO","note":{"title":…,"style":"normal"|"slide","n":0,"content":{…},"books":[],"pen":[]}}`。ファイル名は `<題>.gnoto`（`\ / : * ? " < > |` は `_` に）。最小の有効な例は SPEC.md 1.6。
+2. **ノーマル**：`content.rows` に行を並べる。普通の行は `[{"html":"本文"}]`。見出しは `"htype":"1"〜"3"`（**文字列**）、箇条書きは `"list":"ul"|"ol"`、字下げは `"indent":"1"|"2"`（**文字列**）。表は `{"table":{"head":[…],"rows":[[…]]}}`、区切りは `{"hr":true}`、2 列・囲み・折りたたみは SPEC.md 1.3。`content.title` は `note.title` と同じにし、本文の先頭に題と同じ見出しを置かない。`content.body` には `rows` の簡易な HTML の写しを付ける。
+3. **スライド**：`style:"slide"`。`content.slides=[{id, els:[{id,type:"text",x,y,w,h,z,html}…]}]`、`content.cur=0`、`rows` は `[[{"html":""}]]`。x y w h は面（16:9）に対する %、文字の大きさは `cqh`（面の高さの 1%）、中央寄せは `text-align:center` と y・h で作る（`display:flex` は落ちる）。目安：題 `8,7,84,14`、本文 `8,26,84,66`、2 カラム `8,26,42,66` と `50,26,42,66`。1 枚に詰め込みすぎない。SPEC.md 2.2。
+4. **`html` に書けるもの**：SPEC.md 1.4 の許可（`b i u s a br p div span h1-h6 ul ol li table… blockquote code` など。`script`・`style`・`iframe`・`on*`・`display`・`letter-spacing` は GNOTO の読み込みで落ちる）。文字は素の文字で書き、`&` `<` `>` は `&amp;` `&lt;` `&gt;` にする。引用は `blockquote` で書き、出典と注記は**見える文字**で書く（隠し印は使わない）。画像は利用者が渡したものだけ（`data:image/…;base64,` か、利用者が指定した https の URL）。
+5. **既存の .gnoto を直すとき**：JSON を読み、知らないキー・ブロックは**そのまま残し**、直す所だけ書き換える。
+6. **検査（`check` の代わり）**：書いたら、環境に Python があれば `json.load` で読み直して、次を 1 つずつ確かめる（なければ目で）。JSON として読める／`glyph`・`note`・`note.style`（normal か slide）がある／normal は `rows` が 1 行以上／`htype`・`indent` が文字列／表に `head` と `rows`／画像の `src` が https か `data:image`／slide は各スライドに `els`、`id` の重複なし、x y w h が数、`cur` が範囲内／`html` が 1.4 の許可に収まる／要素の高さに収まる量の文字か。結果は「手作業で確かめた」と報告し、機械の検査（`check`）は走らせていないと書く。GNOTO の読み込みで実際に開けるかは確かめていない（不明）と書く。
+7. **プレビュー・Word**：HTML のプレビューと .docx は、環境でその場のコードが書けるときだけ作る（プレビューは表示だけの静的な HTML でよい）。作れなければ .gnoto だけ渡し、そう伝える。.pptx は作らない（スライドの .pptx は laba-slides）。
+8. **法律モード**：コネクタの返答は、`law-args`・`law-statute`・`law-case`・`law-quote`・`law-unverified` に通せないので、Claude が SPEC.md 3.3 の取り決めで普通のブロックとして書く。条文は見出し（`htype:"3"`）＋各項（2 項以上なら①②…）＋出典行（法令 ID・版・施行日・取得日）、判例は見出し＋裁判要旨・判示事項・参照法条＋出典行（要旨は裁判所の編集で判決の文ではない）、取れなかったものは先頭に【未確認】と理由。「」の引用は `case_quote_check` が一致（exact）を返したものだけ。下の「法律モード（Claude の手順）」の 0〜4 のうち、ツールを呼ぶ所と、返答を保存してスクリプトに通す所は、「返答の内容を読んで、上の取り決めで書く」と読み替える。条文の文言・判例の要旨を記憶で補わない（規則は変わらない）。
+9. 渡すときは `.gnoto` ファイルを必ず添え、「GNOTO のノート一覧の読み込みで開くと『インポート』ジャンルに新しいノートができる」と一言添える。
