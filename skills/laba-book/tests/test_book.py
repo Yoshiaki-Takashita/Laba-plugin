@@ -463,3 +463,20 @@ class DepthG102(unittest.TestCase):
         self.assertIn("換気温度は作物の種類によって異なる。", t)
         self.assertNotIn("var a", t)
         self.assertNotIn("メニュー", t)
+
+    def test_facts_tab_and_empty(self):
+        L = bs.parse_ledger(LEDGER2)
+        rows, bad = bs.parse_facts("ID\t節\t台帳\t事実\t抜き書き\nF01\ts1\tR01\t換気温度は作物で違う\t換気温度は作物の種類によって異なり\n")
+        self.assertEqual(len(rows), 1)
+        self.assertEqual(rows[0]["rids"], ["R01"])
+        tmp = tempfile.mkdtemp()
+        lp = write(tmp, "ledger.tsv", LEDGER2)
+        fp = write(tmp, "facts.tsv", "F01,s1,R01,形の違う行\n")
+        self.assertEqual(bs.main(["facts", fp, "--ledger", lp]), 1)  # 1 行も読めなければ通さない
+
+    def test_fig_note_ledger_id(self):
+        tmp = tempfile.mkdtemp()
+        write(tmp, "outline.json", json.dumps({"chapter": {"no": 1, "title": "x"}, "sections": [{"id": "s1", "title": "題", "fig": None}]}))
+        write(tmp, "figs.json", json.dumps({"f1": {"kind": "table", "note": "甲の資料（R08）の表による"}}, ensure_ascii=False))
+        errs, warns, st = bs.check_figs(tmp)
+        self.assertTrue(any("台帳の ID" in e for e in errs))

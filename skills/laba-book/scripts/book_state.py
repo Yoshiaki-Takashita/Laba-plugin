@@ -488,6 +488,8 @@ def parse_ledger(text):
     rows, unconf, bad = [], [], []
     for ln in text.replace("\r", "").split("\n"):
         s = ln.strip()
+        if "\t" in s and "|" not in s:  # タブ区切り（.tsv）も受ける
+            s = " | ".join(x.strip() for x in s.split("\t"))
         if not s or s.startswith("#") or s.startswith("ID |") or s.startswith("ID|"):
             continue
         mm = LEDGER_ROW.match(s)
@@ -684,6 +686,8 @@ def parse_facts(text):
     rows, bad = [], []
     for ln in text.replace("\r", "").split("\n"):
         s = ln.strip()
+        if "\t" in s and "|" not in s:  # タブ区切り（.tsv）も受ける
+            s = " | ".join(x.strip() for x in s.split("\t"))
         if not s or s.startswith("#") or s.startswith("ID |") or s.startswith("ID|"):
             continue
         m = FACT_ROW.match(s)
@@ -792,6 +796,9 @@ def check_figs(chdir):
             with open(sp, encoding="utf-8") as f:
                 texts[s["id"]] = f.read()
     st = {"candidates": 0, "made": 0, "dropped": 0, "pending": 0, "fig_errors": 0, "fig_warnings": 0, "svg_errors": 0, "svg_warnings": 0, "kinds": {}, "per": []}
+    for fid, fd in figs.items():  # 台帳の ID は紙面に出さない（図の注・題にも書かない）
+        if re.search(r"\b[RU]\d{1,3}[a-z]?\b", json.dumps(fd, ensure_ascii=False)):
+            errs.append(f"{fid}: 図の記述に台帳の ID（R01 など）がある。紙面に出るので、出典は書誌の短い名前で書く")
     used = set()
     for s in o.get("sections", []):
         sid, fig = s["id"], s.get("fig")
@@ -1061,7 +1068,9 @@ def main(argv):
             sd = os.path.join(os.path.dirname(os.path.abspath(lp)), "sources")
         errs, warns, stats = check_facts(rows, L, sd, opt(rest, "--section"))
         warns += [f"表の形に合わない行：{b}" for b in bad]
-        short = any(st["short"] for st in stats.values())
+        if not rows:
+            errs.append("事実の行が 1 つも読めない（形：F01 | s1 | R03 | 事実 | 抜き書き。区切りは「|」かタブ）")
+        short = any(st["short"] for st in stats.values()) or not stats
         if "--json" in rest:
             print(json.dumps({"stats": stats, "errors": errs, "warnings": warns, "pass": not errs and not short}, ensure_ascii=False, indent=1))
         else:
