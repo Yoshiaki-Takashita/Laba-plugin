@@ -1,31 +1,92 @@
 {
  "_": "laba-book の gate の目標。元は reportkiller/references/textbook-prose.md §1（教科書の形の測定）。数値を変えるときは元を直してから写す（references/writer-brief.md 1 の表も同じ値。tests/test_book.py が一致を確かめる）。hs は［推］（測定は大学の教科書だけ）。",
  "levels": {
-  "ug":   {"sentMedian": [55, 68], "sentP90Max": 125},
-  "grad": {"sentMedian": [55, 68], "sentP90Max": 125},
-  "hs":   {"sentMedian": [45, 55], "sentP90Max": 110}
+  "ug": {
+   "sentMedian": [
+    55,
+    68
+   ],
+   "sentP90Max": 125
+  },
+  "grad": {
+   "sentMedian": [
+    55,
+    68
+   ],
+   "sentP90Max": 125
+  },
+  "hs": {
+   "sentMedian": [
+    45,
+    55
+   ],
+   "sentP90Max": 110
+  }
  },
  "common": {
-  "short40Share": [0.15, 0.30],
-  "long81Share": [0.25, 0.35],
+  "short40Share": [
+   0.15,
+   0.3
+  ],
+  "long81Share": [
+   0.25,
+   0.35
+  ],
   "cvMin": 0.45,
-  "comma": [1.8, 3.5],
-  "paraChars": [150, 260],
+  "comma": [
+   1.8,
+   3.5
+  ],
+  "paraChars": [
+   150,
+   260
+  ],
   "oneSentParaMax": 1,
   "paraOpenMax": 0.25,
-  "dearuMax": 0.30,
+  "dearuMax": 0.3,
   "boldPerParaMax": 2,
   "boldLenMax": 9,
-  "boldPer1000": [3, 6],
+  "boldPer1000": [
+   3,
+   6
+  ],
   "h1Max": 20,
   "h2Max": 8,
   "boxSentMax": 3,
   "boxCharsMax": 184,
   "asideSentMax": 2,
-  "asideChars": [75, 120],
-  "pointItems": [3, 5],
+  "asideChars": [
+   75,
+   120
+  ],
+  "pointItems": [
+   3,
+   5
+  ],
   "pointItemMax": 27,
-  "sectionChars": [1200, 1600]
+  "sectionChars": [
+   1200,
+   1600
+  ],
+  "chainMax": 1,
+  "chainMinChars": 100,
+  "chainCommas": 5,
+  "noteInBodyMax": 0,
+  "boxCharsTarget": 120
  },
- "soft": ["long81Share", "boldPer1000", "asideChars", "sectionChars", "short40Share"]
+ "soft": [
+  "long81Share",
+  "boldPer1000",
+  "asideChars",
+  "sectionChars",
+  "short40Share",
+  "boxCharsTarget"
+ ],
+ "depth": {
+  "_": "資料なしの題の 1 節の深さ（P3b 事実の表 facts.tsv。book_state.py facts が測る）。節の字数 ÷ 100 ほどの事実を、種類の違う出典から集める。",
+  "factsMin": 12,
+  "sourcesMin": 3,
+  "kindsMin": 2,
+  "topShareMax": 0.5
+ }
 }

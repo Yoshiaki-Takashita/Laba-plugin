@@ -261,7 +261,7 @@ class Ledger(unittest.TestCase):
             md = f.read()
         block = re.search(r"```\n(ID \|.*?)\n```", md, re.S).group(1)
         L = bs.parse_ledger(block)
-        self.assertEqual(len(L["rows"]), 3)
+        self.assertEqual(len(L["rows"]), 5)
         self.assertEqual(len(L["unconfirmed"]), 1)
         errs, _, _ = bs.check_ledger(L)
         self.assertEqual(errs, [])
@@ -389,3 +389,77 @@ class Page(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+# ---------- G102：深さ（事実の表）・事典のまとめ・読点でつなぐ文・本文の断り ----------
+LEDGER2 = """ID | 完全な書誌 | 確認に使った URL | V0〜V3 | 使い方の印
+R01 | 甲省「温室の手引」 | https://example.go.jp/a | V3 | 【一次】【公的】【ウェブ】
+R02 | 乙大学「園芸学」講義資料 | https://example.ac.jp/b | V3 | 【二次】【講義】【ウェブ】
+R03 | 丙学会「用語集」 | https://example.or.jp/c | V1 | 【二次】【学会】【ウェブ】
+R04 | ウィキペディア「温室」 | https://ja.wikipedia.org/wiki/x | V1 | 【二次】【ウェブ】
+R05 | ウィキペディア「換気」 | https://ja.wikipedia.org/wiki/y | V1 | 【手がかり】【ウェブ】
+"""
+
+
+class DepthG102(unittest.TestCase):
+    def test_hint_rows(self):
+        L = bs.parse_ledger(LEDGER2)
+        errs, warns, st = bs.check_ledger(L)
+        self.assertTrue(any("R04" in e and "手がかり" in e for e in errs))
+        self.assertFalse(any("R05" in e for e in errs))
+        self.assertEqual(st["hints"], 2)
+        self.assertEqual(st["kinds"], ["【公的】", "【学会】", "【講義】"])
+        r = bs.claims("# 題\n\n**換気温度**は作物ごとに違うと呼ぶ[R05]。室温は上がる[R01]。\n", L)
+        self.assertIn("R05", r["cited_hint"])
+        self.assertFalse(r["pass"])
+
+    def test_kind_from_url(self):
+        self.assertEqual(bs.source_kind({"use": "", "url": "https://laws.e-gov.go.jp/x"}), "【法令】")
+        self.assertEqual(bs.source_kind({"use": "", "url": "https://www.example.ac.jp/x.pdf"}), "【講義】")
+        self.assertEqual(bs.source_kind({"use": "【査読】", "url": "https://example.com"}), "【査読】")
+
+    def test_facts_depth_and_quote(self):
+        tmp = tempfile.mkdtemp()
+        os.makedirs(os.path.join(tmp, "sources"))
+        write(tmp, "sources/R01.txt", "温室の 換気温度は、作物の種類によって異なり、\nトマトでは高めにする。")
+        L = bs.parse_ledger(LEDGER2)
+        rows, bad = bs.parse_facts("ID | 節 | 台帳 | 事実 | 抜き書き\n"
+                                   "F01 | s1 | R01 | 換気温度は作物で違う | 換気温度は作物の種類によって異なり\n"
+                                   "F02 | s1 | R01 | 作り話 | 換気温度は一年中同じである\n"
+                                   "F03 | s1 | R04 | まとめ | なにか\n"
+                                   "F04 | s1 | U09 | 未確認 | なにか\n")
+        self.assertEqual(bad, [])
+        errs, warns, st = bs.check_facts(rows, L, os.path.join(tmp, "sources"))
+        j = "\n".join(errs)
+        self.assertNotIn("F01", j)
+        self.assertIn("F02", j)   # 抜き書きが原文に無い
+        self.assertIn("F03", j)   # 事典のまとめ
+        self.assertIn("F04", j)   # 台帳に無い
+        self.assertTrue(st["s1"]["short"])  # 事実 4・出典 1 → 深さ不足
+        rows = [{"id": f"F{i:02d}", "sec": "s1", "rids": [["R01", "R02", "R03"][i % 3]], "fact": "x", "quote": ""} for i in range(12)]
+        errs, warns, st = bs.check_facts(rows, L)
+        self.assertEqual(errs, [])
+        self.assertEqual(st["s1"]["short"], [])
+
+    @unittest.skipUnless(HAS_NODE, "node が無い")
+    def test_comma_chain_and_note(self):
+        chain = "上の場面のように、温かい物を冷たい物に近づけると、温かい方は冷え、冷たい方は温まるが、どんな近づけ方でも同じとは限らず、間に熱を通さない板があれば、二つの物がじかにふれていても温冷の変化はほとんど起きないことが多いと考えられている。"
+        self.assertEqual(len(bs.chain_sentences([chain])), 1)
+        self.assertEqual(len(bs.chain_sentences([LONG + MID])), 0)
+        tmp = tempfile.mkdtemp()
+        body = "# 換気の基準\n\n" + "\n\n".join([LONG + MID + SHORT, chain + LONG, chain + MID, "開く幅の上限は資料には示されておらず不明である。" + LONG + MID]) + "\n"
+        g = bs.gate(write(tmp, "s.md", body))
+        ids = {c["id"]: c for c in g["checks"]}
+        self.assertFalse(ids["commaChain"]["ok"])
+        self.assertFalse(ids["noteInBody"]["ok"])
+        self.assertIn("commaChain", g["ng"])
+
+    def test_source_text_html(self):
+        tmp = tempfile.mkdtemp()
+        p = write(tmp, "a.html", "<html><head><style>x{}</style><script>var a=1;</script></head><body><nav>メニュー</nav><p>換気温度は作物の種類によって異なる。</p><p>二つ目の段落。</p></body></html>")
+        sys.path.insert(0, os.path.join(BOOK, "scripts"))
+        import source_text
+        t = source_text.extract(p)
+        self.assertIn("換気温度は作物の種類によって異なる。", t)
+        self.assertNotIn("var a", t)
+        self.assertNotIn("メニュー", t)

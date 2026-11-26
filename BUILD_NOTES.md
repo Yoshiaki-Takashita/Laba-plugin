@@ -72,3 +72,8 @@
   - laba-book：`references/page.md`（P6）・`book_state.py page`（章のフォルダ → `.gnoto`）・SKILL.md の手順と報告。
   - 直し：`figure_svg.py` の `head:"both"` の始点の矢じりが内向きだった（marker `#at` の形を終点と同じに）。`textbook_check.js` が段落の頭の「第2条」「第三者」を接続語（順序）と数えていた（「第一に」「第二、」だけを数える）。
   - 試験：laba-textbook 44 → 57 件・laba-book 29 → 32 件。plugin.json の版・説明は変えていない。
+- 【未リリース・main にコミット・push していない】laba-book の出力の質（資料なしの題の深さ・文の長さの役割・図の判断の例）を上げた（GLYPH 側の G102。段 L5）。
+  - 深さ：`references/sources.md` 2b（P3b 事実の表 `work/ch<n>/facts.tsv`・節ごとに事実 12・出典 3・種類 2・寄り 5 割まで・最大 2 巡読み足す）。V3 は原文の写し（`work/sources/<ID>.txt`）があるときだけ、WebFetch の要約だけなら V1。Wikipedia 類は【手がかり】で根拠にしない。出典の種類の印（【法令】【公的】【学会】【講義】など。無ければ URL から推す）。
+  - 道具：`scripts/source_text.py`（新・ネットに接続しない。取ってきた HTML・PDF から字を取り出して写しにする・`--grep`）。`book_state.py facts`（新）・`ledger`（種類・事典のまとめ・写しの有無）・`claims`（引いた出典の数・種類・寄りの注意・事典を根拠にした誤り）・`gate` に `commaChain`（読点で節をつなぐだけの長い文）・`noteInBody`（本文の「資料に無く不明」）・`boxCharsTarget`（事例 120 字・注意）。`targets.json` に `depth` と上の値。
+  - 文書：`writer-brief.md` 2（文の長さを役割で変える）・2b（節の型・定義の作り方・事例の作り方・本文に書かないこと）。`figure-judgment.md` に要る・要らないの例。SKILL.md の手順 4・7・報告、`outline.md`、担当 `textbook-writer`。
+  - 試験：laba-book 32 → 37 件。plugin.json の版・説明は変えていない。
