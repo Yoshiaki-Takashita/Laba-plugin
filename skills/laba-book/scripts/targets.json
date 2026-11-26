@@ -83,10 +83,25 @@
   "boxCharsTarget"
  ],
  "depth": {
-  "_": "資料なしの題の 1 節の深さ（P3b 事実の表 facts.tsv。book_state.py facts が測る）。節の字数 ÷ 100 ほどの事実を、種類の違う出典から集める。",
-  "factsMin": 12,
+  "_": "資料なしの題の 1 節の根拠（P3b 根拠の表 facts.tsv。book_state.py facts が測る）。段落の設計（outline.json の paras）の主張に、種類の違う出典の根拠を当てる。事実の数の目標は置かない（段 L5：数の目標が本文の詰め込みを生んだ）。",
   "sourcesMin": 3,
   "kindsMin": 2,
   "topShareMax": 0.5
+ },
+ "paras": {
+  "_": "outline.json の節の段落の設計（1 段落 1 論点）。role の順は前提 → 定義 → 要件 → 例 → 例外（比較は例外と同じ位置）。",
+  "roles": [
+   "前提",
+   "定義",
+   "要件",
+   "例",
+   "例外",
+   "比較"
+  ],
+  "count": [
+   3,
+   8
+  ],
+  "pointMax": 60
  }
 }

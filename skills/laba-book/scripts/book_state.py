@@ -6,13 +6,15 @@
   book_state.py next    book.json                      # 次に作る章と、済んだ章の要点だけを出す
   book_state.py chapter book.json --no N [--title T] [--status planned|writing|done] [--summary "a;b;c"] [--outline P] [--text P]
   book_state.py check   book.json                      # book.json の形の検査
-  book_state.py outline outline.json                   # 構成の検査（見出しの字数・項の数・用語の重複・図の型）
+  book_state.py outline outline.json                   # 構成の検査（見出しの字数・項の数・用語の重複・図の型・節の問いと段落の設計 paras）
   book_state.py gate    節.md [--level ug] [--json]    # 本文の数の検査（targets.json の目標。NG が 0 なら終了コード 0）。[R01] の印は外して測る
   book_state.py map     map.json [--ledger ledger.tsv] # 概念の地図（P1・資料なしの題）の検査
   book_state.py ledger  ledger.tsv [--sources work/sources] [--json]  # 出典の台帳（P3）の検査：V0・重複・URL・確かめ方の印・種類・事典のまとめ・原文の写し・未確認の数
   book_state.py claims  節.md --ledger ledger.tsv [--json] [--strip 出力.md]  # 主張の印 [R01] と台帳の突き合わせ・ID の無い主張の候補
   book_state.py facts   work/ch1/facts.tsv --ledger ledger.tsv [--sources work/sources] [--section s1] [--json]
-                                                       # P3b 事実の表：台帳の ID・抜き書きが原文の写しにあるか・節ごとの深さ（事実・出典・種類・寄り）
+                                                       # P3b 根拠の表：台帳の ID・抜き書きが原文の写しにあるか・節ごとの根拠（出典・種類・寄り）
+  book_state.py paras   work/ch1/s1.md --outline work/ch1/outline.json [--section s1] [--json]
+                                                       # 本文の段落と構成の段落の設計（paras）を並べる（段落ごとの自己点検の下書き）
   book_state.py figs    work/ch1 [--json]              # P5 図：構成の図の候補 → figs.json の記述・本文の :::fig id=・描いた SVG の検査（図にした数／候補の数）
   book_state.py page    work/ch1 --out ch1.gnoto [--format fam-f1] [--variant b1] [--plan plan.json]
                                                        # P6 紙面：章の本文（chapter.md か s*.md）＋figs.json → GNOTO の紙面ノート（v:2 読む順の塊）と検査
@@ -132,8 +134,45 @@ def next_info(b):
 
 
 # ---------- outline.json ----------
+def check_paras(sid, s, P):
+    """節の段落の設計（paras）：1 段落 1 論点・役割の順（前提 → 定義 → 要件 → 例 → 例外）・題の問いへのつながり。"""
+    errs, warns = [], []
+    roles = P.get("roles", ["前提", "定義", "要件", "例", "例外", "比較"])
+    rank = {r: i for i, r in enumerate(roles)}
+    if "比較" in rank and "例外" in rank:
+        rank["比較"] = rank["例外"]
+    if not str(s.get("question", "")).strip():
+        errs.append(f"{sid}: 節の問い question が無い（この節が答える問いを 1 文で。例「比較優位とは何で、なぜ貿易の利益になるのか」）")
+    ps = s.get("paras")
+    if not isinstance(ps, list) or not ps:
+        errs.append(f"{sid}: 段落の設計 paras が無い（1 段落 1 論点で、role・point・answers を並べる。outline.md 3）")
+        return errs, warns
+    lo, hi = P.get("count", [3, 8])
+    if not lo <= len(ps) <= hi:
+        warns.append(f"{sid}: 段落の設計が {len(ps)} 個（{lo}〜{hi} が目安。1,200〜1,600 字で 5〜7）")
+    last = -1
+    for i, p in enumerate(ps, 1):
+        role, point, ans = p.get("role", ""), str(p.get("point", "")).strip(), str(p.get("answers", "")).strip()
+        if role not in rank:
+            errs.append(f"{sid}.p{i}: role「{role}」は使えない（{'・'.join(roles)}）")
+            continue
+        if rank[role] < last:
+            errs.append(f"{sid}.p{i}: role「{role}」が前の段落より前の役割（順は {' → '.join(roles[:5])}。比較は例外の位置）")
+        last = max(last, rank[role])
+        if not point:
+            errs.append(f"{sid}.p{i}: point（この段落の 1 論点）が空")
+        elif clen(point) > P.get("pointMax", 60):
+            warns.append(f"{sid}.p{i}: point が {clen(point)} 字（{P.get('pointMax', 60)} 字まで。論点が 2 つ以上なら段落を分ける）")
+        if not ans:
+            errs.append(f"{sid}.p{i}: answers（この段落が節の問いにどう答えるか）が空。答えないなら段落を外す")
+    if not any(p.get("role") == "定義" for p in ps):
+        warns.append(f"{sid}: 定義の段落が無い（用語を定義する節なら 1 つ置く）")
+    return errs, warns
+
+
 def check_outline(o, targets=None):
-    t = (targets or load_targets())["common"]
+    T = targets or load_targets()
+    t = T["common"]
     errs, warns = [], []
     secs = o.get("sections") or []
     if not secs:
@@ -184,6 +223,9 @@ def check_outline(o, targets=None):
             errs.append(f"{sid}: 図の id「{fig['id']}」は英小文字で始まる 16 字以内")
         if fig is not None and fig.get("kind") is None and fig.get("want") is None and not fig.get("dropped"):
             errs.append(f"{sid}: fig に kind も want も無い（図にしないなら null）")
+        pe, pw = check_paras(sid, s, T.get("paras", {}))
+        errs += pe
+        warns += pw
     return errs, warns
 
 
@@ -672,6 +714,34 @@ def claims(md, L):
             "cited_v0": sorted(set(cite_v0)), "pass": not errs, "errors": errs}
 
 
+# ---------- paras（本文の段落と、構成の段落の設計の突き合わせ・自己点検の下書き） ----------
+def paras_report(md_path, outline_path=None, section=None):
+    with open(md_path, encoding="utf-8") as f:
+        md = f.read()
+    _, paras, _, _ = parse_md(md)
+    body = []
+    for p in paras:
+        ids = sorted(set(x for m in re.findall(r"\[((?:[RU]\d{1,3})(?:\s*,\s*[RU]\d{1,3})*)\]", p) for x in re.split(r"\s*,\s*", m)))
+        t = strip_marks(p)
+        first = t.split("。")[0][:50]
+        body.append({"chars": clen(t), "ids": ids, "first": first})
+    plan, question, warns = [], "", []
+    if outline_path:
+        o = read_json(outline_path)
+        sid = section or os.path.splitext(os.path.basename(md_path))[0]
+        sec = next((x for x in o.get("sections", []) if x.get("id") == sid), None)
+        if sec is None:
+            warns.append(f"構成に節 {sid} が無い（--section で指定）")
+        else:
+            plan = sec.get("paras") or []
+            question = sec.get("question", "")
+            if not plan:
+                warns.append(f"{sid}：構成に段落の設計 paras が無い")
+            elif abs(len(plan) - len(body)) > 1:
+                warns.append(f"本文の段落 {len(body)}・設計 {len(plan)}。1 段落 1 論点なら数がほぼ合う（論点を足したか、1 段落に 2 論点を入れていないか）")
+    return {"question": question, "body": body, "plan": plan, "warnings": warns}
+
+
 # ---------- P3b 事実の表（facts.tsv。資料なしの題の深さ） ----------
 FACT_ROW = re.compile(r"^\s*\|?\s*(F\d{1,3})\s*\|\s*([^|]*?)\s*\|\s*([^|]*?)\s*\|\s*([^|]*?)\s*\|\s*([^|]*?)\s*\|?\s*$")
 
@@ -701,7 +771,7 @@ def parse_facts(text):
 
 
 def check_facts(rows, L, sources_dir=None, section=None, targets=None):
-    """事実の表の検査と、節ごとの深さ（事実の数・出典の数・種類・1 つの出典への寄り）。"""
+    """根拠の表の検査と、節ごとの根拠（出典の数・種類・1 つの出典への寄り）。事実の数の目標は targets に factsMin があるときだけ。"""
     D = (targets or load_targets()).get("depth", {})
     known = {r["id"]: r for r in L["rows"]}
     unconf = {u["id"] for u in L["unconfirmed"]}
@@ -742,9 +812,10 @@ def check_facts(rows, L, sources_dir=None, section=None, targets=None):
             warns.append(f"{f['id']}：抜き書き（原文のまま 10〜80 字）が空")
     secs = {}
     for f in rows:
-        if section and f["sec"] != section:
+        sec = f["sec"].split(".")[0]  # s1.p3 → s1（段落まで書いた行）
+        if section and sec != section:
             continue
-        secs.setdefault(f["sec"], []).append(f)
+        secs.setdefault(sec, []).append(f)
     stats = {}
     for sec, fs in secs.items():
         ids = [rid for f in fs for rid in f["rids"] if rid in known and not is_hint_row(known[rid]) and known[rid]["v"] in (1, 3)]
@@ -755,8 +826,9 @@ def check_facts(rows, L, sources_dir=None, section=None, targets=None):
         st = {"facts": len(fs), "sources": len(uniq), "kinds": kinds, "top_share": round(top, 2),
               "v1_share": round(sum(1 for i in ids if known[i]["v"] == 1) / len(ids), 2) if ids else 0}
         short = []
-        if st["facts"] < D.get("factsMin", 12):
-            short.append(f"事実 {st['facts']}（目標 {D.get('factsMin', 12)} 以上）")
+        if D.get("factsMin") and st["facts"] < D["factsMin"]:
+            short.append(f"事実 {st['facts']}（目標 {D['factsMin']} 以上）")
+        st["paras"] = sorted({f["sec"].split(".")[1] for f in fs if "." in f["sec"]})
         if st["sources"] < D.get("sourcesMin", 3):
             short.append(f"出典 {st['sources']}（目標 {D.get('sourcesMin', 3)} 以上）")
         if len(kinds) < D.get("kindsMin", 2):
@@ -1075,17 +1147,34 @@ def main(argv):
             print(json.dumps({"stats": stats, "errors": errs, "warnings": warns, "pass": not errs and not short}, ensure_ascii=False, indent=1))
         else:
             for sec, st in sorted(stats.items()):
-                print(f"{sec}：事実 {st['facts']}・出典 {st['sources']}・種類 {'・'.join(st['kinds']) or 'なし'}・最大の寄り {int(st['top_share'] * 100)}%・V1 {int(st['v1_share'] * 100)}%"
-                      + ("" if not st["short"] else " → 深さ不足：" + "・".join(st["short"])))
+                print(f"{sec}：主張 {st['facts']}・出典 {st['sources']}・種類 {'・'.join(st['kinds']) or 'なし'}・最大の寄り {int(st['top_share'] * 100)}%・V1 {int(st['v1_share'] * 100)}%"
+                      + (f"・段落 {','.join(st['paras'])}" if st.get("paras") else "")
+                      + ("" if not st["short"] else " → 根拠不足：" + "・".join(st["short"])))
             for e in errs:
                 print("[誤り] " + e)
             for w in warns[:20]:
                 print("[注意] " + w)
             if not errs and not short:
-                print("事実の表の誤り 0・深さの目標を満たす")
+                print("根拠の表の誤り 0・根拠の目標を満たす")
             elif not errs:
-                print("事実の表の誤り 0（深さ不足：確認先を足して読む。探しても届かなければ報告に書く）")
+                print("根拠の表の誤り 0（根拠不足：確認先を足して読む。探しても届かなければ報告に書く）")
         return 1 if errs or short else 0
+    if cmd == "paras":
+        r = paras_report(path, opt(rest, "--outline"), opt(rest, "--section"))
+        if "--json" in rest:
+            print(json.dumps(r, ensure_ascii=False, indent=1))
+        else:
+            if r["question"]:
+                print("節の問い：" + r["question"])
+            for i, b in enumerate(r["body"], 1):
+                pl = r["plan"][i - 1] if i <= len(r["plan"]) else None
+                print(f"p{i}［{pl['role'] if pl else '設計なし'}］{b['chars']} 字・根拠 {','.join(b['ids']) or 'なし'}：{b['first']}")
+                if pl:
+                    print(f"    設計：{pl.get('point', '')}／問いへ：{pl.get('answers', '')}")
+            for w in r["warnings"]:
+                print("[注意] " + w)
+            print("自己点検：段落ごとに「この段落は節の問いに答えているか・論点は 1 つか・設計の point と同じことを言っているか」を確かめ、答えない段落は外すか設計どおりに直す")
+        return 0
     if cmd == "figs":
         errs, warns, st = check_figs(path)
         if "--json" in rest:

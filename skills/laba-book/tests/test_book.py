@@ -60,10 +60,47 @@ class BookState(unittest.TestCase):
 
 
 class Outline(unittest.TestCase):
+    PARAS = [{"role": "前提", "point": "室温が上がりすぎると作物が傷む", "answers": "基準が要る理由"},
+             {"role": "定義", "point": "窓を開け始める室温を換気温度と呼ぶ", "answers": "いつ開けるか"},
+             {"role": "要件", "point": "換気温度は作物で違う", "answers": "基準は一つでない"},
+             {"role": "例外", "point": "外気が低い日は開度を抑える", "answers": "開けない場合"}]
+
     def good(self):
         return {"chapter": {"no": 1, "title": "温室"}, "sections": [
-            {"id": "s1", "title": "換気の基準", "items": [{"title": "上限温度"}, {"title": "開度"}], "terms": ["換気温度"], "fig": {"kind": "flow"}},
-            {"id": "s2", "title": "保温", "items": [{"title": "被覆"}, {"title": "暖房"}], "terms": ["被覆"], "fig": None}]}
+            {"id": "s1", "title": "換気の基準", "items": [{"title": "上限温度"}, {"title": "開度"}], "terms": ["換気温度"], "fig": {"kind": "flow"},
+             "question": "温室はいつ窓を開けるのか", "paras": [dict(p) for p in self.PARAS]},
+            {"id": "s2", "title": "保温", "items": [{"title": "被覆"}, {"title": "暖房"}], "terms": ["被覆"], "fig": None,
+             "question": "温室はどう保温するのか", "paras": [dict(p) for p in self.PARAS]}]}
+
+    def test_paras_plan(self):
+        o = self.good()
+        del o["sections"][1]["paras"]
+        o["sections"][1]["question"] = ""
+        o["sections"][0]["paras"][1]["role"] = "例外"   # 定義の前に例外 → 次の要件が前に戻る
+        o["sections"][0]["paras"][3]["answers"] = ""
+        o["sections"][0]["paras"][2]["point"] = "あ" * 70
+        errs, warns = bs.check_outline(o)
+        j = "\n".join(errs)
+        self.assertIn("s2: 段落の設計 paras が無い", j)
+        self.assertIn("s2: 節の問い question が無い", j)
+        self.assertIn("s1.p3: role「要件」が前の段落より前", j)
+        self.assertIn("s1.p4: answers", j)
+        self.assertTrue(any("s1.p3: point が 70 字" in w for w in warns))
+        o = self.good()
+        o["sections"][0]["paras"][3]["role"] = "比較"   # 比較は例外の位置
+        o["sections"][0]["paras"].append({"role": "例外", "point": "x", "answers": "y"})
+        self.assertEqual(bs.check_outline(o)[0], [])
+
+    def test_paras_report(self):
+        tmp = tempfile.mkdtemp()
+        o = self.good()
+        write(tmp, "outline.json", json.dumps(o, ensure_ascii=False))
+        md = "# 換気の基準\n\n室温が上がりすぎると作物が傷む[R01]。だから窓を開ける。\n\n窓を開け始める室温を**換気温度**と呼ぶ[R02,R03]。\n"
+        r = bs.paras_report(write(tmp, "s1.md", md), os.path.join(tmp, "outline.json"))
+        self.assertEqual(len(r["body"]), 2)
+        self.assertEqual(r["body"][1]["ids"], ["R02", "R03"])
+        self.assertEqual(r["question"], "温室はいつ窓を開けるのか")
+        self.assertTrue(any("本文の段落 2・設計 4" in w for w in r["warnings"]))
 
     def test_good(self):
         errs, _ = bs.check_outline(self.good())
@@ -440,6 +477,12 @@ class DepthG102(unittest.TestCase):
         errs, warns, st = bs.check_facts(rows, L)
         self.assertEqual(errs, [])
         self.assertEqual(st["s1"]["short"], [])
+        # 事実の数の目標は無い（L6）：3 行・出典 3・種類 2 で満たす。節の欄 s1.p2 は s1 に数える
+        rows = [{"id": f"F{i:02d}", "sec": f"s1.p{i}", "rids": [["R01", "R02", "R03"][i % 3]], "fact": "x", "quote": ""} for i in range(3)]
+        errs, warns, st = bs.check_facts(rows, L)
+        self.assertEqual(list(st), ["s1"])
+        self.assertEqual(st["s1"]["short"], [])
+        self.assertEqual(st["s1"]["paras"], ["p0", "p1", "p2"])
 
     @unittest.skipUnless(HAS_NODE, "node が無い")
     def test_comma_chain_and_note(self):
