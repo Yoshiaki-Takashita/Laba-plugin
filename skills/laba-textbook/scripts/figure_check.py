@@ -341,6 +341,8 @@ def check_fig(fid, f, text=None):
     if text:
         labels = [x["label"] for x in nodes]
         labels += [e["what"] for e in f.get("events", [])]
+        if kind in ("table", "matrix"):     # 表の見出しとセルも本文の語か（G7-1。記号 1 字の ○△× などは除く）
+            labels += [c for c in list(f["head"]) + [c for r in f["rows"] for c in r] if len(c.strip()) >= 2]
         for lb in labels:
             if lb and lb not in text:
                 warns.append("%s: 語「%s」が本文に出てこない（図で初めて出る語を作らない・G7-1）" % (P, lb))

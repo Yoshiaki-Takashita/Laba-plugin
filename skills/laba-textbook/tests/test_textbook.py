@@ -335,6 +335,13 @@ class NewKinds(unittest.TestCase):
         self.assertFalse([w for w in fc.check_fig("chart", FIGS["chart"], text)[1] if "本文に無い" in w])
         self.assertTrue([w for w in fc.check_fig("chart", FIGS["chart"], text.replace("52", "53"))[1] if "本文に無い" in w])
 
+    def test_table_cells_checked_against_text(self):
+        f = FIGS["table"]
+        e, w = fc.check_fig("table", f, text="項目ごとに甲説と乙説を比べる。結論は可と不可、理由は理由 1 と理由 2。")
+        self.assertFalse([x for x in w if "本文に出てこない" in x])
+        e, w = fc.check_fig("table", f, text="甲説と乙説。")
+        self.assertTrue([x for x in w if "「結論」" in x])
+
     def test_scale_rules(self):
         f = copy.deepcopy(FIGS["scale"])
         f["items"][1]["at"] = f["items"][0]["at"]
