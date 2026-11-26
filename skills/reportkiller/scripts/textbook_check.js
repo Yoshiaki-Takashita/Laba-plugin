@@ -2,6 +2,7 @@
 /* textbook_check.js：教科書型・解説書型の日本語の本文を、形（長さ・順序・密度）で点検する。
  * 使い方: node textbook_check.js [--json] [--tags ,．] 本文.md
  * 入力：段落は空行で区切る。見出しは行頭の # ～ ###。太字は **語**。箇条（- ・1.）は箇条として数える。
+ *   役割の印（行頭の :::box ～ 行頭の :::）は地の文から外し、役割ごとの数と字数だけを出す（所見は出さない）。
  *   引用・注・図題の行は、行頭が > ／ [^ ／ 「図」「表」＋空白で始まるものを地の文から外す。
  * 出す：測った値と、範囲（references/textbook-prose.md の TS1〜）の外にある所見。
  * これは「AI が書いた」と判定する道具ではない。直す候補を出すだけ。文の正しさ・論理は見ない。ファイルは書かず、ネットワークに接続しない。
@@ -12,7 +13,10 @@ const args = process.argv.slice(2);
 const json = args.includes('--json');
 const file = args.filter(a => !a.startsWith('--'))[0];
 if (!file) { console.log('使い方: node textbook_check.js [--json] 本文.md'); process.exit(2); }
-const src = fs.readFileSync(file, 'utf8').replace(/\r/g, '');
+const raw = fs.readFileSync(file, 'utf8').replace(/\r/g, '');
+// 役割の印（:::box・:::aside・:::point・:::fig … :::）は地の文から外し、長さだけを測る（laba-book の出力の形）
+const roles = {};
+const src = raw.replace(/^:::(\w+)[^\n]*\n([\s\S]*?)^:::[ \t]*$/gm, (m, r, body) => { (roles[r] = roles[r] || []).push(body.replace(/\s/g, '').length); return ''; });
 
 const CONN = [['逆接', /^(しかし|ただし|もっとも|だが|他方|これに対し)/], ['例示', /^(例えば|たとえば)/], ['帰結', /^(したがって|そこで|このため|このように|その結果|そのため|以上)/],
   ['添加', /^(また|さらに|なお|そして|加えて)/], ['順序', /^(まず|次に|最後に|第[1-9１-９一二三])/], ['言い換え', /^(すなわち|つまり)/]];
@@ -62,6 +66,7 @@ const M = {
   見出し: { 字数の中央値: q(heads.map(len), .5), 最大: heads.length ? Math.max(...heads.map(len)) : 0, '1万字あたり': bodyChars ? +(heads.length * 10000 / bodyChars).toFixed(1) : 0,
     名詞止めの割合: heads.length ? +(heads.filter(h => !/[ぁ-ん。？?]$/.test(h.trim())).length / heads.length).toFixed(2) : null },
   本文の箇条書き: bullets.length,
+  役割の印: Object.fromEntries(Object.entries(roles).map(([k, v]) => [k, { 数: v.length, 字数: v }])),
 };
 const F = [];
 const add = (lv, id, msg) => F.push({ level: lv, id, msg });

@@ -118,6 +118,7 @@ v5 の採点で「直すとよい」とされた任意の5点（索引、全体�
 | 「GNOTO のノートにして」「GNOTO のスライドにして」（出力先が GNOTO） | 内容は上の手順で作り、.gnoto に書く（Word と併用も可）。ノーマルとスライドだけ | `skills/gnoto-lite/SKILL.md`（`${CLAUDE_PLUGIN_ROOT}` で指す） |
 | 「教科書のように組んで」「教科書の配置で」（紙面ノート。図も教科書の形式で） | 内容は上の手順で作り、組み方は教科書の規則で .gnoto（紙面）に書く。座標は書かない | `skills/laba-textbook/SKILL.md`（`${CLAUDE_PLUGIN_ROOT}` で指す） |
 | 「教科書のように書いて」「入門書の 1 節を」「解説書として」（本文そのもの。紙面にするかは別） | 本文は教科書型の文章の規則（文・段落・見出し・太字・事例・注の数値と順序）で書く。ざっくり理解は `zakkuri.md` 8 | `skills/reportkiller/references/textbook-prose.md`・`references/zakkuri.md` 8 |
+| 「〜の教科書を作って」「単語・分野から教科書の章を」「続きの章を」（資料が無いか、題から章立てを作る） | 範囲 → 構成 → 本文を 1 回 1 章で作り、本の状態（book.json）で続ける | `skills/laba-book/SKILL.md`（`${CLAUDE_PLUGIN_ROOT}` で指す） |
 | 「図にして」「関係図を描いて」 | 図だけ（仕様から生成し、検査と照合を通す） | `references/figures.md` |
 | 「採点して」「他の本と比べて」 | 16指標の採点（機械と点検者の分担を守る） | `references/scoring.md` |
 | 主題1つ・短い資料の軽い依頼（「急ぎで」「ざっと」と言われても、軽い依頼のときだけ） | 上の各行の成果物を、**速さ優先**（段階を縮める。正確さの守りは省かない）で | `references/speed.md` 4 |

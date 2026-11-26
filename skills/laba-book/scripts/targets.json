@@ -1,0 +1,31 @@
+{
+ "_": "laba-book の gate の目標。元は reportkiller/references/textbook-prose.md §1（教科書の形の測定）。数値を変えるときは元を直してから写す（references/writer-brief.md 1 の表も同じ値。tests/test_book.py が一致を確かめる）。hs は［推］（測定は大学の教科書だけ）。",
+ "levels": {
+  "ug":   {"sentMedian": [55, 68], "sentP90Max": 125},
+  "grad": {"sentMedian": [55, 68], "sentP90Max": 125},
+  "hs":   {"sentMedian": [45, 55], "sentP90Max": 110}
+ },
+ "common": {
+  "short40Share": [0.15, 0.30],
+  "long81Share": [0.25, 0.35],
+  "cvMin": 0.45,
+  "comma": [1.8, 3.5],
+  "paraChars": [150, 260],
+  "oneSentParaMax": 1,
+  "paraOpenMax": 0.25,
+  "dearuMax": 0.30,
+  "boldPerParaMax": 2,
+  "boldLenMax": 9,
+  "boldPer1000": [3, 6],
+  "h1Max": 20,
+  "h2Max": 8,
+  "boxSentMax": 3,
+  "boxCharsMax": 184,
+  "asideSentMax": 2,
+  "asideChars": [75, 120],
+  "pointItems": [3, 5],
+  "pointItemMax": 27,
+  "sectionChars": [1200, 1600]
+ },
+ "soft": ["long81Share", "boldPer1000", "asideChars", "sectionChars", "short40Share"]
+}

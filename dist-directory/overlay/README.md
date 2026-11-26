@@ -16,10 +16,11 @@
 | **reportkiller** | 学術レポート・小論文・論文・研究報告を、どの分野でも書く・直す（Word＋図）。読んでいない文献は書かない引用台帳（V0〜V3）、レベル6段（高校生〜学会）、文体と図の点検、建築の作品研究（ライトとル・コルビュジエの研究つき） | 「レポートを書いて」「論文を直して」「AI っぽさを消して」「この図を直して」 |
 | **gnoto-lite** | GNOTO のノート（.gnoto。ノーマルとスライドだけ）を Claude の中で作る・直す・見る。法律モードは、コネクタ（なければ e-Gov・裁判所サイト）から条文・判例を取り、出典つきで書く | 「ノートを作って」「このノートに条文を入れて」「判例を入れて」 |
 | **laba-textbook** | 教科書どおりの紙面：文章を役割に分け、教科書の組みの規則で GNOTO の紙面ノート（.gnoto・スロットと文だけ）に書き出す。教科書の図（フロー・木・表・年表・関係図）の記述を作る | 「教科書のように組んで」「教科書の配置で」「図を教科書の形式で」 |
+| **laba-book** | 単語・分野・資料つきの題から、教科書の章（文章）を範囲 → 構成 → 本文の順に作り、続きの章を足していく（本の状態は book.json・1 回に 1 章）。本文は教科書の文の数に合わせて書く | 「〜の教科書を作って」「この分野の入門書を」「続きの章を」 |
 
 4つの入口スキル（laba-hanrei・laba-slides・laba-figures・laba-score）は、本体（skills/laba）の該当部分を開くための入口で、規則は本体に一つだけある。reportkiller は独立したスキルで、自分の規則を持つ（講義ノート・判例研究・スライドの依頼には使わず、それらは上の各スキルが受ける）。
 
-Cowork と Claude Code では、`agents/` の14の担当（確認・節の執筆・図・巻末・統一・法的点検・足した文の点検・文体の点検・図の点検と、合議の裁判官5人）が読み込まれる。claude.ai のチャットでは読み込まれない。
+Cowork と Claude Code では、`agents/` の15の担当（確認・節の執筆・教科書の節の執筆・図・巻末・統一・法的点検・足した文の点検・文体の点検・図の点検と、合議の裁判官5人）が読み込まれる。claude.ai のチャットでは読み込まれない。
 
 ## 公式版（手順書のみ）とフル版の違い
 
@@ -101,6 +102,8 @@ LABA is a plugin that turns Japanese law course materials (lecture handouts, tex
 | **laba-score** | Scores a note on 16 measures and compares it with a textbook or another book | "Score this", "Compare it with the textbook" |
 | **reportkiller** | Writes and revises academic reports, essays and papers in any field (Word plus figures): a citation ledger that forbids citing what was not read (levels V0 to V3), six levels from high school to conference paper, style and figure checks, and architecture case studies (with notes on Frank Lloyd Wright and Le Corbusier) | "Write a report", "Fix this paper", "Remove the AI-sounding style" |
 | **gnoto-lite** | Creates, edits and previews GNOTO notes (.gnoto files; normal and slide styles only) inside Claude. Its law mode fetches statutes and court decisions through a connector (or, without one, the official e-Gov and courts pages) and writes them with their sources | "Make a note", "Add this article to the note", "Add this decision" |
+| **laba-textbook** | Lays text out as a textbook page: splits it into roles and writes a GNOTO page note (.gnoto, slots and text only) following textbook layout rules; describes textbook-style figures (flow, tree, table, timeline, relation) | "Lay this out like a textbook", "Make the figure textbook-style" |
+| **laba-book** | Writes a textbook chapter from a word, a field or a titled source (scope, outline, text) and keeps adding chapters (book state in book.json, one chapter per run), held to measured textbook numbers | "Make a textbook on ...", "Write the next chapter" |
 
 The four entry skills (laba-hanrei, laba-slides, laba-figures and laba-score) only open the relevant part of the main skill (skills/laba); the rules exist in one place. reportkiller is a separate skill with its own rules; it is not used for lecture notes, case studies or slides.
 
@@ -130,7 +133,7 @@ The full edition is on the `release` branch of GitHub Yoshiaki-Takashita/Laba-pl
 
 - **No scripts, no programs.** The plugin runs nothing on its own. The skills are instructions Claude reads. When the instructions say to produce a file, Claude writes and runs short code of its own in your session, in your working folder, to build that file.
 - **No network access of its own.** The `case_lookup` tool of the full edition does not exist here. To verify statutes and court decisions, the skills tell Claude to read public pages only (the official e-Gov law database, the Courts of Japan case-law search, J-STAGE, CiNii and similar). They send no personal data.
-- **Agents.** The agents folder holds fourteen plain-text agent definitions (Markdown files), loaded only in Cowork and Claude Code. The reviewers and the five deliberation-panel members are given no file-editing tools.
+- **Agents.** The agents folder holds fifteen plain-text agent definitions (Markdown files), loaded only in Cowork and Claude Code. The reviewers and the five deliberation-panel members are given no file-editing tools.
 - **No hooks, no bundled servers.** The plugin contains no hooks and no MCP server configuration. It sends nothing anywhere on its own.
 
 ## Using gnoto-lite
