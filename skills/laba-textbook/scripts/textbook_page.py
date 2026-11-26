@@ -8,7 +8,10 @@ Laba が書くのは「フォーマット名・変種・ページごとのスロ
   python3 textbook_page.py formats                                  フォーマットと変種の一覧
   python3 textbook_page.py slots --format fam-f1 [--variant b1] [--master body]
                                                                     スロットの要約（書く前に読む。フォーマット全文は読まない）
-  python3 textbook_page.py build --in input.json --out note.gnoto   入力（references/output-format.md）→ .gnoto
+  python3 textbook_page.py build --in input.json --out note.gnoto   入力（references/output-format.md）→ .gnoto（v:1 スロット）
+  python3 textbook_page.py build2 --md chapter.md [--figs figs.json] --format fam-f1 --variant b1 --out ch1.gnoto
+                                  [--chapter-title "第1章　…"] [--no-chapter-page] [--plan plan.json]
+                                                                    laba-book の章（役割の印つき Markdown）→ .gnoto（v:2 読む順の塊。page_v2.py）
   python3 textbook_page.py check note.gnoto                         検査だけ
   python3 textbook_page.py preview note.gnoto out.html              スロットの一覧（組んだ後の見た目ではない）
 
@@ -27,6 +30,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 import figure_check  # noqa: E402
 import minischema  # noqa: E402
+import page_v2  # noqa: E402
 
 FORMATS = os.path.join(HERE, "..", "formats")
 PID_RE = re.compile(r"^[a-z0-9_]{1,16}$")
@@ -358,6 +362,9 @@ def check_note(note):
     p2 = c.get("page2")
     if p2 is None:
         return errs + ["page2 が無い"], warns
+    if isinstance(p2, dict) and isinstance(p2.get("lite"), dict) and p2["lite"].get("v") == 2:
+        e2, w2, _ = page_v2.check_v2(note)   # v:2（読む順の塊）：pgSanPage2 の写し・pid の置き場・行の見積り
+        return errs + e2, warns + w2
     se = ["page2: " + e for e in minischema.validate(p2, minischema.load_schema("page2-lite.schema.json"))]
     if se:
         return errs + se, warns   # 形が違うと、後の突き合わせが成り立たない
@@ -405,8 +412,28 @@ def check_note(note):
     return errs, warns
 
 
+def preview_v2(note, out):
+    c = note["note"]["content"]
+    by = {b["pid"]: b for row in c["rows"] for b in row if "pid" in b}
+    _, _, st = page_v2.check_v2(note)
+    h = ['<!doctype html><meta charset="utf-8"><title>塊の一覧</title><style>body{font:14px sans-serif;margin:16px;max-width:860px}'
+         'section{border:1px solid #bbb;margin:12px 0;padding:8px}h2{font-size:15px}.s{margin:6px 0;border-left:3px solid #888;padding-left:8px}'
+         '.n{color:#666;font-size:12px}</style><h1>塊の一覧（v:2）</h1><p class="n">組んだ後の見た目ではありません（行の位置は GNOTO が決めます）。行は見積り（GNOTO の数え方の写し）。</p>']
+    for i, lp in enumerate(c["page2"]["lite"]["pages"]):
+        est = st.get("est", [])
+        h.append('<section><h2>%s・%s <span class="n">見積り %s 行</span></h2>' % (hesc(lp["id"]), hesc(lp.get("kind", "")), est[i] if i < len(est) else "?"))
+        for b in lp.get("blocks", []):
+            t = " ".join(re.sub(r"<[^>]+>", "", by[p]["html"]) for p in b.get("rows", []) if p in by)
+            extra = ("・図 " + b["fig"]) if b.get("fig") else ("・" + b["box"]) if b.get("box") else ""
+            h.append('<div class="s"><b>%s</b>%s %s</div>' % (hesc(b["t"]), hesc(extra), hesc(t[:200])))
+        h.append("</section>")
+    open(out, "w", encoding="utf-8").write("\n".join(h))
+
+
 def preview(note, out):
     c = note["note"]["content"]
+    if (c.get("page2") or {}).get("lite", {}).get("v") == 2:
+        return preview_v2(note, out)
     by = {b["pid"]: b for row in c["rows"] for b in row if "pid" in b}
     fmt = load_format(c["page2"]["fmt"]["id"])
     var = fmt["variants"].get(c["page2"]["fmt"].get("variant"), {})
@@ -445,6 +472,16 @@ def main(argv=None):
     b = sp.add_parser("build")
     b.add_argument("--in", dest="inp", required=True)
     b.add_argument("--out", required=True)
+    b2 = sp.add_parser("build2")
+    b2.add_argument("--md", required=True)
+    b2.add_argument("--figs")
+    b2.add_argument("--format", default="fam-f1")
+    b2.add_argument("--variant", default="b1")
+    b2.add_argument("--out", required=True)
+    b2.add_argument("--chapter-title")
+    b2.add_argument("--title")
+    b2.add_argument("--no-chapter-page", action="store_true")
+    b2.add_argument("--plan")
     c = sp.add_parser("check")
     c.add_argument("file")
     pv = sp.add_parser("preview")
@@ -472,6 +509,8 @@ def main(argv=None):
                 json.dump(note, f, ensure_ascii=False, separators=(",", ":"))
             print("書いた:", a.out, "（行 %d・ページ %d）" % (len(note["note"]["content"]["rows"]), len(note["note"]["content"]["page2"]["pages"])))
             return 0
+        if a.cmd == "build2":
+            return cmd_build2(a)
         note = json.load(open(a.file, encoding="utf-8"))
         if a.cmd == "preview":
             preview(note, a.out)
@@ -484,9 +523,35 @@ def main(argv=None):
             print("誤り:", e)
         print("検査:", "通らない" if errs else "通る")
         return 1 if errs else 0
-    except BuildError as e:
+    except (BuildError, page_v2.V2Error) as e:
         print("誤り:", e)
         return 1
+
+
+def cmd_build2(a):
+    md = open(a.md, encoding="utf-8").read()
+    figs = {}
+    if a.figs:
+        figs, _ = figure_check.load_figs(a.figs)
+    note, plan, errs, warns = page_v2.build_v2(md, figs, a.format, a.variant, a.chapter_title, not a.no_chapter_page, a.title)
+    if note:
+        e2, w2 = check_note(note)
+        errs, warns = errs + e2, warns + [w for w in w2 if w not in warns]
+    for w in warns:
+        print("警告:", w)
+    if errs or not note:
+        for e in errs:
+            print("誤り:", e)
+        return 1
+    with open(a.out, "w", encoding="utf-8") as f:
+        json.dump(note, f, ensure_ascii=False, separators=(",", ":"))
+    if a.plan:
+        with open(a.plan, "w", encoding="utf-8") as f:
+            json.dump(plan, f, ensure_ascii=False, indent=1)
+    print("書いた:", a.out, "（v:2・行 %d・ページ %d）" % (len(note["note"]["content"]["rows"]), len(plan["pages"])))
+    for p in plan["pages"]:
+        print("  %s %s 見積り %d/%d 行（%s）" % (p["id"], p["kind"] or "本文", p["rows"], plan["lines"], p["est"]))
+    return 0
 
 
 if __name__ == "__main__":

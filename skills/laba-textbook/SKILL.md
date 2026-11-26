@@ -16,7 +16,7 @@ Laba が作った（または利用者が渡した）文章を、**教科書の�
 1. 毎回：`references/rules-short.md`（20 行）と `references/page-slots.md`（スロットの要約）。
 2. 文を書くとき：`references/text-structure.md`（量と順序の 1 枚。本体は reportkiller の `textbook-prose.md`）。置き場所・ページの種類・容量の判断：`references/placement-judgment.md`。
 3. 図を作るとき：`references/figure-spec.md` の 2 章と 4 章。
-4. 出力の形・GNOTO での現状を確かめるとき：`references/output-format.md`。座標つきで直接 page2 に出す手順：`references/page2-direct.md`（部品・箱の座標・検査 `scripts/page2_direct_check.py`・骨組み `templates/page2-types.json`）。
+4. 出力の形・GNOTO での現状を確かめるとき：`references/output-format.md`（v:2 は 7）。座標つきで直接 page2 に出す手順：`references/page2-direct.md`（部品・箱の座標・検査 `scripts/page2_direct_check.py`・骨組み `templates/page2-types.json`）。
 5. 規則の根拠・例外：`references/rules.md` の該当の章だけ。
 `formats/*.json` の全文は渡さない（要約は `textbook_page.py slots`）。
 
@@ -43,7 +43,7 @@ Laba が作った（または利用者が渡した）文章を、**教科書の�
 
 | 道具 | 役目 |
 |---|---|
-| `scripts/textbook_page.py` | `formats`・`slots`・`build`・`check`・`preview` |
+| `scripts/textbook_page.py` | `formats`・`slots`・`build`（v:1 スロット）・`build2`（v:2 読む順の塊。laba-book の章から。`page_v2.py`）・`check`・`preview` |
 | `scripts/figure_check.py` | 図の記述の検査（型・規模・長さ・辺の端・孤立・GNOTO が落とす形・本文との突き合わせ）と、SVG の形式と幾何の検査（`--svg`：色・文字の重なり・はみ出し・文字に掛かる線・縦横比・余白） |
 | `scripts/figure_svg.py` | 図の記述から灰の濃さだけの SVG（10 型・幅は傍注 154／本文 600／張り出し 790） |
 | `scripts/page2_direct_check.py` | 座標つきで直接書いた紙面ノートの形の検査（部品の名前・矩形が紙の中・id の対応・行の存在）。`references/page2-direct.md` |

@@ -19,7 +19,7 @@ const roles = {};
 const src = raw.replace(/^:::(\w+)[^\n]*\n([\s\S]*?)^:::[ \t]*$/gm, (m, r, body) => { (roles[r] = roles[r] || []).push(body.replace(/\s/g, '').length); return ''; });
 
 const CONN = [['逆接', /^(しかし|ただし|もっとも|だが|他方|これに対し)/], ['例示', /^(例えば|たとえば)/], ['帰結', /^(したがって|そこで|このため|このように|その結果|そのため|以上)/],
-  ['添加', /^(また|さらに|なお|そして|加えて)/], ['順序', /^(まず|次に|最後に|第[1-9１-９一二三])/], ['言い換え', /^(すなわち|つまり)/]];
+  ['添加', /^(また|さらに|なお|そして|加えて)/], ['順序', /^(まず|次に|最後に|第[1-9１-９一二三四五六七八九十]+(に|[、，]))/], ['言い換え', /^(すなわち|つまり)/]];
 const q = (xs, p) => { if (!xs.length) return null; const s = [...xs].sort((a, b) => a - b); return s[Math.min(s.length - 1, Math.round(p * (s.length - 1)))]; };
 const mean = xs => xs.length ? xs.reduce((a, b) => a + b, 0) / xs.length : 0;
 const cv = xs => { if (xs.length < 5) return null; const m = mean(xs); return Math.sqrt(mean(xs.map(x => (x - m) ** 2))) / m; };

@@ -97,7 +97,7 @@ class Svg:
 
     def doc(self, w, h, title, kind):
         defs = ('<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="%s"/></marker>'
-                '<marker id="at" viewBox="0 0 10 10" refX="1" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M10,0 L0,5 L10,10 z" fill="%s"/></marker></defs>' % (INK, INK))
+                '<marker id="at" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="%s"/></marker></defs>' % (INK, INK))
         return ('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 %.0f %.0f" width="%.0f" height="%.0f" data-kind="%s" %s>\n<title>%s</title>\n%s\n<rect width="100%%" height="100%%" fill="#ffffff"/>\n%s\n</svg>\n'
                 % (w, h, w, h, kind, FONT, escape(title), defs, "\n".join(self.b)))
 

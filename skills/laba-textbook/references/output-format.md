@@ -69,3 +69,24 @@ Laba は `.gnoto` に **フォーマット名・変種・ページごとのス�
 - 検査：`python3 textbook_page.py check`（形・pid・HTML の許可・GNOTO が落とす形）。`tests/test_textbook.py`。
 - GNOTO を実際に開く確認は、GNOTO の開発側の試験（`laba-textbook-open.test.js`）にある。Claude の実行環境（チャット）では GNOTO を開けないので、そこでは「開く確認は走らせていない」と書く。
 - 不明：GNOTO の将来の版が `lite` を別の形で読むかもしれない。その版の仕様が出たら、このファイルと `schema/page2-lite.schema.json` を直す。
+
+## 7. 紙面の指示 v:2（読む順の塊。`build2`・laba-book の P6）
+
+v:1（上の 2〜3）は「スロットと文」＝ひな形のスロットの位置に置く。**v:2 は「読む順の塊」**＝GNOTO のレイアウトの決定（`pgCompose`）が本の型の格子に読む順で行を割り当てて組む。GNOTO の主な道は v:2。どちらも座標・色・書体は書かない。
+
+| | v:1（`build`） | v:2（`build2`） |
+|---|---|---|
+| 入力 | スロットの JSON（2） | laba-book の章（役割の印つき Markdown）＋`figs.json` |
+| `page2.lite` | `{v:1, pages:[{id, master, <スロット名>:[pid…], aside, fig}]}` | `{v:2, pages:[{id, master, kind?, blocks:[{t, rows:[pid…], box?, fig?, cap?, ref?, w?, h?}]}]}` |
+| ページの区切り | 書き手が決める（字数の目安の警告だけ） | 道具が決める（GNOTO の行の数え方の写しで 1 ページの行を見積もり、段落は文の切れ目で分ける） |
+| 位置 | スロットの箱 | 行の割り当て（見出しの型・囲みの高さ・図の位置〈ページの頭・地〉・傍注の行） |
+
+```
+python3 ${CLAUDE_PLUGIN_ROOT}/skills/laba-textbook/scripts/textbook_page.py build2 --md chapter.md --figs figs.json \
+        --format fam-f1 --variant b1 --chapter-title "第1章　…" --out ch1.gnoto --plan plan.json
+```
+- 塊の種類 `t`：`h1`（章扉の題）・`h2` 節・`h3` 項・`h4` 目・`p` 本文・`box`（`box`＝case・column・model・example・setrei・talk・gray・lead）・`fig`（`fig`＝`page2.figs` の id・`cap`＝図の題 60 字・`w`・`h`＝w1000 の大きさ）・`note`（傍注・`ref`＝参照の段落の pid）・`foot`（脚注の帯）。
+- 対応：`#`→h2（b1 は輪郭数字。番号が無ければ節の順の数を頭に付ける。GNOTO は番号の無い輪郭数字を 1 と描くため）・`##`→h3・`###`→h4・段落→p・`:::box`→本の囲み（b1 case・b2 column・b5 talk・b4 example。部品の無い本は枠なしの lead）・`:::aside`→note（傍注の列の無い本は foot。GNOTO は脚注の帯の分だけ本文の行を減らさないので、道具が行を空ける）・`:::fig`→fig（大きさは `figure_svg.py` の SVG の幅と、高さから題の帯 38 を引いた値。題は本の札の語〈b1 CHART〉＋番号＋`caption.title`）・`:::point`→枠なしの lead の行（GNOTO に要点の枠の部品が無い）。台帳の印 `[R01]` は外す。
+- 検査（`check` が v:2 を見分ける）：①GNOTO の読み込み（`pgSanPage2` の lite v:2 の欄）の写し `page_v2.san_lite_v2` に塊を 1 つずつ通し、落ちる・変わる欄を誤りに ②全部の pid がどれか 1 つの塊にある（未配置 0）③傍注の参照が同じページ ④図の記述（`check_fig`・`fig_walk`）⑤見積りでどのページも 1 ページの行以内。
+- 写しの元：GLYPH.html v1.17.173 の `pgSanPage2`（lite）・`PG_CMP`（見出しの行）・`CMP_BOX`（囲み）・`pgCmpBody`（行の数え方・図の高さ）。**GNOTO が正**。値が変わったら `page_v2.py` の表を直す。見積りは写しなので、真の確かめは GNOTO で開いて見ること（このプラグインの中では開けない）。
+- 未対応：段落をページをまたいで 1 つのまま流すこと（分けた続きは字下げの段落になる）・図の横の回り込みを狙う置き方（図は版面の幅で置き、狭い図だけ GNOTO が回り込ませる）・目次のページ。

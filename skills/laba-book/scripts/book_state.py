@@ -12,6 +12,8 @@
   book_state.py ledger  ledger.tsv [--json]            # 出典の台帳（P3）の検査：V0・重複・URL・確かめ方の印・未確認の数
   book_state.py claims  節.md --ledger ledger.tsv [--json] [--strip 出力.md]  # 主張の印 [R01] と台帳の突き合わせ・ID の無い主張の候補
   book_state.py figs    work/ch1 [--json]              # P5 図：構成の図の候補 → figs.json の記述・本文の :::fig id=・描いた SVG の検査（図にした数／候補の数）
+  book_state.py page    work/ch1 --out ch1.gnoto [--format fam-f1] [--variant b1] [--plan plan.json]
+                                                       # P6 紙面：章の本文（chapter.md か s*.md）＋figs.json → GNOTO の紙面ノート（v:2 読む順の塊）と検査
 数の元：reportkiller/references/textbook-prose.md §1 → scripts/targets.json（写し）。"""
 import json
 import os
@@ -668,6 +670,48 @@ def check_figs(chdir):
     return errs, warns, st
 
 
+def make_page(chdir, out, fmt="fam-f1", variant="b1", plan_path=None):
+    """P6：章のフォルダ → .gnoto（v:2）。戻り値 (errors, warnings, plan)。本文は chapter.md、無ければ構成の節の順に s*.md を連ねる。台帳の印は外す。"""
+    _textbook_tools()
+    import page_v2  # noqa: E402
+    import textbook_page  # noqa: E402
+    o = read_json(os.path.join(chdir, "outline.json"))
+    cp = os.path.join(chdir, "chapter.md")
+    if os.path.exists(cp):
+        with open(cp, encoding="utf-8") as f:
+            md = f.read()
+    else:
+        parts = []
+        for s in o.get("sections", []):
+            sp = os.path.join(chdir, s["id"] + ".md")
+            if os.path.exists(sp):
+                with open(sp, encoding="utf-8") as f:
+                    parts.append(f.read())
+        md = "\n\n".join(parts)
+    if not md.strip():
+        return ["本文が無い（chapter.md も s*.md も無い）"], [], None
+    md = strip_marks(md)
+    fp = os.path.join(chdir, "figs.json")
+    figs = read_json(fp) if os.path.exists(fp) else {}
+    ch = o.get("chapter", {})
+    title = "第%s章　%s" % (ch.get("no", 1), ch.get("title", "")) if ch.get("title") else None
+    try:
+        note, plan, errs, warns = page_v2.build_v2(md, figs, fmt, variant, title, bool(title), title)
+    except page_v2.V2Error as ex:
+        return [str(ex)], [], None
+    if note:
+        e2, w2 = textbook_page.check_note(note)
+        errs += e2
+        warns += [w for w in w2 if w not in warns]
+    if errs or not note:
+        return errs, warns, plan
+    with open(out, "w", encoding="utf-8") as f:
+        json.dump(note, f, ensure_ascii=False, separators=(",", ":"))
+    if plan_path:
+        write_json(plan_path, plan)
+    return errs, warns, plan
+
+
 def fc_text(md):
     """図の語の突き合わせに使う本文（台帳の印を外し、:::fig の塊は中身ごと外す＝図の説明の行で語が見つかったことにしない）。"""
     out, infig = [], False
@@ -821,6 +865,22 @@ def main(argv):
                 print("[注意] " + w)
             if not errs:
                 print("図の誤り 0")
+        return 1 if errs else 0
+    if cmd == "page":
+        out = opt(rest, "--out")
+        if not out:
+            print("--out が要る")
+            return 2
+        errs, warns, plan = make_page(path, out, opt(rest, "--format", "fam-f1"), opt(rest, "--variant", "b1"), opt(rest, "--plan"))
+        for w in warns:
+            print("[注意] " + w)
+        for e in errs:
+            print("[誤り] " + e)
+        if plan and not errs:
+            print(f"書いた：{out}（v:2・{len(plan['pages'])} ページ・1 ページ {plan['lines']} 行）")
+            for p in plan["pages"]:
+                print(f"  {p['id']} {p['kind'] or '本文'} 見積り {p['rows']}/{plan['lines']} 行（{p['est']}）")
+            print("紙面の誤り 0（GNOTO で開いた見た目は確かめていない）")
         return 1 if errs else 0
     if cmd == "gate":
         level = opt(rest, "--level", "ug")

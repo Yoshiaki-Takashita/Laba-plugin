@@ -418,5 +418,147 @@ class NoMaterial(unittest.TestCase):
                 self.assertFalse(fn.lower().endswith((".png", ".jpg", ".jpeg", ".gif", ".pdf", ".webp")), fn)
 
 
+import page_v2 as pv  # noqa: E402
+
+
+def chapter_md():
+    with open(os.path.join(TB, "samples", "chapter-sample.md"), encoding="utf-8") as f:
+        return f.read()
+
+
+class V2(unittest.TestCase):
+    """紙面の指示 v:2（読む順の塊）：page_v2.build_v2 と check_v2（G100・段 L4）。"""
+
+    def build(self, md=None, figs=None, **kw):
+        md = md if md is not None else chapter_md()
+        figs = {"f1": FIGS["flow"]} if figs is None else figs
+        note, plan, errs, warns = pv.build_v2(md, figs, kw.pop("fmt", "fam-f1"), kw.pop("variant", "b1"), kw.pop("title", "第1章　見本"), **kw)
+        return note, plan, errs, warns
+
+    def test_sample_builds_and_check_passes(self):
+        note, plan, errs, warns = self.build()
+        self.assertEqual(errs, [])
+        e2, w2 = tp.check_note(note)
+        self.assertEqual(e2, [])
+        p2 = note["note"]["content"]["page2"]
+        self.assertEqual(p2["lite"]["v"], 2)
+        self.assertEqual(p2["lite"]["pages"][0]["kind"], "chapter")
+        self.assertIn("f1", p2["figs"])
+        self.assertNotIn("html", json.dumps(p2))
+        ts = {b["t"] for pg in p2["lite"]["pages"] for b in pg["blocks"]}
+        self.assertTrue({"h1", "h2", "h3", "p", "box", "note", "fig"} <= ts, ts)
+
+    def test_every_pid_placed_once_and_pages_within_lines(self):
+        note, plan, errs, _ = self.build()
+        c = note["note"]["content"]
+        pids = [r[0]["pid"] for r in c["rows"]]
+        placed = [x for pg in c["page2"]["lite"]["pages"] for b in pg["blocks"] for x in b["rows"]]
+        self.assertEqual(sorted(pids), sorted(placed))
+        self.assertTrue(all(p["rows"] <= plan["lines"] for p in plan["pages"]), plan)
+        _, _, st = pv.check_v2(note)
+        self.assertEqual(st["over_pages"], 0)
+
+    def test_long_paragraph_is_split_at_sentence(self):
+        md = "# 長い節\n\n" + "長い段落の文である。" * 120
+        note, plan, errs, warns = self.build(md, {})
+        self.assertEqual(errs, [])
+        self.assertGreaterEqual(len(plan["pages"]), 3)
+        self.assertTrue(any("分けた" in w for w in warns))
+        texts = [tp.plain_len(r[0]["html"]) for r in note["note"]["content"]["rows"]]
+        self.assertEqual(sum(texts), len("長い節") + 2 + len("長い段落の文である。") * 120 + len("第1章　見本"))
+
+    def test_section_number_added_for_outline_heading(self):
+        note, _, _, _ = self.build()
+        hs = [r[0]["html"] for r in note["note"]["content"]["rows"] if r[0].get("htype") == "2"]
+        self.assertTrue(hs[0].startswith("1　") and hs[1].startswith("2　"), hs)
+
+    def test_ledger_marks_removed(self):
+        note, _, _, warns = self.build("# 節\n\n主張の文である[R01]。次の文である[R02, R03]。", {})
+        self.assertNotIn("[R0", json.dumps(note, ensure_ascii=False))
+        self.assertTrue(any("台帳の印" in w for w in warns))
+
+    def test_unknown_fig_is_error(self):
+        _, _, errs, _ = self.build("# 節\n\n文である。\n\n:::fig id=f9 kind=flow\n図\n:::", {})
+        self.assertTrue(any("f9" in e for e in errs))
+
+    def test_san_copy_flags_dropped_values(self):
+        note, _, _, _ = self.build()
+        bad = copy.deepcopy(note)
+        L = bad["note"]["content"]["page2"]["lite"]["pages"]
+        L[1]["blocks"][0]["t"] = "h9"                 # 知らない塊（落ちる）
+        L[1]["blocks"].append({"t": "fig", "fig": "f1", "rows": [], "cap": "<b>x</b>"})   # < > の題（落ちる）
+        errs, _, _ = pv.check_v2(bad)
+        self.assertTrue(any("落ちる" in e or "数が変わる" in e for e in errs), errs)
+        self.assertTrue(any("cap" in e for e in errs), errs)
+
+    def test_san_copy_matches_known_rules(self):
+        src = {"v": 2, "pages": [{"id": "p1", "kind": "nope", "run": "<x>", "blocks": [
+            {"t": "p", "rows": ["r_ok", "BAD ID"], "lines": 999, "w": 0, "at": "left", "box": "zzz", "no": "1"}]}]}
+        out = pv.san_lite_v2(src)
+        b = out["pages"][0]["blocks"][0]
+        self.assertEqual(out["pages"][0], {"id": "p1", "master": "body", "blocks": [b]})
+        self.assertEqual(b, {"t": "p", "rows": ["r_ok"], "no": "1", "lines": 400, "w": 1})
+
+    def test_unplaced_and_over_detected(self):
+        note, _, _, _ = self.build()
+        bad = copy.deepcopy(note)
+        c = bad["note"]["content"]
+        c["rows"].append([{"html": "置かれない段落", "pid": "r_zzzzzz"}])
+        pg = c["page2"]["lite"]["pages"][1]
+        pg["blocks"] += [{"t": "p", "rows": [c["rows"][3][0]["pid"]]}] * 0
+        long_pid = "r_long01"
+        c["rows"].append([{"html": "あ" * 2000, "pid": long_pid}])
+        pg["blocks"].append({"t": "p", "rows": [long_pid]})
+        errs, _, _ = pv.check_v2(bad)
+        self.assertTrue(any("r_zzzzzz" in e and "未配置" in e for e in errs), errs)
+        self.assertTrue(any("あふれる" in e for e in errs), errs)
+
+    def test_cli_build2_and_preview(self):
+        with tempfile.TemporaryDirectory() as d:
+            mdp, fp, out, pl, pv_html = (os.path.join(d, x) for x in ("c.md", "f.json", "c.gnoto", "plan.json", "p.html"))
+            with open(mdp, "w", encoding="utf-8") as f:
+                f.write(chapter_md())
+            with open(fp, "w", encoding="utf-8") as f:
+                json.dump({"f1": FIGS["flow"]}, f, ensure_ascii=False)
+            self.assertEqual(tp.main(["build2", "--md", mdp, "--figs", fp, "--chapter-title", "第1章　見本", "--out", out, "--plan", pl]), 0)
+            self.assertEqual(tp.main(["check", out]), 0)
+            self.assertEqual(tp.main(["preview", out, pv_html]), 0)
+            with open(pv_html, encoding="utf-8") as f:
+                self.assertIn("塊の一覧", f.read())
+
+    def test_other_variant_without_side_column_uses_foot(self):
+        note, plan, errs, _ = self.build(fmt="fam-f1", variant="b2")
+        self.assertEqual(errs, [])
+        ts = [b["t"] for pg in note["note"]["content"]["page2"]["lite"]["pages"] for b in pg["blocks"]]
+        self.assertIn("foot", ts)
+        self.assertNotIn("note", ts)
+
+    def test_fig_size_from_svg(self):
+        note, _, _, _ = self.build()
+        fb = [b for pg in note["note"]["content"]["page2"]["lite"]["pages"] for b in pg["blocks"] if b["t"] == "fig"][0]
+        svg = fs.render(FIGS["flow"], "CHART")
+        import re as _re
+        w, h = map(float, _re.search(r'viewBox="0 0 ([0-9.]+) ([0-9.]+)"', svg).groups())
+        self.assertEqual(fb["w"], round(w, 1))
+        self.assertEqual(fb["h"], round(h - pv.SVG_TAG_H, 1))
+        self.assertTrue(fb["cap"].startswith("CHART 1"))
+
+
+class ArrowHead(unittest.TestCase):
+    """head:"both" の始点の矢じり（G100）：始点の marker は終点と同じ形・refX 9（auto-start-reverse が外向きに回す）。"""
+
+    def test_start_marker_points_outward(self):
+        f = {"kind": "flow", "caption": {"title": "双方向"}, "nodes": [{"id": "a", "label": "甲"}, {"id": "b", "label": "乙"}],
+             "edges": [{"from": "a", "to": "b", "head": "both"}]}
+        svg = fs.render(f)
+        import re as _re
+        at = _re.search(r'<marker id="at"[^>]*>(.*?)</marker>', svg).group(0)
+        ah = _re.search(r'<marker id="ah"[^>]*>(.*?)</marker>', svg).group(0)
+        self.assertIn('refX="9"', at)
+        self.assertIn('auto-start-reverse', at)
+        self.assertEqual(_re.search(r'<path d="([^"]+)"', at).group(1), _re.search(r'<path d="([^"]+)"', ah).group(1))
+        self.assertIn('marker-start="url(#at)"', svg)
+
+
 if __name__ == "__main__":
     unittest.main()

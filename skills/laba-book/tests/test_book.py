@@ -347,5 +347,45 @@ class Gate(unittest.TestCase):
         self.assertEqual(j["測定"]["役割の印"]["aside"]["数"], 1)
 
 
+    @unittest.skipUnless(HAS_NODE, "node が無い")
+    def test_article_number_is_not_connective(self):
+        """「第2条は」「第三者が」で始まる段落を接続語（順序）と数えない。「第一に」は数える（G100）。"""
+        tmp = tempfile.mkdtemp()
+        md = "\n\n".join(["第2条は、" + LONG, "第15条の規定は、" + MID, "第三者が現れると、" + LONG, "第一に、" + MID])
+        p = write(tmp, "s.md", md)
+        r = subprocess.run(["node", bs.CHECKER, "--json", p], capture_output=True, text=True)
+        j = json.loads(r.stdout)
+        self.assertEqual(j["測定"]["段落数"], 4)
+        self.assertAlmostEqual(j["測定"]["段落の頭の接続語の割合"], 0.25)
+
+
+class Page(unittest.TestCase):
+    """P6 紙面：book_state.py page（G100）。"""
+
+    def test_page_from_chapter_dir(self):
+        tmp = tempfile.mkdtemp()
+        write(tmp, "outline.json", json.dumps({"chapter": {"no": 2, "title": "換気"}, "sections": [{"id": "s1", "title": "換気", "fig": None}, {"id": "s2", "title": "開度", "fig": None}]}, ensure_ascii=False))
+        write(tmp, "s1.md", "# 換気\n\n" + (LONG + MID) * 3 + "[R01]\n\n:::aside\n補足の文である。\n:::\n")
+        write(tmp, "s2.md", "# 開度\n\n" + (MID + LONG) * 4 + "\n\n:::point\n- 要点\n:::\n")
+        out = os.path.join(tmp, "c.gnoto")
+        errs, warns, plan = bs.make_page(tmp, out, plan_path=os.path.join(tmp, "plan.json"))
+        self.assertEqual(errs, [])
+        note = json.load(open(out, encoding="utf-8"))
+        lite = note["note"]["content"]["page2"]["lite"]
+        self.assertEqual(lite["v"], 2)
+        self.assertEqual(lite["pages"][0]["kind"], "chapter")
+        first = note["note"]["content"]["rows"][0][0]["html"]
+        self.assertEqual(first, "第2章　換気")
+        self.assertNotIn("[R01]", json.dumps(note, ensure_ascii=False))
+        self.assertTrue(all(p["rows"] <= plan["lines"] for p in plan["pages"]))
+        self.assertEqual(bs.main(["page", tmp, "--out", out]), 0)
+
+    def test_page_without_text_is_error(self):
+        tmp = tempfile.mkdtemp()
+        write(tmp, "outline.json", json.dumps({"chapter": {"no": 1, "title": "x"}, "sections": [{"id": "s1", "title": "x", "fig": None}]}))
+        errs, _, _ = bs.make_page(tmp, os.path.join(tmp, "c.gnoto"))
+        self.assertTrue(errs)
+
+
 if __name__ == "__main__":
     unittest.main()

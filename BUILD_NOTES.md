@@ -67,3 +67,8 @@
   - `figure_svg.py`：新しい 3 型の描き手。既存 7 型の直し：tree が treeStyle を見る（bracket・brace は箱なし・nested は入れ子・region は破線の領域）・relation の高さを置いた位置で決める（下が空かない）・太い線のラベルを線の脇へ・平行な 2 本のラベルを外側へ・表とマトリクスは張り出し幅 790 で全幅（長いセルは折り返す）・幅は 3 段（154／600／790）・書体はゴシック（GNOTO の図と同じ向き）。試験 34 → 43 件。
   - laba-book：`references/figures.md`（P5：判断 → 型 → 要素 → 描く → 検める のループ・置き場・やめるときは `fig.dropped`）。`book_state.py figs`（構成の候補・`figs.json`・本文の `:::fig id=`・SVG の検査の突き合わせ。図にした数／候補の数）。`figure-judgment.md`・SKILL.md・outline.md・担当 textbook-writer・overlay を 10 型に合わせた。plugin.json の版・説明は変えていない。
   - GNOTO の紙面（`pgFigSVG`）は新しい型をまだ描かない（別の担当。入力の形は GLYPH 側 `docs/edit-app/laba-textbook/FIGURE-TYPES-FOR-GNOTO.md`）。
+- 【未リリース・main にコミット・push していない】laba-book に P6（紙面）を足し、紙面の指示 v:2（読む順の塊）を書けるようにした（GLYPH 側の G100。段 L4）。
+  - laba-textbook：`scripts/page_v2.py`（新）＝役割の印つき Markdown＋`figs.json` → `page2.lite` v:2 の `.gnoto`。ページの区切りは GNOTO の行の数え方の写し（見出しの行・囲みの高さ・図の高さ）で見積もり、入らない段落は文の切れ目で分ける。検査は `pgSanPage2`（lite v:2）の写しに塊を 1 つずつ通す・未配置 0・傍注の参照・見積りの行。`textbook_page.py` に `build2`、`check`・`preview` が v:2 を見分ける。`samples/chapter-sample.md`（意味のない文）。v:1（`build`）は残した。
+  - laba-book：`references/page.md`（P6）・`book_state.py page`（章のフォルダ → `.gnoto`）・SKILL.md の手順と報告。
+  - 直し：`figure_svg.py` の `head:"both"` の始点の矢じりが内向きだった（marker `#at` の形を終点と同じに）。`textbook_check.js` が段落の頭の「第2条」「第三者」を接続語（順序）と数えていた（「第一に」「第二、」だけを数える）。
+  - 試験：laba-textbook 44 → 57 件・laba-book 29 → 32 件。plugin.json の版・説明は変えていない。
