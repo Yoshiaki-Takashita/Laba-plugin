@@ -92,11 +92,26 @@ def plain(html):
     return t.replace("&lt;", "<").replace("&gt;", ">").replace("&quot;", '"').replace("&#39;", "'").replace("&amp;", "&").rstrip()
 
 
-def para_lines(html, cpl, ind):
+def plan_w(s):
+    """ページの区切りを決めるための字の幅（GNOTO の cmpW より多め）。和文の中の欧字と空白は、組むと両側のアキで全角ほどに広がる
+    （L4 の評価：「冒頭の A が」のような文で GNOTO の見積りより 1 行多く組まれ、ページの最後の段落が切れた）。数字は 0.6。"""
+    w = 0.0
+    for ch in s:
+        if re.match(r"[0-9]", ch):
+            w += 0.6
+        elif re.match(r"[ -~｡-ﾟ]", ch):
+            w += 1.0
+        else:
+            w += 1
+    return w
+
+
+def para_lines(html, cpl, ind, plan=False):
     s = plain(html)
     if not s:
         return 1
-    return max(1, math.ceil((cmp_w(s) + ind) / max(1, cpl) - 1e-6))
+    w = plan_w(s) if plan else cmp_w(s)
+    return max(1, math.ceil((w + ind) / max(1, cpl) - 1e-6))
 
 
 def head_rows(g, t, at_top):
@@ -107,12 +122,12 @@ def head_rows(g, t, at_top):
     return H["rows"] + (0 if at_top else H.get("before", 0))
 
 
-def box_rows(g, part, html_list):
+def box_rows(g, part, html_list, plan=False):
     D = CMP_BOX.get(part)
     if not D:
-        return sum(para_lines(h, g["cpl"], 0) for h in html_list)
+        return sum(para_lines(h, g["cpl"], 0, plan) for h in html_list)
     per = math.floor((g["bw"] - D["wr"] - D["pad"][1] - D["pad"][3]) / D["size"])
-    n = sum(para_lines(h, per, 0) for h in html_list)
+    n = sum(para_lines(h, per, 0, plan) for h in html_list)
     h = D["pad"][0] + n * D["size"] * D["lead"] + D["pad"][2]
     return max(1, math.ceil((0.04 * g["pitch"] + h) / g["pitch"] + 0.35 - 1e-6))
 
@@ -270,9 +285,14 @@ def build_v2(md, figs=None, fmt_id="fam-f1", variant="b1", chapter_title=None, c
     def place_fig(fb, force=False):
         first = at_top()
         n = fig_rows(g, fb["h"], first, fb.get("cap"))
-        if not force and not fits(n):
+        # ページの途中の図：GNOTO は札（fig-tag）を図の上 gap に描くが行を取らない（前の行の字に重なる）。札の分の空き行を 1 つ前に置く
+        spacer = bool(fb.get("cap")) and not first and g["key"] in CMP_FTAG_GAP
+        if not force and not fits(n + spacer):
             state["floats"].append(fb)
             return
+        if spacer:
+            sp = new_pid("\u3000")
+            add({"t": "p", "rows": [sp["pid"]]}, 1, "S")
         blk = {"t": "fig", "fig": fb["fig"], "rows": [], "w": round(fb["w"], 1), "h": round(fb["h"], 1)}
         if fb.get("cap"):
             blk["cap"] = fb["cap"]
@@ -281,26 +301,26 @@ def build_v2(md, figs=None, fmt_id="fam-f1", variant="b1", chapter_title=None, c
         add(blk, n, "F")
 
     def place_para(html, ind, box_lead=False):
-        n = para_lines(html, g["cpl"], ind)
+        n = para_lines(html, g["cpl"], ind, True)
         if not fits(n):
             room = L - state["r"]
             sents = split_sentences(html)
             if room >= 2 and len(sents) > 1:
                 head = ""
                 k = 0
-                while k < len(sents) and para_lines(head + sents[k], g["cpl"], ind) <= room:
+                while k < len(sents) and para_lines(head + sents[k], g["cpl"], ind, True) <= room:
                     head += sents[k]
                     k += 1
                 if k > 0:
                     b = new_pid(head)
-                    add({"t": "box", "box": "lead", "rows": [b["pid"]]} if box_lead else {"t": "p", "rows": [b["pid"]]}, para_lines(head, g["cpl"], ind), "P")
+                    add({"t": "box", "box": "lead", "rows": [b["pid"]]} if box_lead else {"t": "p", "rows": [b["pid"]]}, para_lines(head, g["cpl"], ind, True), "P")
                     state["last_p"] = b["pid"]
                     warns.append("%s：段落を文の切れ目で次のページへ分けた（続きは字下げの段落になる）" % state["page"]["id"])
                     open_page()
                     place_para("".join(sents[k:]), ind, box_lead)
                     return
             open_page()
-            n = para_lines(html, g["cpl"], ind)
+            n = para_lines(html, g["cpl"], ind, True)
         b = new_pid(html)
         add({"t": "box", "box": "lead", "rows": [b["pid"]]} if box_lead else {"t": "p", "rows": [b["pid"]]}, n, "P")
         state["last_p"] = b["pid"]
@@ -309,7 +329,7 @@ def build_v2(md, figs=None, fmt_id="fam-f1", variant="b1", chapter_title=None, c
         """見出しの直後の項目の最初の 2 行（見出しをページの末に残さない）。"""
         for it in items[i + 1:]:
             if it["type"] == "p":
-                return min(2, para_lines(inline(it["text"]), g["cpl"], g["indent"]))
+                return min(2, para_lines(inline(it["text"]), g["cpl"], g["indent"], True))
             if it["type"] in ("box", "point"):
                 return 2
             if it["type"] == "h":
@@ -339,7 +359,7 @@ def build_v2(md, figs=None, fmt_id="fam-f1", variant="b1", chapter_title=None, c
             if not html:
                 continue
             if boxpart:
-                n = box_rows(g, boxpart, html)
+                n = box_rows(g, boxpart, html, True)
                 if not fits(n) and not at_top():
                     open_page()
                 ids = [new_pid(h)["pid"] for h in html]
