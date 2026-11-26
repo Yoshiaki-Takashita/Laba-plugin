@@ -11,6 +11,7 @@
   book_state.py map     map.json [--ledger ledger.tsv] # 概念の地図（P1・資料なしの題）の検査
   book_state.py ledger  ledger.tsv [--json]            # 出典の台帳（P3）の検査：V0・重複・URL・確かめ方の印・未確認の数
   book_state.py claims  節.md --ledger ledger.tsv [--json] [--strip 出力.md]  # 主張の印 [R01] と台帳の突き合わせ・ID の無い主張の候補
+  book_state.py figs    work/ch1 [--json]              # P5 図：構成の図の候補 → figs.json の記述・本文の :::fig id=・描いた SVG の検査（図にした数／候補の数）
 数の元：reportkiller/references/textbook-prose.md §1 → scripts/targets.json（写し）。"""
 import json
 import os
@@ -21,8 +22,10 @@ import sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(os.path.dirname(HERE))  # skills/
 CHECKER = os.path.join(ROOT, "reportkiller", "scripts", "textbook_check.js")
-FIG_KINDS = {"flow", "tree", "table", "matrix", "timeline", "concept", "relation"}
-FIG_WANT = {"compare", "chart", "scale", "brace", "bracket", "scene", "venn", "family", "ledger"}  # スキーマの案の型（まだ描けない。references/figure-judgment.md）
+FIG_KINDS = {"flow", "tree", "table", "matrix", "timeline", "concept", "relation", "compare", "chart", "scale"}  # laba-textbook figure.schema.json の kind（L3 で 10 型）
+FIG_WANT = {"scene", "venn", "family", "ledger"}  # まだ描けない案の型（references/figure-judgment.md）
+FIG_VARIANT = {"brace": "tree の treeStyle:\"brace\"", "bracket": "tree の treeStyle:\"bracket\""}  # 型でなく欄で描ける変種
+TEXTBOOK_SCRIPTS = os.path.join(ROOT, "laba-textbook", "scripts")
 MARK_RE = re.compile(r"\[((?:[RU]\d{1,3}[a-z]?)(?:\s*[,，、]\s*[RU]\d{1,3}[a-z]?)*)\]")
 LEVELS = {"hs", "ug", "grad"}
 KINDS = {"word", "field", "sourced"}
@@ -164,10 +167,17 @@ def check_outline(o, targets=None):
         if fig is not None and fig.get("kind") is not None and fig.get("kind") not in FIG_KINDS:
             errs.append(f"{sid}: 図の型「{fig.get('kind')}」は使えない（{'・'.join(sorted(FIG_KINDS))}）")
         if fig is not None and fig.get("want") is not None:
-            if fig["want"] not in FIG_WANT:
-                errs.append(f"{sid}: want「{fig['want']}」は案の型ではない（{'・'.join(sorted(FIG_WANT))}）")
+            w = fig["want"]
+            if w in FIG_KINDS:
+                warns.append(f"{sid}: want「{w}」はもう描ける（kind=\"{w}\" にする）")
+            elif w in FIG_VARIANT:
+                warns.append(f"{sid}: want「{w}」は {FIG_VARIANT[w]} で描ける")
+            elif w not in FIG_WANT:
+                errs.append(f"{sid}: want「{w}」は案の型ではない（{'・'.join(sorted(FIG_WANT))}）")
             else:
-                warns.append(f"{sid}: 当たった型 {fig['want']} はまだ描けない（kind={fig.get('kind')} で代える。figure-judgment.md）")
+                warns.append(f"{sid}: 当たった型 {w} はまだ描けない（kind={fig.get('kind')} で代える。figure-judgment.md）")
+        if fig is not None and fig.get("id") is not None and not re.match(r"^[a-z][a-z0-9_]{0,15}$", str(fig["id"])):
+            errs.append(f"{sid}: 図の id「{fig['id']}」は英小文字で始まる 16 字以内")
         if fig is not None and fig.get("kind") is None and fig.get("want") is None:
             errs.append(f"{sid}: fig に kind も want も無い（図にしないなら null）")
     return errs, warns
@@ -564,6 +574,117 @@ def claims(md, L):
             "cited_v0": sorted(set(cite_v0)), "pass": not errs, "errors": errs}
 
 
+# ---------- figs（P5 図） ----------
+FIG_LINE = re.compile(r"^:::fig\b(.*)$", re.M)
+
+
+def _textbook_tools():
+    if TEXTBOOK_SCRIPTS not in sys.path:
+        sys.path.insert(0, TEXTBOOK_SCRIPTS)
+    import figure_check  # noqa: E402
+    return figure_check
+
+
+def check_figs(chdir):
+    """章のフォルダ（outline.json・s*.md・figs.json・figs/<id>.svg）の図を検める。
+    候補＝outline の fig が null でない節。各候補は「図にした（fig.id）」か「やめた（fig.dropped に理由）」のどちらか。
+    図にした図：figs.json に記述がある・kind が構成と同じ・本文に :::fig id=<id> が 1 回・figure_check（--text＝その節の本文）の誤り 0・
+    描いた SVG（figs/<id>.svg）がある・SVG の検査（形式と幾何）の誤り 0。"""
+    fc = _textbook_tools()
+    errs, warns = [], []
+    o = read_json(os.path.join(chdir, "outline.json"))
+    fp = os.path.join(chdir, "figs.json")
+    figs = read_json(fp) if os.path.exists(fp) else {}
+    texts = {}
+    for s in o.get("sections", []):
+        sp = os.path.join(chdir, s["id"] + ".md")
+        if os.path.exists(sp):
+            with open(sp, encoding="utf-8") as f:
+                texts[s["id"]] = f.read()
+    st = {"candidates": 0, "made": 0, "dropped": 0, "pending": 0, "fig_errors": 0, "fig_warnings": 0, "svg_errors": 0, "svg_warnings": 0, "kinds": {}, "per": []}
+    used = set()
+    for s in o.get("sections", []):
+        sid, fig = s["id"], s.get("fig")
+        md = texts.get(sid, "")
+        refs = [m.group(1) for m in FIG_LINE.finditer(md)]
+        ids_in_text = [re.search(r"id=([a-z][a-z0-9_]*)", r).group(1) for r in refs if re.search(r"id=([a-z][a-z0-9_]*)", r)]
+        for r in refs:
+            if not re.search(r"id=", r):
+                errs.append(f"{sid}: 本文の :::fig に id が無い（:::fig id=f1 kind=… の形）")
+        if len(refs) > 1:
+            warns.append(f"{sid}: 1 つの節に図が {len(refs)} つ（本文のあるページに図は 1 つまで）")
+        if fig is None:
+            for i in ids_in_text:
+                errs.append(f"{sid}: 構成に図の候補が無いのに本文に :::fig id={i} がある（outline の fig に id を書く）")
+            continue
+        st["candidates"] += 1
+        row = {"section": sid, "kind": fig.get("kind"), "want": fig.get("want"), "id": fig.get("id"), "status": "pending"}
+        if fig.get("id") is None:
+            if fig.get("dropped"):
+                st["dropped"] += 1
+                row["status"] = "dropped"
+                row["why"] = fig["dropped"]
+            else:
+                st["pending"] += 1
+                errs.append(f"{sid}: 図の候補（{fig.get('kind') or fig.get('want')}）が図にもならず、やめた理由（fig.dropped）も無い")
+            st["per"].append(row)
+            continue
+        fid = fig["id"]
+        if fid in used:
+            errs.append(f"{sid}: 図の id {fid} が 2 つの節で使われている")
+        used.add(fid)
+        f = figs.get(fid)
+        if f is None:
+            errs.append(f"{sid}: figs.json に図 {fid} の記述が無い")
+            st["pending"] += 1
+            st["per"].append(row)
+            continue
+        if fig.get("kind") and f.get("kind") != fig["kind"]:
+            warns.append(f"{sid}: 構成の kind={fig['kind']} と図 {fid} の kind={f.get('kind')} が違う（構成を直す）")
+        if ids_in_text.count(fid) != 1:
+            errs.append(f"{sid}: 本文に :::fig id={fid} が {ids_in_text.count(fid)} 回（1 回だけ・参照する段落の直後に）")
+        e, w = fc.check_fig(fid, f, text=fc_text(md))
+        st["fig_errors"] += len(e)
+        st["fig_warnings"] += len(w)
+        errs += [f"{sid}: {x}" for x in e]
+        warns += [f"{sid}: {x}" for x in w]
+        svg = os.path.join(chdir, "figs", fid + ".svg")
+        if not os.path.exists(svg):
+            errs.append(f"{sid}: 描いた SVG が無い（figure_svg.py figs.json figs/ で描き、幾何の検査を通す）")
+        else:
+            e2, w2 = fc.svg_check(svg)
+            st["svg_errors"] += len(e2)
+            st["svg_warnings"] += len(w2)
+            errs += [f"{sid}: {fid}.svg {x}" for x in e2]
+            warns += [f"{sid}: {fid}.svg {x}" for x in w2]
+        if not e and os.path.exists(svg) and not fc.svg_check(svg)[0] and ids_in_text.count(fid) == 1:
+            st["made"] += 1
+            row["status"] = "made"
+            st["kinds"][f["kind"]] = st["kinds"].get(f["kind"], 0) + 1
+        st["per"].append(row)
+    for fid in figs:
+        if fid not in used:
+            warns.append(f"figs.json の図 {fid} はどの節の構成にも無い")
+    return errs, warns, st
+
+
+def fc_text(md):
+    """図の語の突き合わせに使う本文（台帳の印を外し、:::fig の塊は中身ごと外す＝図の説明の行で語が見つかったことにしない）。"""
+    out, infig = [], False
+    for ln in strip_marks(md).split("\n"):
+        s = ln.strip()
+        if infig:
+            infig = s != ":::"
+            continue
+        if s.startswith(":::fig"):
+            infig = True
+            continue
+        if s.startswith(":::"):
+            continue
+        out.append(ln)
+    return "\n".join(out)
+
+
 def print_gate(g):
     print(f"# {g['file']}（段 {g['level']}）：{'通過' if g['pass'] else 'NG あり'}")
     m = g["measure"]
@@ -687,6 +808,20 @@ def main(argv):
             if sp:
                 print(f"印を外した本文：{sp}")
         return 0 if r["pass"] else 1
+    if cmd == "figs":
+        errs, warns, st = check_figs(path)
+        if "--json" in rest:
+            print(json.dumps({"stats": st, "errors": errs, "warnings": warns, "pass": not errs}, ensure_ascii=False, indent=1))
+        else:
+            print(f"図の候補 {st['candidates']}・図にした {st['made']}・やめた {st['dropped']}・残り {st['pending']}"
+                  f"（記述の誤り {st['fig_errors']}・警告 {st['fig_warnings']}／SVG の誤り {st['svg_errors']}・警告 {st['svg_warnings']}）")
+            for e in errs:
+                print("[誤り] " + e)
+            for w in warns:
+                print("[注意] " + w)
+            if not errs:
+                print("図の誤り 0")
+        return 1 if errs else 0
     if cmd == "gate":
         level = opt(rest, "--level", "ug")
         if level not in LEVELS:

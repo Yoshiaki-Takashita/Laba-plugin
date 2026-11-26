@@ -16,7 +16,10 @@
     "matrix",
     "timeline",
     "concept",
-    "relation"
+    "relation",
+    "compare",
+    "chart",
+    "scale"
    ]
   },
   "caption": {
@@ -166,7 +169,8 @@
    "enum": [
     "bracket",
     "nested",
-    "region"
+    "region",
+    "brace"
    ]
   },
   "head": {
@@ -236,6 +240,246 @@
   "note": {
    "type": "string",
    "maxLength": 80
+  },
+  "panelKind": {
+   "enum": [
+    "relation"
+   ]
+  },
+  "slots": {
+   "type": "object",
+   "maxProperties": 8,
+   "propertyNames": {
+    "pattern": "^[a-z][a-z0-9_]{0,15}$"
+   },
+   "additionalProperties": {
+    "type": "array",
+    "items": {
+     "type": "integer",
+     "minimum": 0,
+     "maximum": 3
+    },
+    "minItems": 2,
+    "maxItems": 2
+   }
+  },
+  "panels": {
+   "type": "array",
+   "minItems": 2,
+   "maxItems": 3,
+   "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+     "title",
+     "nodes"
+    ],
+    "properties": {
+     "title": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 8
+     },
+     "nodes": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 8,
+      "items": {
+       "$ref": "#/$defs/panelNode"
+      }
+     },
+     "edges": {
+      "type": "array",
+      "maxItems": 12,
+      "items": {
+       "$ref": "#/$defs/relEdge"
+      }
+     },
+     "note": {
+      "type": "string",
+      "maxLength": 30
+     }
+    }
+   }
+  },
+  "x": {
+   "type": "object",
+   "required": [
+    "cats"
+   ],
+   "additionalProperties": false,
+   "properties": {
+    "cats": {
+     "type": "array",
+     "minItems": 3,
+     "maxItems": 12,
+     "items": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 8
+     }
+    },
+    "label": {
+     "type": "string",
+     "maxLength": 10
+    }
+   }
+  },
+  "y": {
+   "type": "object",
+   "additionalProperties": false,
+   "properties": {
+    "unit": {
+     "type": "string",
+     "maxLength": 6
+    },
+    "label": {
+     "type": "string",
+     "maxLength": 10
+    }
+   }
+  },
+  "y2": {
+   "type": "object",
+   "additionalProperties": false,
+   "properties": {
+    "unit": {
+     "type": "string",
+     "maxLength": 6
+    },
+    "label": {
+     "type": "string",
+     "maxLength": 10
+    }
+   }
+  },
+  "series": {
+   "type": "array",
+   "minItems": 1,
+   "maxItems": 3,
+   "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+     "label",
+     "type",
+     "values"
+    ],
+    "properties": {
+     "label": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 8
+     },
+     "type": {
+      "enum": [
+       "line",
+       "bar"
+      ]
+     },
+     "axis": {
+      "enum": [
+       "left",
+       "right"
+      ]
+     },
+     "values": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 12,
+      "items": {
+       "type": [
+        "number",
+        "null"
+       ]
+      }
+     },
+     "tone": {
+      "enum": [
+       "base",
+       "key"
+      ]
+     }
+    }
+   }
+  },
+  "marks": {
+   "type": "array",
+   "maxItems": 3,
+   "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+     "at"
+    ],
+    "properties": {
+     "at": {
+      "type": "string",
+      "maxLength": 8
+     },
+     "label": {
+      "type": "string",
+      "maxLength": 8
+     }
+    }
+   }
+  },
+  "ends": {
+   "type": "array",
+   "minItems": 2,
+   "maxItems": 2,
+   "items": {
+    "type": "string",
+    "minLength": 1,
+    "maxLength": 4
+   }
+  },
+  "bar": {
+   "enum": [
+    "wedge",
+    "band"
+   ]
+  },
+  "axisLabel": {
+   "type": "string",
+   "maxLength": 20
+  },
+  "items": {
+   "type": "array",
+   "minItems": 2,
+   "maxItems": 5,
+   "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+     "at",
+     "label"
+    ],
+    "properties": {
+     "at": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+     },
+     "label": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 8,
+      "pattern": "^[^\\u0000-\\u001f]*$"
+     },
+     "sub": {
+      "type": "string",
+      "maxLength": 8,
+      "pattern": "^[^\\u0000-\\u001f]*$"
+     },
+     "tone": {
+      "enum": [
+       "base",
+       "key"
+      ]
+     }
+    }
+   }
   }
  },
  "allOf": [
@@ -342,7 +586,129 @@
      "events"
     ]
    }
+  },
+  {
+   "if": {
+    "properties": {
+     "kind": {
+      "const": "compare"
+     }
+    }
+   },
+   "then": {
+    "required": [
+     "panels",
+     "slots"
+    ]
+   }
+  },
+  {
+   "if": {
+    "properties": {
+     "kind": {
+      "const": "chart"
+     }
+    }
+   },
+   "then": {
+    "required": [
+     "x",
+     "series"
+    ]
+   }
+  },
+  {
+   "if": {
+    "properties": {
+     "kind": {
+      "const": "scale"
+     }
+    }
+   },
+   "then": {
+    "required": [
+     "ends",
+     "items"
+    ]
+   }
   }
  ],
- "$defs": {}
+ "$defs": {
+  "slotId": {
+   "type": "string",
+   "pattern": "^[a-z][a-z0-9_]{0,15}$"
+  },
+  "relEdge": {
+   "type": "object",
+   "required": [
+    "from",
+    "to"
+   ],
+   "additionalProperties": false,
+   "properties": {
+    "from": {
+     "$ref": "#/$defs/slotId"
+    },
+    "to": {
+     "$ref": "#/$defs/slotId"
+    },
+    "label": {
+     "type": "string",
+     "maxLength": 12
+    },
+    "head": {
+     "enum": [
+      "arrow",
+      "none",
+      "both"
+     ]
+    },
+    "line": {
+     "enum": [
+      "solid",
+      "dashed",
+      "thick",
+      "wedge",
+      "cancel"
+     ]
+    }
+   }
+  },
+  "panelNode": {
+   "type": "object",
+   "required": [
+    "id",
+    "label"
+   ],
+   "additionalProperties": false,
+   "properties": {
+    "id": {
+     "$ref": "#/$defs/slotId"
+    },
+    "label": {
+     "type": "string",
+     "minLength": 1,
+     "maxLength": 12
+    },
+    "pict": {
+     "enum": [
+      "person",
+      "building",
+      "land",
+      "none"
+     ]
+    },
+    "gone": {
+     "type": "boolean"
+    },
+    "tone": {
+     "enum": [
+      "base",
+      "key",
+      "mute"
+     ]
+    }
+   }
+  }
+ }
 }

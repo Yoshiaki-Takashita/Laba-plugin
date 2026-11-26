@@ -44,8 +44,8 @@ Laba が作った（または利用者が渡した）文章を、**教科書の�
 | 道具 | 役目 |
 |---|---|
 | `scripts/textbook_page.py` | `formats`・`slots`・`build`・`check`・`preview` |
-| `scripts/figure_check.py` | 図の記述の検査（型・規模・長さ・辺の端・孤立・GNOTO が落とす形・本文との突き合わせ）と、SVG の形式の検査（`--svg`） |
-| `scripts/figure_svg.py` | 図の記述から灰の濃さだけの SVG |
+| `scripts/figure_check.py` | 図の記述の検査（型・規模・長さ・辺の端・孤立・GNOTO が落とす形・本文との突き合わせ）と、SVG の形式と幾何の検査（`--svg`：色・文字の重なり・はみ出し・文字に掛かる線・縦横比・余白） |
+| `scripts/figure_svg.py` | 図の記述から灰の濃さだけの SVG（10 型・幅は傍注 154／本文 600／張り出し 790） |
 | `scripts/page2_direct_check.py` | 座標つきで直接書いた紙面ノートの形の検査（部品の名前・矩形が紙の中・id の対応・行の存在）。`references/page2-direct.md` |
 | `schema/` | 入力・図・page2 のスキーマ（座標・色・`html`・`style` は拒否） |
 | `samples/` | 見本（意味のない文）：`f1-b1-input.json`・`figs-examples.json` |

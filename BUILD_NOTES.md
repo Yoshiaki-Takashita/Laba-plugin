@@ -61,3 +61,9 @@
   - `book_state.py` に `map`（地図の検査：概念 5〜15・前提の循環と後ろの章・確認先）・`ledger`（台帳の検査：V0・重複・URL・確かめ方の印・「存在しない」の語）・`claims`（主張の印と台帳の突き合わせ・ID の無い主張の候補の数・`--strip` で印を外す）を足した。`gate` は `[R01]` の印を外して測る。`outline` は `fig.want` を受ける。試験 13 → 25 件。
   - SKILL.md・intake・outline・book-state・writer-brief・担当 textbook-writer・overlay の skill-top を、資料なしの題の手順に合わせた。plugin.json の版・説明は変えていない。
   - 「ID の無い主張の候補」は機械の下限（数・年・条番号・「」・定義の文・人名らしい語の文）で、印の無い主張をすべて拾うわけではない。
+- 【未リリース・main にコミット・push していない】図の型を 3 つ足し、laba-book に P5（図）の工程を足した（GLYPH 側の G96。段 L3）。
+  - laba-textbook：`figure.schema.json` の kind に `compare`（面 2〜3・全面で同じ当事者を `slots` の同じ位置に）・`chart`（棒・折れ線・右の軸は折れ線だけ・`marks`）・`scale`（くさび・濃淡の帯・項目 2〜5・2 行目は `sub`）。tree の `treeStyle` に `brace`。
+  - `figure_check.py`：型ごとの記述の検査（compare の当事者の集合・位置の重なり・面の間で関係が変わるか／chart の値の数・負の値・右の軸・本文の数との突き合わせ／scale の at の重なり）。GNOTO の図の読み込みの写しを `pgSanFig`（深さ 8・文字列 400 字・制御文字）に合わせた（`fig_walk`）。`--svg` に幾何の検査（文字の外接のはみ出し・文字どうしの重なり・文字に掛かる線や枠〔白地の札は細い線だけ許す〕・型ごとの縦横比・上下の余白）。
+  - `figure_svg.py`：新しい 3 型の描き手。既存 7 型の直し：tree が treeStyle を見る（bracket・brace は箱なし・nested は入れ子・region は破線の領域）・relation の高さを置いた位置で決める（下が空かない）・太い線のラベルを線の脇へ・平行な 2 本のラベルを外側へ・表とマトリクスは張り出し幅 790 で全幅（長いセルは折り返す）・幅は 3 段（154／600／790）・書体はゴシック（GNOTO の図と同じ向き）。試験 34 → 43 件。
+  - laba-book：`references/figures.md`（P5：判断 → 型 → 要素 → 描く → 検める のループ・置き場・やめるときは `fig.dropped`）。`book_state.py figs`（構成の候補・`figs.json`・本文の `:::fig id=`・SVG の検査の突き合わせ。図にした数／候補の数）。`figure-judgment.md`・SKILL.md・outline.md・担当 textbook-writer・overlay を 10 型に合わせた。plugin.json の版・説明は変えていない。
+  - GNOTO の紙面（`pgFigSVG`）は新しい型をまだ描かない（別の担当。入力の形は GLYPH 側 `docs/edit-app/laba-textbook/FIGURE-TYPES-FOR-GNOTO.md`）。

@@ -11,7 +11,7 @@
 - 節の題は 8 字前後（20 字まで）、項の題は 5 字前後（8 字まで）。**名詞で止める**（「〜について」「〜とは」で終えない）。
 - 1 節は本文 1,200〜1,600 字・項 2〜4 個。
 - 各節は **事例（具体）→ 総説（定義・分類）→ 要件・手順 → 例外・比較** の順で開く。事例の枠は節の頭（見出しの直後）に置く。事例の無い題（現象の説明・年表）は、具体の場面の 1〜2 文から入る。
-- 図は「言葉より図が速い所」に 1 節 1 つまで。選び方は `figure-judgment.md`（判断の 12 行）。型は `flow`・`tree`・`table`・`matrix`・`timeline`・`concept`・`relation`（laba-textbook `figure-spec.md`）。案の型（compare・chart・scale など）に当たったら `want` に残す。図にしない所に図を置かない。
+- 図は「言葉より図が速い所」に 1 節 1 つまで。選び方は `figure-judgment.md`（判断の 12 行）。型は `flow`・`tree`・`table`・`matrix`・`timeline`・`concept`・`relation`・`compare`・`chart`・`scale`（laba-textbook `figure-spec.md`）。まだ描けない型（scene・venn・family・ledger）に当たったら `want` に残す。図を描くのは本文の後（`figures.md`）。図にしない所に図を置かない。
 - 太字にする語（定義する用語）を節ごとに 2〜6 個決め、**同じ語を 2 つの節で定義しない**（担当表）。
 
 ## 3. `outline.json` の形
@@ -27,7 +27,7 @@
    "excluded": []}
  ]}
 ```
-`case`＝事例の枠を置くか。`fig` は無ければ `null`（案の型に当たったら `{"kind": "table", "want": "chart", ...}`）。検査：`python3 ${CLAUDE_PLUGIN_ROOT}/skills/laba-book/scripts/book_state.py outline outline.json`。
+`case`＝事例の枠を置くか。`fig` は無ければ `null`。P5 で図にしたら `"id": "f1"`、やめたら `"dropped": "理由"` を足す（まだ描けない型は `{"kind": "table", "want": "venn", ...}`）。検査：`python3 ${CLAUDE_PLUGIN_ROOT}/skills/laba-book/scripts/book_state.py outline outline.json`。
 
 ## 4. 本文の形（役割の印つき Markdown。節ごとに 1 ファイル）
 
@@ -43,8 +43,8 @@
 :::aside
 補足（1〜2 文。読み飛ばしても論がつながる内容だけ）
 :::
-:::fig kind=flow
-図の中身の説明（1 行）
+:::fig id=f1 kind=flow
+図が示すこと（1 行。P5 で図にしたときだけ。id は figs.json の図）
 :::
 :::point
 - 要点（3〜5 項目・1 項目 27 字まで）

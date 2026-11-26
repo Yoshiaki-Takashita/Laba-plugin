@@ -13,17 +13,20 @@ Laba が書くのは「型と要素」だけ。**座標・色・線の太さ・�
 
 ## 2. 入力の仕様
 
-全型の共通：`kind`（必須）・`caption{title, no?}`（題は名詞句・10 字以内が目安。`no` は書かない＝GNOTO が採番）・`width`（`text`／`wide`／`page`。表は wide、他は text が既定）・`note`（80 字まで）。
+全型の共通：`kind`（必須）・`caption{title, no?}`（題は名詞句・10 字以内が目安。`no` は書かない＝GNOTO が採番）・`width`（`text`＝本文幅／`wide`・`page`＝張り出し。表・マトリクス・compare は wide、出来事 6 以上の timeline も wide、他は text が既定）・`note`（80 字まで）。文字列に改行・制御文字を入れない（GNOTO の読み込みが消す）。
 
 | kind | 必須 | 欄と上限 |
 |---|---|---|
 | flow | `nodes`・`edges` | `direction`（`down`／`right`）・`nodes[]`（≤14・`id`・`label`≤24・`shape`＝box/round/ellipse・`tone`＝base/key/mute・`group`）・`edges[]`（≤24・`from`・`to`・`label`≤12・`line`＝solid/dashed・`head`＝arrow/none/both）・`groups[]`（≤6・`id`・`label`≤16） |
-| tree | `nodes` | `treeStyle`（bracket／nested／region）・`nodes[]`（≤24・`id`・`label`・`parent`＝親の id・根だけ parent なし・`tone`）。**根は 1 つ・3 階層まで・子は 6 まで** |
+| tree | `nodes` | `treeStyle`（bracket＝罫線の括り／brace＝波括弧と点線の引出線〔並べて束ねるだけの分類〕／nested＝角丸の入れ子／region＝破線の領域。bracket・brace は箱を描かない）・`nodes[]`（≤24・`id`・`label`・`parent`＝親の id・根だけ parent なし・`tone`）。**根は 1 つ・3 階層まで・子は 6 まで** |
 | table | `head`（2〜6 列）・`rows`（≤12 行） | `rowHead`・セル ≤40 字（目安 ≤20）。各行のセル数＝列数 |
 | matrix | `head`・`rows`・`rowAxis`・`colAxis` | `corner`＝diag。各行のセル数＝列数＋1（先頭が行見出し） |
 | timeline | `events` | `events[]`（≤8・`when`≤16・`what`≤30・`to`＝期間の終わり） |
 | concept | `nodes` | `nodes[].group`＝入れ子の外側（groups の id か外側のノードの id）・`groups[]`・`edges`（任意） |
-| relation | `nodes`・`edges` | `nodes[].pict`（person／building／land／none）・`edges[].line`（thick＝太い灰線／dashed／wedge＝楔／cancel＝取消線）・`head` |
+| relation | `nodes`・`edges` | `nodes[].pict`（person／building／land／none。none は細い黒の長方形）・`edges[].line`（thick＝太い灰線／dashed／wedge＝楔／cancel＝取消線）・`head`。同じ 2 者の間の 2 本は平行にずらして描く |
+| compare | `panels`（2〜3）・`slots` | 前と後・甲説と乙説で**同じ当事者の関係が変わる**とき。`panels[]{title≤8 字, nodes[]≤8, edges[]≤12, note≤30}`（面の中は relation の欄。`nodes[].gone:true`＝消えた当事者＝点線の枠と取消線）・`slots{id:[列, 行]}`（0〜3。全面に共通の位置）。**全部の面に同じ当事者を書く**（消えた者も gone で残す）・面の間で関係が 1 つ以上違う・2 人を同じ位置に置かない。当事者の id は英小文字で始める（キー名になるため） |
+| chart | `x.cats`（3〜12・≤8 字）・`series`（1〜3） | `series[]{label≤8, type=line/bar, values[カテゴリと同じ数・null で欠け], axis=left/right（右は line だけ）, tone}`・`y{unit, label}`・`y2{unit}`・`marks[]{at=カテゴリ, label}`（点線の縦線）。**値は本文の数そのまま**（丸めない・作らない）・棒に負の値は不可（表にする）・`note` に出典 |
+| scale | `ends`（2・≤4 字）・`items`（2〜5） | 順序（程度）だけを言うとき。`items[]{at=0〜1 の順序の印, label≤8, sub≤8＝2 行目, tone}`・`bar`（wedge＝くさび・太い方が ends[0]／band＝濃淡の帯）・`axisLabel`（≤20 字）。at は値ではない（等間隔でよい） |
 
 辺の端は `nodes` の `id` と一致すること。`id` は `^[a-z0-9_]{1,16}$`。
 
@@ -48,13 +51,13 @@ Laba が書くのは「型と要素」だけ。**座標・色・線の太さ・�
 
 ## 4. 文章から図の記述を作る手順（G1〜G7）
 
-**G1 候補を拾う**：本文の段落ごとに、図にする条件（`rules.md` R9）を当てる。当事者 3 人以上＝relation／判断が「はい／いいえ」で 2 回以上分かれる＝flow／上位・下位＝tree／入れ子の包含＝concept／日付・期間 3 つ以上＝timeline／同じ観点で 2 つ以上を比べる＝table（2 軸なら matrix）。当たった段落だけ候補。1 ページに 1〜2 図・章に 3〜8 図が上限の目安［推］。
-**G2 型を決める**（R10 の決定表を上から）：順序・分岐→flow／親が 1 つの木→tree／時間軸→timeline／1 軸の比較→table／行と列の両方に意味→matrix／入れ子・包含→concept／人や物の間の関係→relation。2 つ当たったら読者が先に知りたい方。決められなければ**作らない**。
+**G1 候補を拾う**：本文の段落ごとに、図にする条件（`rules.md` R9）を当てる。当事者 3 人以上＝relation／前後・説で同じ当事者の関係が変わる＝compare／判断が「はい／いいえ」で 2 回以上分かれる＝flow／上位・下位＝tree／入れ子の包含＝concept／日付・期間 3 つ以上＝timeline／同じ観点で 2 つ以上を比べる＝table（2 軸なら matrix）／本文に数の推移・内訳が 3 点以上＝chart／順序（程度）だけ＝scale。選ぶ・選ばない判断の 12 行は laba-book の `references/figure-judgment.md`。当たった段落だけ候補。1 ページに 1〜2 図・章に 3〜8 図が上限の目安［推］。
+**G2 型を決める**（R10 の決定表を上から。ただし compare を relation より先に当てる）：関係が変わる→compare／数の大きさ・増減→chart／順序・分岐→flow／親が 1 つの木→tree／時間軸→timeline／1 軸の比較→table／行と列の両方に意味→matrix／入れ子・包含→concept／程度の順序だけ→scale／人や物の間の関係→relation。2 つ当たったら読者が先に知りたい方。決められなければ**作らない**。
 **G3 要素を取る**：ノード＝**本文で使っている語そのまま**の名詞句（言い換えない・動詞や文を入れない）／エッジ＝本文の動詞を名詞形にして `label`（「譲渡」「通知」「いいえ」）。意味が分かる辺には付けない／並び順＝本文での登場順（flow・timeline は時間順）／グループ＝本文で「第 1 段階」「（ア）（イ）」のようにまとめて語られているものだけ。
 **G4 長さを整える**：flow のノード ≤14 字（上限 24）・辺のラベル ≤6 字（上限 12）・tree のノード ≤12 字・table のセル ≤20 字・timeline の `when` ≤8 字・`what` ≤20 字・`caption.title` ≤10 字・matrix の軸名 ≤6 字［推］。超える語は本文側に残して図は短い語にする。
 **G5 規模を確かめる**（R12）：flow は箱 5〜9・tree は 3 階層・timeline は出来事 3〜8・relation は当事者 3〜6・table は 5 列×12 行まで。超えたら 2 つに分ける。
 **G6 強調**：`tone:"key"` は 1 図に 1 つ（結論・主題）。他は base。
-**G7 自己検査**（出す前に）：①全ノードが本文のどこかに語として出てくる ②全エッジの根拠となる文が本文にある（図で初めて出る事実を作らない）③孤立ノードがない ④ラベルが上の長さ以内 ⑤図の前後の本文で、図が何を示すかを 1 文で言っている（R13）⑥`figure_check.py` を通す。①と③と④は機械が見る：
+**G7 自己検査**（出す前に）：①全ノードが本文のどこかに語として出てくる ②全エッジの根拠となる文が本文にある（図で初めて出る事実を作らない）③孤立ノードがない ④ラベルが上の長さ以内 ⑤図の前後の本文で、図が何を示すかを 1 文で言っている（R13）⑥`figure_check.py` を通す。①と③と④は機械が見る（chart の値が本文の数にあるか・compare の面の見出しも見る）。描いた SVG は幾何（文字の外接のはみ出し・文字どうしの重なり・文字に掛かる線や枠・型ごとの縦横比・上下の余白）も機械が見る：
 
 ```
 python3 ${CLAUDE_PLUGIN_ROOT}/skills/laba-textbook/scripts/figure_check.py figs.json --text 本文.txt
@@ -66,9 +69,11 @@ python3 ${CLAUDE_PLUGIN_ROOT}/skills/laba-textbook/scripts/figure_check.py --svg
 ## 5. 既存の図（laba-figures）との使い分け
 
 - 法律の関係図・流れ図を Word・PDF に入れる図（25 型・三色・PNG）は `laba-figures`。**教科書どおりの紙面（GNOTO の紙面ノート）に入れる図は、この文書の記述**。同じ内容を両方に出すときは、先に本文と図の語をそろえ、それぞれの検査（`fig_lint.py`／`figure_check.py`）を通す。2 つの検査の色の規則は別（laba-figures は三色、教科書は灰の濃さだけ）。
-- グラフ（棒・折れ線）の型は無い［不明］。必要なら画像でなく表（table）にする。
+- グラフ（棒・折れ線・2 軸）は `chart`（画像にしない）。負の値・基準線の要る図は表（table）にする。
 
 ## 6. 満たされていない所
 
 - 図の内部の座標の大半は未測定。角丸・矢じり・ピクト・波括弧の形は［不明］。GNOTO の描き手は現時点で、これらの型を描く実装が入っているかを確かめていない（`output-format.md` 4）。
 - `tone` の見た目（key・mute）は測定の裏付けが弱い［推］。
+- compare・chart・scale・tree の brace と region を GNOTO の紙面（`pgFigSVG`）が描くかは版による（描き手は別に足す。入れても描けない版では空の枠）［不明］。`figure_svg.py` の SVG は版によらず見られる。
+- 型ごとの縦横比の範囲（`figure_check.py` の `ASPECT`）は 5 冊・法律の 76 図の測定。他分野の図は測っていない。

@@ -211,5 +211,204 @@
     "line": "dashed"
    }
   ]
+ },
+ "compare": {
+  "kind": "compare",
+  "caption": {
+   "title": "変更の前と後"
+  },
+  "slots": {
+   "s1": [
+    0,
+    0
+   ],
+   "s2": [
+    2,
+    0
+   ],
+   "a": [
+    0,
+    1
+   ],
+   "b": [
+    2,
+    1
+   ],
+   "c": [
+    1,
+    2
+   ]
+  },
+  "panels": [
+   {
+    "title": "変更前",
+    "nodes": [
+     {
+      "id": "s1",
+      "label": "甲",
+      "pict": "person"
+     },
+     {
+      "id": "s2",
+      "label": "乙",
+      "pict": "person"
+     },
+     {
+      "id": "a",
+      "label": "A 社"
+     },
+     {
+      "id": "b",
+      "label": "B 社"
+     },
+     {
+      "id": "c",
+      "label": "債権者"
+     }
+    ],
+    "edges": [
+     {
+      "from": "s1",
+      "to": "a",
+      "line": "thick"
+     },
+     {
+      "from": "s2",
+      "to": "b",
+      "line": "thick"
+     },
+     {
+      "from": "c",
+      "to": "b",
+      "line": "wedge"
+     }
+    ]
+   },
+   {
+    "title": "変更後",
+    "nodes": [
+     {
+      "id": "s1",
+      "label": "甲",
+      "pict": "person"
+     },
+     {
+      "id": "s2",
+      "label": "乙",
+      "pict": "person"
+     },
+     {
+      "id": "a",
+      "label": "A 社"
+     },
+     {
+      "id": "b",
+      "label": "B 社",
+      "gone": true
+     },
+     {
+      "id": "c",
+      "label": "債権者"
+     }
+    ],
+    "edges": [
+     {
+      "from": "s1",
+      "to": "a",
+      "line": "thick"
+     },
+     {
+      "from": "s2",
+      "to": "a",
+      "line": "thick"
+     },
+     {
+      "from": "c",
+      "to": "a",
+      "line": "wedge"
+     }
+    ],
+    "note": "B 社の権利義務は A 社へ"
+   }
+  ]
+ },
+ "chart": {
+  "kind": "chart",
+  "caption": {
+   "title": "量と率の推移"
+  },
+  "x": {
+   "cats": [
+    "第1期",
+    "第2期",
+    "第3期",
+    "第4期",
+    "第5期"
+   ]
+  },
+  "y": {
+   "unit": "万件"
+  },
+  "y2": {
+   "unit": "%"
+  },
+  "series": [
+   {
+    "label": "件数",
+    "type": "bar",
+    "values": [
+     32,
+     41,
+     38,
+     47,
+     52
+    ]
+   },
+   {
+    "label": "割合",
+    "type": "line",
+    "axis": "right",
+    "values": [
+     12,
+     15,
+     14,
+     19,
+     22
+    ]
+   }
+  ],
+  "note": "数値は架空の見本"
+ },
+ "scale": {
+  "kind": "scale",
+  "caption": {
+   "title": "拘束の強さ"
+  },
+  "ends": [
+   "強い",
+   "弱い"
+  ],
+  "bar": "wedge",
+  "items": [
+   {
+    "at": 0.1,
+    "label": "第一の型"
+   },
+   {
+    "at": 0.5,
+    "label": "第二の型",
+    "sub": "（中間）",
+    "tone": "key"
+   },
+   {
+    "at": 0.9,
+    "label": "第三の型"
+   },
+   {
+    "at": 0.56,
+    "label": "変種"
+   }
+  ],
+  "axisLabel": "左ほど当事者の自由が狭い"
  }
 }

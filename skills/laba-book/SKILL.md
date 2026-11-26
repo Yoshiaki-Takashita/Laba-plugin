@@ -6,7 +6,7 @@ description: 単語・分野・資料つきの題から、教科書の章（文�
 # 教科書の生成（Laba の本）
 
 単語・分野・資料つきの題から、**教科書の章**を作る。1 回の呼び出しで **1 章**（重ければ 1 節）。本の状態は `book.json` に持ち、次の回はそれを読んで続ける。
-この版（L2）でできるのは **文章まで**（P0 依頼の形・P1 範囲・P2 構成・P3 出典の台帳・P4 本文）。資料なしの題（単語・分野）は、標準の章立てを確認先つきで立て（P1）、主張ごとに台帳の ID を持つ（P3）。図（P5）・紙面（P6）は既存のスキルへ渡す（下の 5）。
+この版（L3）でできるのは **文章と図まで**（P0 依頼の形・P1 範囲・P2 構成・P3 出典の台帳・P4 本文・P5 図）。資料なしの題（単語・分野）は、標準の章立てを確認先つきで立て（P1）、主張ごとに台帳の ID を持つ（P3）。図は本文から「図にするか」を判断し、型・要素・SVG・検査のループで作る（P5）。紙面（P6）は laba-textbook へ渡す（下の 5）。
 
 ## 1. 読む順（毎回全部は読まない）
 
@@ -18,6 +18,7 @@ description: 単語・分野・資料つきの題から、教科書の章（文�
 | 構成を作るとき | `references/outline.md`（章立て・`outline.json`） |
 | 図の候補を決めるとき | `references/figure-judgment.md`（判断の 12 行・今使える型） |
 | 本文を書くとき | `references/writer-brief.md`（数の目標。担当に渡す） |
+| 図を作るとき（本文の後） | `references/figures.md`（P5 のループ・置き場・`book_state.py figs`）と laba-textbook `references/figure-spec.md`（記述の欄） |
 | 2 回目以降・続きの章 | `references/book-state.md`（`book.json` の形と続け方）。**前の章の本文は読み直さない** |
 | 文の規則の根拠が要るときだけ | `${CLAUDE_PLUGIN_ROOT}/skills/reportkiller/references/textbook-prose.md` の該当の節 |
 
@@ -32,8 +33,9 @@ description: 単語・分野・資料つきの題から、教科書の章（文�
 5. **P2 構成**：`outline.md` 2〜3 のとおり `work/ch<n>/outline.json` を書き（図の候補は `figure-judgment.md`）、`book_state.py outline work/ch<n>/outline.json` で検査する（誤りが 0 になるまで直す）。
 6. **P4 本文**：節ごとに担当 `textbook-writer` を 1 人ずつ同時に立てる。渡すのは、節の id・`outline.json` の場所・`writer-brief.md` の場所・資料（その節の分）か台帳（`work/ledger.tsv`）・術語表（`work/glossary.json`）だけ。担当が立てられない環境（チャット）では、自分で `writer-brief.md` の手順を節ごとに行う。
 7. **測って直す**：各節は `book_state.py gate work/ch<n>/s1.md --level ug` が通るまで直す（担当の中で最大 2 回）。資料なしの題は `book_state.py claims work/ch<n>/s1.md --ledger work/ledger.tsv` も通す（台帳に無い ID・未確認や V2 を根拠にした文・ID の無い主張の候補が 0）。2 回で通らない項目は直さずに残し、報告に書く（点数を上げるための書き直しをしない）。
-8. **章にまとめる**：節を順に `work/ch<n>/chapter.md` に連ね、`book_state.py chapter work/book.json --no <n> --status done --title "<章の題>" --summary "<要点 3〜5 項目を ; で>"` で状態を更新する。術語は `glossary.json` に足す（表記をそろえる）。
-9. **渡す**：章の本文（役割の印つき Markdown。`[R01]` の印は `claims --strip` で外す）と台帳を渡し、紙面にするなら laba-textbook へ。返事を終える前に、成果物を必ず渡す。
+8. **P5 図**：`figures.md` のとおり、書いた本文を読み直して図にするかを決め（`figure-judgment.md` の 12 行）、候補ごとに型 → 要素（`work/ch<n>/figs.json`）→ `figure_svg.py` で描く（記述と幾何の検査）→ 本文に `:::fig id=… kind=…` を置く。`book_state.py figs work/ch<n>` が誤り 0 で通るまで直す（2 回で直らない図はやめ、`fig.dropped` に理由）。
+9. **章にまとめる**：節を順に `work/ch<n>/chapter.md` に連ね、`book_state.py chapter work/book.json --no <n> --status done --title "<章の題>" --summary "<要点 3〜5 項目を ; で>"` で状態を更新する。術語は `glossary.json` に足す（表記をそろえる）。
+10. **渡す**：章の本文（役割の印つき Markdown。`[R01]` の印は `claims --strip` で外す）と台帳と図（`figs.json`・`figs/*.svg`）を渡し、紙面にするなら laba-textbook へ。返事を終える前に、成果物を必ず渡す。
 
 ## 3. 守ること（破ると誤りに直結する）
 
@@ -47,7 +49,8 @@ description: 単語・分野・資料つきの題から、教科書の章（文�
 - 題の種類・段・既定で決めたこと。章と節の数・本文の字数。
 - 節ごとの `gate` の結果（通った項目・通らなかった項目と理由）。直した回数。
 - 資料なしの題：標準の章立ての確認先・台帳の行の数（V3・V1・V2・未確認）・`claims` の結果（ID の無い主張の候補の数）。コネクタが無かった・ウェブが使えなかったときは、その旨と未確認の数を冒頭に。
-- 走らせなかった検査（出典の確認・図・紙面・人の採点）と理由。分からないことは「不明」。「問題なし」と書かない。
+- 図：候補の数・図にした数（型ごと）・やめた数と理由・`figs` の記述と SVG の誤りと警告の数。図の点検者を立てたか（立てないなら「自己点検」）。
+- 走らせなかった検査（出典の確認・図の点検者・紙面・人の採点）と理由。分からないことは「不明」。「問題なし」と書かない。
 
 ## 5. 他のスキル・担当の使い分け
 
@@ -56,5 +59,6 @@ description: 単語・分野・資料つきの題から、教科書の章（文�
 | 文の規則（教科書型） | reportkiller `references/textbook-prose.md`・道具 `scripts/textbook_check.js`（`gate` が中で呼ぶ） |
 | 出典の確認（法学） | 担当 `verifier`・laba `references/connector.md` |
 | 出典の台帳（資料なしの題） | `references/sources.md`・`book_state.py ledger`／`claims`（元の規則は reportkiller `citation-ledger.md`） |
-| 図・紙面 | 選ぶ判断は `references/figure-judgment.md`、描き方と紙面は laba-textbook（`figure-spec.md`・`textbook_page.py`） |
+| 図 | 判断は `references/figure-judgment.md`、手順は `references/figures.md`、記述の欄・描き手・検査は laba-textbook（`figure-spec.md`・`figure_svg.py`・`figure_check.py`） |
+| 紙面 | laba-textbook（`textbook_page.py`） |
 | 独立の点検 | 担当 `style-reviewer`（文体）・`added-text-reviewer`（資料にない文） |

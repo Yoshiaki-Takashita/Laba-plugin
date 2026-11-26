@@ -103,6 +103,66 @@ class Outline(unittest.TestCase):
         self.assertEqual(errs, [])
 
 
+class Figs(unittest.TestCase):
+    """P5 図（L3・G96）：構成の候補 → figs.json → 本文の :::fig id= → 描いた SVG の突き合わせ。"""
+
+    def make(self, tmp):
+        sys.path.insert(0, bs.TEXTBOOK_SCRIPTS)
+        import figure_svg as fsv  # noqa: E402
+        ex = json.load(open(os.path.join(bs.TEXTBOOK_SCRIPTS, "..", "samples", "figs-examples.json"), encoding="utf-8"))
+        o = {"chapter": {"no": 1, "title": "変更"}, "sections": [
+            {"id": "s1", "title": "変更の前後", "items": [{"title": "前"}, {"title": "後"}], "terms": ["合併"], "fig": {"kind": "compare", "id": "f1"}},
+            {"id": "s2", "title": "件数", "items": [{"title": "推移"}, {"title": "割合"}], "terms": ["件数"], "fig": {"kind": "chart", "dropped": "本文に数が 2 点しかない"}}]}
+        write(tmp, "outline.json", json.dumps(o, ensure_ascii=False))
+        md = ("# 変更の前後\n\n変更前には甲が A 社を、乙が B 社を持ち、債権者は B 社に債権を持っていた。変更後には B 社の権利義務は A 社へ移り、"
+              "甲と乙はともに A 社を持ち、債権者は A 社に債権を持つ。\n\n:::fig id=f1 kind=compare\n変更前と変更後の当事者の関係\n:::\n")
+        write(tmp, "s1.md", md)
+        write(tmp, "s2.md", "# 件数\n\n本文。\n")
+        write(tmp, "figs.json", json.dumps({"f1": ex["compare"]}, ensure_ascii=False))
+        os.makedirs(os.path.join(tmp, "figs"))
+        with open(os.path.join(tmp, "figs", "f1.svg"), "w", encoding="utf-8") as f:
+            f.write(fsv.render(ex["compare"]))
+        return o
+
+    def test_made_and_dropped_pass(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            self.make(tmp)
+            errs, warns, st = bs.check_figs(tmp)
+            self.assertEqual(errs, [])
+            self.assertEqual((st["candidates"], st["made"], st["dropped"], st["pending"]), (2, 1, 1, 0))
+            self.assertEqual(bs.main(["figs", tmp]), 0)
+
+    def test_missing_svg_text_ref_and_reason(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            o = self.make(tmp)
+            os.remove(os.path.join(tmp, "figs", "f1.svg"))
+            self.assertTrue(any("SVG が無い" in e for e in bs.check_figs(tmp)[0]))
+        with tempfile.TemporaryDirectory() as tmp:
+            o = self.make(tmp)
+            write(tmp, "s1.md", "# 変更の前後\n\n本文。\n")
+            self.assertTrue(any(":::fig id=f1 が 0 回" in e for e in bs.check_figs(tmp)[0]))
+        with tempfile.TemporaryDirectory() as tmp:
+            o = self.make(tmp)
+            del o["sections"][1]["fig"]["dropped"]
+            write(tmp, "outline.json", json.dumps(o, ensure_ascii=False))
+            self.assertTrue(any("やめた理由" in e for e in bs.check_figs(tmp)[0]))
+
+    def test_fig_words_checked_against_text_without_fig_block(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            self.make(tmp)
+            write(tmp, "s1.md", "# 変更の前後\n\n関係の無い本文。\n\n:::fig id=f1 kind=compare\n甲 乙 A 社 B 社 債権者 変更前 変更後\n:::\n")
+            errs, warns, st = bs.check_figs(tmp)
+            self.assertTrue([w for w in warns if "本文に出てこない" in w])
+
+    def test_outline_accepts_new_kinds_and_variant_hint(self):
+        o = Outline().good()
+        o["sections"][0]["fig"] = {"kind": "scale"}
+        o["sections"][1]["fig"] = {"kind": "tree", "want": "brace"}
+        errs, warns = bs.check_outline(o)
+        self.assertEqual(errs, [])
+        self.assertTrue(any("treeStyle" in w for w in warns))
+
+
 class Targets(unittest.TestCase):
     def test_brief_matches_targets(self):
         t = bs.load_targets()

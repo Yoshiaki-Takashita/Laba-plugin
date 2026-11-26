@@ -186,7 +186,7 @@ class Build(unittest.TestCase):
 
 class Figures(unittest.TestCase):
     def test_every_kind_example_is_valid(self):
-        self.assertEqual(sorted(FIGS), ["concept", "flow", "matrix", "relation", "table", "timeline", "tree"])
+        self.assertEqual(sorted(FIGS), ["chart", "compare", "concept", "flow", "matrix", "relation", "scale", "table", "timeline", "tree"])
         for k, f in FIGS.items():
             e, w = fc.check_fig(k, f)
             self.assertEqual(e, [], k)
@@ -280,13 +280,126 @@ class Svg(unittest.TestCase):
             self.assertTrue(chk('<linearGradient id="g"/><text x="1" y="1">あ</text>'))
             self.assertTrue(chk('<text x="500" y="1">あ</text>'))
             self.assertTrue(chk('<text x="1" y="1">あ</text>', vb=""))
-            self.assertEqual(chk('<rect fill="#787878" stroke="#222222" width="5" height="5"/><text x="1" y="1">あ</text>'), [])
+            self.assertEqual(chk('<rect fill="#787878" stroke="#222222" width="5" height="5"/><text x="20" y="40">あ</text>'), [])
+            # 幾何（L3）：文字の外接がはみ出す・文字どうしの重なり・文字に掛かる線
+            self.assertTrue(any("外へ" in e for e in chk('<text x="1" y="5">あいう</text>')))
+            self.assertTrue(any("重なる" in e for e in chk('<text x="20" y="40">あいう</text><text x="30" y="42">えお</text>')))
+            self.assertTrue(any("掛かる" in e for e in chk('<line x1="0" y1="36" x2="100" y2="36" stroke="#222222"/><text x="20" y="40">あい</text>')))
+            # 白地の札（data-bg）は細い線だけ許す。太い線は許さない
+            self.assertEqual(chk('<line x1="0" y1="36" x2="100" y2="36" stroke="#222222"/><text x="20" y="40" data-bg="1">あい</text>'), [])
+            self.assertTrue(chk('<line x1="0" y1="36" x2="100" y2="36" stroke="#c0c0c0" stroke-width="8"/><text x="20" y="40" data-bg="1">あい</text>'))
 
     def test_cli_writes_files(self):
         with tempfile.TemporaryDirectory() as d:
             inf = os.path.join(TB, "samples", "figs-examples.json")
             self.assertEqual(fs.main([inf, d]), 0)
             self.assertEqual(sorted(os.listdir(d)), sorted(k + ".svg" for k in FIGS))
+
+
+class NewKinds(unittest.TestCase):
+    """L3（G96）：compare・chart・scale の記述の検査と、既存 7 型の描き方の直し。"""
+
+    def test_compare_rules(self):
+        f = copy.deepcopy(FIGS["compare"])
+        f["panels"][1]["nodes"] = f["panels"][1]["nodes"][:-1]
+        f["panels"][1]["edges"] = [e for e in f["panels"][1]["edges"] if "c" not in (e["from"], e["to"])]
+        self.assertTrue(any("当事者の集合" in e for e in fc.check_fig("compare", f)[0]))
+        f = copy.deepcopy(FIGS["compare"])
+        del f["slots"]["c"]
+        self.assertTrue(any("slots に位置の無い" in e for e in fc.check_fig("compare", f)[0]))
+        f = copy.deepcopy(FIGS["compare"])
+        f["slots"]["c"] = [0, 0]
+        self.assertTrue(any("同じ位置" in e for e in fc.check_fig("compare", f)[0]))
+        f = copy.deepcopy(FIGS["compare"])
+        f["panels"][1] = dict(copy.deepcopy(f["panels"][0]), title="変更後")
+        self.assertTrue(any("変わらない" in e for e in fc.check_fig("compare", f)[0]))
+        f = copy.deepcopy(FIGS["compare"])
+        f["slots"]["1x"] = [3, 3]     # 数字で始まる id はキーとして GNOTO が落とす
+        self.assertTrue(fc.check_fig("compare", f)[0])
+
+    def test_chart_rules(self):
+        f = copy.deepcopy(FIGS["chart"])
+        f["series"][0]["values"] = f["series"][0]["values"][:-1]
+        self.assertTrue(any("カテゴリ" in e for e in fc.check_fig("chart", f)[0]))
+        f = copy.deepcopy(FIGS["chart"])
+        f["series"][0]["values"][0] = -1
+        self.assertTrue(any("負の値" in e for e in fc.check_fig("chart", f)[0]))
+        f = copy.deepcopy(FIGS["chart"])
+        f["series"][0]["axis"] = "right"
+        self.assertTrue(any("右の軸" in e for e in fc.check_fig("chart", f)[0]))
+        f = copy.deepcopy(FIGS["chart"])
+        del f["note"]
+        self.assertTrue(any("出典" in w for w in fc.check_fig("chart", f)[1]))
+        # 本文の数と突き合わせる（数を作らない）
+        text = "第1期から第5期まで、件数は 32、41、38、47、52 万件、割合は 12・15・14・19・22% と推移した。"
+        self.assertFalse([w for w in fc.check_fig("chart", FIGS["chart"], text)[1] if "本文に無い" in w])
+        self.assertTrue([w for w in fc.check_fig("chart", FIGS["chart"], text.replace("52", "53"))[1] if "本文に無い" in w])
+
+    def test_scale_rules(self):
+        f = copy.deepcopy(FIGS["scale"])
+        f["items"][1]["at"] = f["items"][0]["at"]
+        self.assertTrue(any("同じ at" in e for e in fc.check_fig("scale", f)[0]))
+        f = copy.deepcopy(FIGS["scale"])
+        f["items"][0]["label"] = "一行目\n二行目"     # 改行は GNOTO が消す。2 行目は sub
+        self.assertTrue(fc.check_fig("scale", f)[0])
+        f = copy.deepcopy(FIGS["scale"])
+        f["items"] = f["items"][:1]
+        self.assertTrue(fc.check_fig("scale", f)[0])
+
+    def test_gnoto_fig_depth_follows_pgSanFig(self):
+        # 図の記述は pgSanFig（深さ 8 未満を残す）。compare の面の中の当事者（深さ 4）は残る
+        errs = []
+        fc.fig_walk(FIGS["compare"], "f", 0, errs)
+        self.assertEqual(errs, [])
+        errs = []
+        fc.fig_walk({"a": [[[[[[[[1]]]]]]]]}, "f", 0, errs)
+        self.assertTrue(errs)
+
+    def _svg(self, f, d, name):
+        p = os.path.join(d, name + ".svg")
+        open(p, "w", encoding="utf-8").write(fs.render(f, "図表"))
+        return p, fc.svg_check(p)
+
+    def test_tree_styles_respected(self):
+        with tempfile.TemporaryDirectory() as d:
+            for st in ("bracket", "brace", "nested", "region"):
+                f = dict(copy.deepcopy(FIGS["tree"]), treeStyle=st)
+                p, (e, w) = self._svg(f, d, st)
+                self.assertEqual(e, [], st)
+                body = open(p, encoding="utf-8").read()
+                rects = body.count("<rect") - 2    # 題の帯と白地を除く
+                if st in ("bracket", "brace"):
+                    self.assertEqual(rects, 0, st + " は箱を描かない")
+                if st == "brace":
+                    self.assertIn("<path", body)
+
+    def test_relation_no_bottom_gap_and_label_off_thick_line(self):
+        with tempfile.TemporaryDirectory() as d:
+            p, (e, w) = self._svg(FIGS["relation"], d, "relation")
+            self.assertEqual(e, [])
+            self.assertFalse([x for x in w if "余白" in x or "縦横比" in x], w)
+
+    def test_table_uses_wide_width(self):
+        with tempfile.TemporaryDirectory() as d:
+            p, (e, w) = self._svg(FIGS["table"], d, "table")
+            self.assertIn('viewBox="0 0 790', open(p, encoding="utf-8").read())
+            f = dict(copy.deepcopy(FIGS["table"]), width="text")
+            p, _ = self._svg(f, d, "table2")
+            self.assertIn('viewBox="0 0 600', open(p, encoding="utf-8").read())
+
+    def test_new_kinds_render_clean(self):
+        with tempfile.TemporaryDirectory() as d:
+            for k in ("compare", "chart", "scale"):
+                p, (e, w) = self._svg(FIGS[k], d, k)
+                self.assertEqual(e, [], k)
+                self.assertFalse([x for x in w if "縦横比" in x], (k, w))
+
+    def test_geometry_catches_overlapping_long_labels(self):
+        f = copy.deepcopy(FIGS["scale"])
+        f["items"] = [{"at": 0.0, "label": "ながいながい語"}, {"at": 0.02, "label": "となりの語句"}, {"at": 0.04, "label": "さらに隣の語"}]
+        with tempfile.TemporaryDirectory() as d:
+            p, (e, w) = self._svg(f, d, "s")
+            self.assertTrue(e)    # 3 つ目は下にも上にも入らない
 
 
 class NoMaterial(unittest.TestCase):

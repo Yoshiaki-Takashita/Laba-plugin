@@ -19,7 +19,8 @@
 
 ## この版で使える型と、まだ使えない型
 
-- **使える型は今の 7 つだけ**：`flow`・`tree`・`table`・`matrix`・`timeline`・`concept`・`relation`（`figure.schema.json` の `kind`）。
-- `compare`・`chart`・`scale`（と tree の `brace`／`bracket` の変種）は**スキーマの案の段階**で、記述の検査・描き手（`figure_check.py`・`figure_svg.py`）・GNOTO の読み込みはまだ対応していない。実装は図の担当が別に行う。
-- それまでの書き方：判断が compare・chart・scale に当たったら、`fig` に `"want": "compare"` のように当たった型を残し、`kind` には 7 型のうちで近いもの（compare → 面ごとに `relation` を 2 つ／chart → `table`／scale → `table` か図にしない）を書くか、`fig` を `null` にする。**当たらない型に無理に入れない**（compare を 1 枚の relation に詰めない）。
-- chart は「本文の数」が台帳の ID つきで確かめた数のときだけ（`sources.md` 1）。
+- **使える型は 10**：`flow`・`tree`（`treeStyle`＝`bracket`・`brace`・`nested`・`region`）・`table`・`matrix`・`timeline`・`concept`・`relation`・`compare`・`chart`・`scale`（laba-textbook の `figure.schema.json`。記述の検査・描き手・幾何の検査がある）。
+- **まだ描けない型**：`scene`・`venn`・`family`・`ledger`。当たったら `fig` に `"want": "venn"` のように残し、`kind` は近いもの（venn → `table`・ledger → `table`・scene → 図にしない）か、図をやめて `"dropped": "型が無い"`。**当たらない型に無理に入れない**。
+- 紙面（GNOTO の `pgFigSVG`）が compare・chart・scale・tree の brace／region を描くかは GNOTO の版による（描き手は別の担当が足す）。描けない版の GNOTO では、その図は空の枠になる［不明：版ごとに未確認］。`figure_svg.py` の SVG はどの版でも見られる。
+- chart は「本文の数」が資料の数か、台帳の ID つきで確かめた数のときだけ（`sources.md` 1）。
+- 図にする手順（描く・検める・本文に置く）は `figures.md`。
