@@ -44,3 +44,9 @@
   - marketplace.json の名前は `laba-marketplace`（予約名・`<owner>-<repo>` と重ならないことを確認）、プラグイン名 `laba` は plugin.json と同じ。
   - 試験：`claude plugin validate`（main・release の木・ディレクトリ版の zip を展開したもの・marketplace.json）通過。gnoto-lite の unittest 48/48、`evals/gogi/test_gogi.py` 8/8。ディレクトリ版の検査（`check_directory.py`：種類・UTF-8・NUL・#!・JSON・PNG の完全さ・256 KiB・512 個・実行権・パスの文字・鍵らしい文字列）は、許可外のファイルを混ぜた木で失敗することも確かめた。
   - 食い違い・注意（直していない）：①ディレクトリ版でも `references/` や `agents/` の本文には「`python3 …` を走らせる」と書いた行が残る（Markdown の説明で、実行は各 SKILL.md 先頭の「公式版（道具なし）での進め方」が手作業に読み替えさせる。読み替えが実際に守られるかは未検証＝不明）。②`skills/gnoto-lite/references/SPEC.md` は `tests/fixtures/` の見本を指すが、ディレクトリ版には見本（.gnoto）が入らない。③ディレクトリ版は画像以外が 256 KiB 以下・512 個以下・NUL なし・UTF-8 を満たすが、審査の安全スキャンと方針の審査（公式の検証画面）は走らせていない（不明）。
+- 【未リリース・作業ツリーのみ・コミットしていない】skills/laba-textbook を足した（教科書の学習・図の生成・教科書どおりの配置の出力。GLYPH 側の G40）。
+  - 中身：`formats/`（F1・F2・F3 の数値と構造だけの JSON・目録の TSV）・`references/`（rules-short 20 行・rules 詳細・page-slots・figure-spec・output-format・learning）・`scripts/`（textbook_page.py・figure_check.py・figure_svg.py・minischema.py）・`schema/`・`samples/`（意味のない文）・`tests/test_textbook.py`（34 件）。教科書の画像・本文は入れていない（試験が画像ファイルの有無を見る）。
+  - 出力の形は `page2.lite`（スロットの控え）。GNOTO の読み込み（pgSanPage2・pgSanAny）が知らないキーを残す規則（キー名・文字列に < > 不可・深さ 5 まで）に合わせた。図の辺の線種は `line`（`style` は GNOTO が落とす）、木は平らな `parent` 形。
+  - 配った版に含めるときの確認が残っている：build-dist.sh の EXCLUDE に tests を足した・build_directory.py の skills_with_scripts と overlay/skill-top に laba-textbook を足した（ディレクトリ版のビルドは走らせていない）。plugin.json の版・説明は変えていない。
+  - 分かっていないこと：GNOTO が `lite` から箱を置く処理は GNOTO 側が未実装（開くと未配置）。Claude の中の GNOTO Lite（gnoto_open）は page を開けない。実際のモデル呼び出しでの出力の質は未測定。
+

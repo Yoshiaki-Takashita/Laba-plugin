@@ -1,0 +1,102 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "laba-page-input",
+ "title": "LABA が書く、スロットと文だけの入力（座標を含まない）",
+ "type": "object",
+ "required": [
+  "format",
+  "pages"
+ ],
+ "additionalProperties": false,
+ "properties": {
+  "format": {
+   "type": "string",
+   "pattern": "^[a-z0-9_-]{1,32}$"
+  },
+  "variant": {
+   "type": "string",
+   "pattern": "^[a-z0-9_-]{1,16}$"
+  },
+  "title": {
+   "type": "string",
+   "maxLength": 500
+  },
+  "figs": {
+   "type": "object",
+   "maxProperties": 100,
+   "propertyNames": {
+    "pattern": "^[a-z][a-z0-9_]{0,15}$"
+   },
+   "additionalProperties": {
+    "$ref": "figure.schema.json"
+   }
+  },
+  "pages": {
+   "type": "array",
+   "minItems": 1,
+   "maxItems": 500,
+   "items": {
+    "type": "object",
+    "required": [
+     "slots"
+    ],
+    "additionalProperties": false,
+    "properties": {
+     "master": {
+      "type": "string",
+      "pattern": "^[a-z0-9_-]{1,16}$"
+     },
+     "slots": {
+      "type": "object",
+      "maxProperties": 40,
+      "additionalProperties": {
+       "$ref": "#/$defs/slot"
+      }
+     }
+    }
+   }
+  }
+ },
+ "$defs": {
+  "slot": {
+   "type": "object",
+   "additionalProperties": false,
+   "properties": {
+    "text": {
+     "type": "string",
+     "maxLength": 20000
+    },
+    "items": {
+     "type": "array",
+     "maxItems": 40,
+     "items": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+       "ref": {
+        "type": "string",
+        "maxLength": 40
+       },
+       "no": {
+        "type": "string",
+        "maxLength": 12
+       },
+       "text": {
+        "type": "string",
+        "maxLength": 2000
+       }
+      }
+     }
+    },
+    "fig": {
+     "type": "string",
+     "pattern": "^[a-z][a-z0-9_]{0,15}$"
+    },
+    "no": {
+     "type": "string",
+     "maxLength": 12
+    }
+   }
+  }
+ }
+}

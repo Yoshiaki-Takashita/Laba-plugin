@@ -21,7 +21,7 @@ description: "学術レポート・小論文・論文・研究報告（どの分
 | ② 主張マップ | 結論←主張←根拠の木。根拠のない主張は書かない。自分の論点（一次資料を細かく読んで見つけた点）を 1 つ | `structure.md` §2 |
 | ③ 調査と台帳 | 検索先を回り、1 文献 1 行の台帳（V0〜V3）を作る。V0 は書かない。「」は V3 だけ。頁は V3 だけ | `citation-ledger.md` |
 | ④ 構成 | 分野の標準構成。冒頭に構成。序論の型（問い・範囲・主張）、反論と射程、学説・判例の扱い | `structure.md` §3〜7 |
-| ⑤ 本文 | 日本語の学部生以下は `prose-ja.md`、大学院生以上の日本語（法律文が手本）は `prose-ja-law.md`、英語は `prose-en.md`。禁止語の一覧ではなく、実測で効いた目印を消す | 言語と段で 1 つ |
+| ⑤ 本文 | **教科書・入門書・解説書・「教科書のように」の本文は `textbook-prose.md`（型 `textbook`。文・段落・見出し・強調・事例・注・図題の数値と順序）**。日本語の学部生以下は `prose-ja.md`、大学院生以上の日本語（法律文が手本）は `prose-ja-law.md`、英語は `prose-en.md`。禁止語の一覧ではなく、実測で効いた目印を消す | 言語と段で 1 つ |
 | ⑥ 図と表 | 一文で言えるメッセージ→型→白黒で描き切る→色を 1 つ（#943522）→図題に読み方と数字。表は横罫 3 本 | `figures.md` |
 | ⑦ 体裁 | Word は黒一色・囲みなし・フッターに頁番号。スライドは図形で描く | `word-format.md`・`slides.md` |
 | ⑧ 検証 | 引用の再照合・数値の再計算・本文を見ていない別エージェントの査読（段の回数）・機械の点検（下の scripts）・最終チェック | `verification.md` |
@@ -34,6 +34,7 @@ node ${CLAUDE_PLUGIN_ROOT}/skills/reportkiller/scripts/prose_check.js --level gr
 node ${CLAUDE_PLUGIN_ROOT}/skills/reportkiller/scripts/prose_check.js --level paper --lang en --ledger 台帳.txt draft.txt
 node ${CLAUDE_PLUGIN_ROOT}/skills/reportkiller/scripts/ledger_check.js 本文.txt --ledger 台帳.txt       # V0・ID の重複・本文に無い ID・頁数の食い違い・V3 でない行の「」と頁
 python3 ${CLAUDE_PLUGIN_ROOT}/skills/reportkiller/scripts/fig_check.py 図.svg --width-mm 156           # 図の 22 項目＋建築の図の 6 項目（PNG は色と dpi だけ）
+node ${CLAUDE_PLUGIN_ROOT}/skills/reportkiller/scripts/textbook_check.js 本文.md                # 教科書型の本文の形（文の長さ・段落・見出し・太字・文末）。論文・レジュメの型は上の prose_check.js
 ```
 
 所見は error が 0 になるまで直す。warn は残す理由を書けるなら残す。1 つの印だけで書き直さない。指摘は「どの文が・何字で・どこで分けるか」から始め、書き直しは利用者が選ぶ。

@@ -22,6 +22,7 @@ EXCLUDE=(
   skills/laba/scripts/slides/tests        # スライドの回帰試験
   skills/gnoto-lite/tests/app_roundtrip.js  # GNOTO Lite の試験（見本の tests/fixtures/ は SPEC.md が参照するので残す）
   skills/gnoto-lite/tests/test_gnoto.py
+  skills/laba-textbook/tests              # 教科書の紙面・図の試験
 )
 
 idx="$(mktemp)"; trap 'rm -f "$idx"' EXIT

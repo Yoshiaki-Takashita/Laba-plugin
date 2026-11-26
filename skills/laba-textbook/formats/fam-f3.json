@@ -1,0 +1,124 @@
+{
+ "v": 1,
+ "unit": "w1000",
+ "avoid": "画像・本文の書き写し。座標・色・書体・字の大きさ・番号・柱の指定。",
+ "masters": {
+  "body": {
+   "role": "本文ページ",
+   "tpl": "body（図があれば bodyfig・box があれば bodybox）",
+   "slots": {
+    "h2": {
+     "role": "節の見出し",
+     "kind": "text",
+     "required": false,
+     "style": "h2",
+     "maxChars": 20
+    },
+    "h3": {
+     "role": "項の見出し",
+     "kind": "text",
+     "required": false,
+     "style": "h3",
+     "maxChars": 24
+    },
+    "body": {
+     "role": "本文",
+     "kind": "md",
+     "required": true,
+     "style": "body",
+     "grid": {
+      "linesPerPage": 39
+     }
+    },
+    "aside": {
+     "role": "補足（小さい字の注）",
+     "kind": "notes",
+     "required": false,
+     "style": "note",
+     "perNote": {
+      "charsPerLine": 10,
+      "maxLines": 6
+     }
+    },
+    "box": {
+     "role": "事例・設例（または発展の読み物）の枠",
+     "kind": "md",
+     "required": false,
+     "style": "box-text",
+     "maxChars": 400
+    },
+    "fig": {
+     "role": "図・表",
+     "kind": "fig",
+     "required": false
+    },
+    "point": {
+     "role": "節末の要点・確認",
+     "kind": "md",
+     "required": false,
+     "style": "box-text",
+     "maxChars": 300
+    }
+   }
+  },
+  "chapter": {
+   "role": "章扉",
+   "tpl": "chapter",
+   "slots": {
+    "title": {
+     "role": "章の題",
+     "kind": "text",
+     "required": true,
+     "style": "h1",
+     "maxChars": 24
+    },
+    "overview": {
+     "role": "章頭の概要",
+     "kind": "md",
+     "required": false,
+     "style": "overview",
+     "maxChars": 270
+    }
+   }
+  }
+ },
+ "id": "fam-f3",
+ "name": "法学入門 F3",
+ "scene": "入門書。字が小さく行数が多い（39 行）。外側の注欄・設例と展開例・灰のコラム。",
+ "paper": {
+  "ratio": 1.4122,
+  "widthMm": 200
+ },
+ "base": {
+  "em": 17.56,
+  "pitch": 29.09,
+  "lines": 39,
+  "chars": 34,
+  "indent": 1,
+  "margin": {
+   "top": 152.5,
+   "inner": 94
+  },
+  "side": {
+   "w": 222,
+   "gap": 17
+  },
+  "folio": {
+   "y": 1367.85,
+   "size": 17.8,
+   "run": "head",
+   "dot": false
+  }
+ },
+ "variants": {
+  "b4": {
+   "title": "入門書",
+   "figWord": "表",
+   "punct": "、。",
+   "aside": "side-column",
+   "box": "corner-box",
+   "status": "provisional"
+  }
+ },
+ "_note": "数値は紙の幅を 1000 とした値（w1000）。実寸（mm・pt）は paper.widthMm で決まる仮の値。status=provisional は測定が 1〜2 ページ・または本の判別が仮。画像・本文は含まない。"
+}

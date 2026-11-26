@@ -1,0 +1,348 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "figure.schema.json",
+ "title": "図の記述（型＋要素）。座標・色・線の太さは書かない（GNOTO が型の規則から決める）。キー名 style・src・href・html は GNOTO の読み込みで落ちるので使わない",
+ "type": "object",
+ "required": [
+  "kind"
+ ],
+ "additionalProperties": false,
+ "properties": {
+  "kind": {
+   "enum": [
+    "flow",
+    "tree",
+    "table",
+    "matrix",
+    "timeline",
+    "concept",
+    "relation"
+   ]
+  },
+  "caption": {
+   "type": "object",
+   "additionalProperties": false,
+   "properties": {
+    "no": {
+     "type": "string",
+     "maxLength": 12
+    },
+    "title": {
+     "type": "string",
+     "maxLength": 40
+    }
+   }
+  },
+  "width": {
+   "enum": [
+    "text",
+    "wide",
+    "page"
+   ]
+  },
+  "direction": {
+   "enum": [
+    "down",
+    "right"
+   ]
+  },
+  "nodes": {
+   "type": "array",
+   "maxItems": 24,
+   "items": {
+    "type": "object",
+    "required": [
+     "id",
+     "label"
+    ],
+    "additionalProperties": false,
+    "properties": {
+     "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9_]{1,16}$"
+     },
+     "label": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 24
+     },
+     "shape": {
+      "enum": [
+       "box",
+       "round",
+       "ellipse"
+      ]
+     },
+     "tone": {
+      "enum": [
+       "base",
+       "key",
+       "mute"
+      ]
+     },
+     "group": {
+      "type": "string",
+      "pattern": "^[a-z0-9_]{1,16}$"
+     },
+     "pict": {
+      "enum": [
+       "person",
+       "building",
+       "land",
+       "none"
+      ]
+     },
+     "parent": {
+      "type": "string",
+      "pattern": "^[a-z0-9_]{1,16}$"
+     }
+    }
+   }
+  },
+  "edges": {
+   "type": "array",
+   "maxItems": 24,
+   "items": {
+    "type": "object",
+    "required": [
+     "from",
+     "to"
+    ],
+    "additionalProperties": false,
+    "properties": {
+     "from": {
+      "type": "string",
+      "pattern": "^[a-z0-9_]{1,16}$"
+     },
+     "to": {
+      "type": "string",
+      "pattern": "^[a-z0-9_]{1,16}$"
+     },
+     "label": {
+      "type": "string",
+      "maxLength": 12
+     },
+     "head": {
+      "enum": [
+       "arrow",
+       "none",
+       "both"
+      ]
+     },
+     "line": {
+      "enum": [
+       "solid",
+       "dashed",
+       "thick",
+       "wedge",
+       "cancel"
+      ]
+     }
+    }
+   }
+  },
+  "groups": {
+   "type": "array",
+   "maxItems": 6,
+   "items": {
+    "type": "object",
+    "required": [
+     "id"
+    ],
+    "additionalProperties": false,
+    "properties": {
+     "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9_]{1,16}$"
+     },
+     "label": {
+      "type": "string",
+      "maxLength": 16
+     }
+    }
+   }
+  },
+  "treeStyle": {
+   "enum": [
+    "bracket",
+    "nested",
+    "region"
+   ]
+  },
+  "head": {
+   "type": "array",
+   "minItems": 2,
+   "maxItems": 6,
+   "items": {
+    "type": "string",
+    "maxLength": 16
+   }
+  },
+  "rows": {
+   "type": "array",
+   "maxItems": 12,
+   "items": {
+    "type": "array",
+    "maxItems": 6,
+    "items": {
+     "type": "string",
+     "maxLength": 40
+    }
+   }
+  },
+  "rowHead": {
+   "type": "boolean"
+  },
+  "corner": {
+   "enum": [
+    "none",
+    "diag"
+   ]
+  },
+  "rowAxis": {
+   "type": "string",
+   "maxLength": 12
+  },
+  "colAxis": {
+   "type": "string",
+   "maxLength": 12
+  },
+  "events": {
+   "type": "array",
+   "maxItems": 8,
+   "items": {
+    "type": "object",
+    "required": [
+     "when",
+     "what"
+    ],
+    "additionalProperties": false,
+    "properties": {
+     "when": {
+      "type": "string",
+      "maxLength": 16
+     },
+     "what": {
+      "type": "string",
+      "maxLength": 30
+     },
+     "to": {
+      "type": "string",
+      "maxLength": 16
+     }
+    }
+   }
+  },
+  "note": {
+   "type": "string",
+   "maxLength": 80
+  }
+ },
+ "allOf": [
+  {
+   "if": {
+    "properties": {
+     "kind": {
+      "const": "flow"
+     }
+    }
+   },
+   "then": {
+    "required": [
+     "nodes",
+     "edges"
+    ]
+   }
+  },
+  {
+   "if": {
+    "properties": {
+     "kind": {
+      "const": "relation"
+     }
+    }
+   },
+   "then": {
+    "required": [
+     "nodes",
+     "edges"
+    ]
+   }
+  },
+  {
+   "if": {
+    "properties": {
+     "kind": {
+      "const": "concept"
+     }
+    }
+   },
+   "then": {
+    "required": [
+     "nodes"
+    ]
+   }
+  },
+  {
+   "if": {
+    "properties": {
+     "kind": {
+      "const": "tree"
+     }
+    }
+   },
+   "then": {
+    "required": [
+     "nodes"
+    ]
+   }
+  },
+  {
+   "if": {
+    "properties": {
+     "kind": {
+      "const": "table"
+     }
+    }
+   },
+   "then": {
+    "required": [
+     "head",
+     "rows"
+    ]
+   }
+  },
+  {
+   "if": {
+    "properties": {
+     "kind": {
+      "const": "matrix"
+     }
+    }
+   },
+   "then": {
+    "required": [
+     "head",
+     "rows",
+     "rowAxis",
+     "colAxis"
+    ]
+   }
+  },
+  {
+   "if": {
+    "properties": {
+     "kind": {
+      "const": "timeline"
+     }
+    }
+   },
+   "then": {
+    "required": [
+     "events"
+    ]
+   }
+  }
+ ],
+ "$defs": {}
+}

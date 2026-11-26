@@ -1,0 +1,174 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "page2-lite.schema.json",
+ "title": "content.page2 のうち、Laba が書く部分（スロット方式）。GNOTO の pgSanPage2 が通す形（キー名・深さ 5 まで・文字列に < > を含めない）に合わせてある",
+ "type": "object",
+ "required": [
+  "v",
+  "fmt",
+  "pages",
+  "lite"
+ ],
+ "additionalProperties": true,
+ "properties": {
+  "v": {
+   "const": 2
+  },
+  "paper": {
+   "type": "object",
+   "required": [
+    "ratio",
+    "widthMm"
+   ],
+   "additionalProperties": false,
+   "properties": {
+    "ratio": {
+     "type": "number",
+     "minimum": 0.2,
+     "maximum": 24
+    },
+    "widthMm": {
+     "type": "number",
+     "minimum": 50,
+     "maximum": 1200
+    }
+   }
+  },
+  "fmt": {
+   "type": "object",
+   "required": [
+    "id",
+    "v",
+    "widthMm"
+   ],
+   "additionalProperties": false,
+   "properties": {
+    "id": {
+     "type": "string",
+     "pattern": "^[a-z0-9-]{1,32}$"
+    },
+    "variant": {
+     "type": "string",
+     "pattern": "^[a-z0-9_]{1,16}$"
+    },
+    "v": {
+     "type": "integer",
+     "minimum": 1,
+     "maximum": 999
+    },
+    "widthMm": {
+     "type": "number",
+     "minimum": 50,
+     "maximum": 1200
+    }
+   }
+  },
+  "pages": {
+   "type": "array",
+   "minItems": 1,
+   "maxItems": 500,
+   "items": {
+    "type": "object",
+    "required": [
+     "id",
+     "master"
+    ],
+    "additionalProperties": false,
+    "properties": {
+     "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9_]{1,16}$"
+     },
+     "master": {
+      "type": "string",
+      "pattern": "^[a-z0-9_]{1,16}$"
+     }
+    }
+   }
+  },
+  "figs": {
+   "type": "object",
+   "maxProperties": 100,
+   "propertyNames": {
+    "pattern": "^[a-z][a-z0-9_]{0,15}$"
+   },
+   "additionalProperties": {
+    "$ref": "figure.schema.json"
+   }
+  },
+  "lite": {
+   "type": "object",
+   "required": [
+    "v",
+    "pages"
+   ],
+   "additionalProperties": false,
+   "properties": {
+    "v": {
+     "const": 1
+    },
+    "pages": {
+     "type": "array",
+     "minItems": 1,
+     "maxItems": 500,
+     "items": {
+      "type": "object",
+      "required": [
+       "id",
+       "master"
+      ],
+      "properties": {
+       "id": {
+        "type": "string",
+        "pattern": "^[a-z0-9_]{1,16}$"
+       },
+       "master": {
+        "type": "string",
+        "pattern": "^[a-z0-9_]{1,16}$"
+       },
+       "fig": {
+        "type": "string",
+        "pattern": "^[a-z][a-z0-9_]{0,15}$"
+       },
+       "aside": {
+        "type": "array",
+        "maxItems": 40,
+        "items": {
+         "type": "object",
+         "required": [
+          "rows"
+         ],
+         "additionalProperties": false,
+         "properties": {
+          "ref": {
+           "type": "string",
+           "pattern": "^[a-z0-9_]{1,16}$"
+          },
+          "no": {
+           "type": "string",
+           "maxLength": 12
+          },
+          "rows": {
+           "type": "string",
+           "pattern": "^[a-z0-9_]{1,16}( [a-z0-9_]{1,16})*$"
+          }
+         }
+        }
+       }
+      },
+      "additionalProperties": {
+       "type": [
+        "array",
+        "string"
+       ],
+       "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9_]{1,16}$"
+       }
+      }
+     }
+    }
+   }
+  }
+ }
+}

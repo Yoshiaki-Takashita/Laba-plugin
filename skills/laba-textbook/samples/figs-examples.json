@@ -1,0 +1,215 @@
+{
+ "flow": {
+  "kind": "flow",
+  "direction": "down",
+  "caption": {
+   "title": "判断の流れ"
+  },
+  "nodes": [
+   {
+    "id": "a",
+    "label": "出発点"
+   },
+   {
+    "id": "b",
+    "label": "条件を満たす"
+   },
+   {
+    "id": "c",
+    "label": "結論 甲",
+    "shape": "ellipse",
+    "tone": "key"
+   },
+   {
+    "id": "d",
+    "label": "結論 乙",
+    "shape": "ellipse"
+   }
+  ],
+  "edges": [
+   {
+    "from": "a",
+    "to": "b"
+   },
+   {
+    "from": "b",
+    "to": "c",
+    "label": "はい"
+   },
+   {
+    "from": "b",
+    "to": "d",
+    "label": "いいえ",
+    "line": "dashed"
+   }
+  ]
+ },
+ "tree": {
+  "kind": "tree",
+  "treeStyle": "bracket",
+  "caption": {
+   "title": "分類"
+  },
+  "nodes": [
+   {
+    "id": "r",
+    "label": "全体"
+   },
+   {
+    "id": "a",
+    "label": "第 1 類",
+    "parent": "r"
+   },
+   {
+    "id": "b",
+    "label": "第 2 類",
+    "parent": "r"
+   },
+   {
+    "id": "a1",
+    "label": "1-a",
+    "parent": "a"
+   },
+   {
+    "id": "a2",
+    "label": "1-b",
+    "parent": "a"
+   }
+  ]
+ },
+ "table": {
+  "kind": "table",
+  "caption": {
+   "title": "比較"
+  },
+  "head": [
+   "項目",
+   "甲説",
+   "乙説"
+  ],
+  "rows": [
+   [
+    "結論",
+    "可",
+    "不可"
+   ],
+   [
+    "理由",
+    "理由 1",
+    "理由 2"
+   ]
+  ],
+  "rowHead": true
+ },
+ "matrix": {
+  "kind": "matrix",
+  "caption": {
+   "title": "場合分け"
+  },
+  "rowAxis": "主体",
+  "colAxis": "行為",
+  "corner": "diag",
+  "head": [
+   "作為",
+   "不作為"
+  ],
+  "rows": [
+   [
+    "A の場合",
+    "○",
+    "△"
+   ],
+   [
+    "B の場合",
+    "×",
+    "○"
+   ]
+  ]
+ },
+ "timeline": {
+  "kind": "timeline",
+  "caption": {
+   "title": "経過"
+  },
+  "events": [
+   {
+    "when": "4 月",
+    "what": "契約を結ぶ"
+   },
+   {
+    "when": "6 月",
+    "what": "履行を求める"
+   },
+   {
+    "when": "9 月",
+    "what": "訴えを起こす"
+   }
+  ]
+ },
+ "concept": {
+  "kind": "concept",
+  "caption": {
+   "title": "入れ子の構造"
+  },
+  "nodes": [
+   {
+    "id": "o",
+    "label": "全体",
+    "tone": "mute"
+   },
+   {
+    "id": "p",
+    "label": "部分 1",
+    "group": "o"
+   },
+   {
+    "id": "q",
+    "label": "部分 2",
+    "group": "o"
+   }
+  ],
+  "groups": [
+   {
+    "id": "o",
+    "label": "全体"
+   }
+  ]
+ },
+ "relation": {
+  "kind": "relation",
+  "caption": {
+   "title": "当事者の関係"
+  },
+  "nodes": [
+   {
+    "id": "a",
+    "label": "A",
+    "pict": "person"
+   },
+   {
+    "id": "b",
+    "label": "B",
+    "pict": "person"
+   },
+   {
+    "id": "l",
+    "label": "甲土地",
+    "pict": "land"
+   }
+  ],
+  "edges": [
+   {
+    "from": "a",
+    "to": "b",
+    "label": "売買",
+    "line": "thick"
+   },
+   {
+    "from": "b",
+    "to": "l",
+    "label": "登記",
+    "line": "dashed"
+   }
+  ]
+ }
+}

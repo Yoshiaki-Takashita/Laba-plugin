@@ -1,0 +1,6 @@
+book	family	n_images	kind	page_kinds	parts	confidence	note
+B1	F1	32	刑法総論型	はしがき・目次・章扉・節扉+本文・本文・本文+図・本文+囲み・図表のみ	band-title outline-num rule-dot bar-pair case-frame fig-tag fig-frame folio chapter-band side-note shaded-table	高	28字x30行・傍注列・CASE枠・CHART
+B2	F1	34	会社法型	目次・本文・本文+囲み(Column)・図表切り抜き	fig-tag column-box note-rule bar-pair runin-head shaded-table	高	35字x30行・図表n-m・Column・notes罫
+B3	F1(仮)	10	民事訴訟法型	目次・節扉+本文・本文・書面の模型枠・概念図	rule-dot toc-chapter form-frame fig-tag	中	字寸は再測定が要る（アプリに変種なし）
+B4	F3	13	民法入門型	章扉・本文+注欄・資料切り抜き	corner-box gray-column 注欄	中	字16.1相当・外側の注欄・設例/展開例
+B5	F2	10	UNIT型	本文(サイドヘッド・脚注)・灰ベタ大見出し・図表(影つき)	gray-head dotted-box fig-shadow foot-rule	中	上の柱・脚注・サイドヘッド

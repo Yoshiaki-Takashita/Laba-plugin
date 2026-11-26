@@ -1,0 +1,146 @@
+{
+ "v": 1,
+ "unit": "w1000",
+ "avoid": "画像・本文の書き写し。座標・色・書体・字の大きさ・番号・柱の指定。",
+ "masters": {
+  "body": {
+   "role": "本文ページ",
+   "tpl": "body（図があれば bodyfig・box があれば bodybox）",
+   "slots": {
+    "h2": {
+     "role": "節の見出し",
+     "kind": "text",
+     "required": false,
+     "style": "h2",
+     "maxChars": 20
+    },
+    "h3": {
+     "role": "項の見出し",
+     "kind": "text",
+     "required": false,
+     "style": "h3",
+     "maxChars": 24
+    },
+    "body": {
+     "role": "本文",
+     "kind": "md",
+     "required": true,
+     "style": "body",
+     "grid": {
+      "linesPerPage": 30
+     }
+    },
+    "aside": {
+     "role": "補足（小さい字の注）",
+     "kind": "notes",
+     "required": false,
+     "style": "note",
+     "perNote": {
+      "charsPerLine": 10,
+      "maxLines": 6
+     }
+    },
+    "box": {
+     "role": "事例・設例（または発展の読み物）の枠",
+     "kind": "md",
+     "required": false,
+     "style": "box-text",
+     "maxChars": 400
+    },
+    "fig": {
+     "role": "図・表",
+     "kind": "fig",
+     "required": false
+    },
+    "point": {
+     "role": "節末の要点・確認",
+     "kind": "md",
+     "required": false,
+     "style": "box-text",
+     "maxChars": 300
+    }
+   }
+  },
+  "chapter": {
+   "role": "章扉",
+   "tpl": "chapter",
+   "slots": {
+    "title": {
+     "role": "章の題",
+     "kind": "text",
+     "required": true,
+     "style": "h1",
+     "maxChars": 24
+    },
+    "overview": {
+     "role": "章頭の概要",
+     "kind": "md",
+     "required": false,
+     "style": "overview",
+     "maxChars": 270
+    }
+   }
+  }
+ },
+ "id": "fam-f1",
+ "name": "法学教科書 F1",
+ "scene": "法学の体系書。1 段の本文・下端のノンブル兼柱・縦帯ではさむ見出し・図表の帯。定義は本文の太字、事例は灰の太い角丸の枠、補足は小さい字の脇の注。",
+ "paper": {
+  "ratio": 1.422,
+  "widthMm": 148
+ },
+ "base": {
+  "em": 21.46,
+  "pitch": 39.14,
+  "lines": 30,
+  "chars": 35,
+  "indent": 1,
+  "margin": {
+   "top": 135.5,
+   "inner": 133
+  },
+  "side": null,
+  "folio": {
+   "y": 1346.3,
+   "size": 17.9,
+   "run": "head",
+   "dot": true
+  }
+ },
+ "variants": {
+  "b1": {
+   "title": "刑法総論型",
+   "chars": 28,
+   "pitch": 38.97,
+   "margin": {
+    "top": 136,
+    "inner": 134.8
+   },
+   "side": {
+    "w": 154,
+    "gap": 34.8
+   },
+   "figWord": "CHART",
+   "punct": "，．",
+   "aside": "side-note",
+   "box": "case-frame",
+   "status": "measured"
+  },
+  "b2": {
+   "title": "会社法型",
+   "chars": 35,
+   "pitch": 39.14,
+   "margin": {
+    "top": 134.5,
+    "inner": 133
+   },
+   "side": null,
+   "figWord": "図表",
+   "punct": "，．",
+   "aside": "note-rule",
+   "box": "column-box",
+   "status": "provisional"
+  }
+ },
+ "_note": "数値は紙の幅を 1000 とした値（w1000）。実寸（mm・pt）は paper.widthMm で決まる仮の値。status=provisional は測定が 1〜2 ページ・または本の判別が仮。画像・本文は含まない。"
+}

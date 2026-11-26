@@ -1,0 +1,115 @@
+{
+ "format": "fam-f1",
+ "variant": "b1",
+ "title": "見本（意味のない文）",
+ "figs": {
+  "f1": {
+   "kind": "flow",
+   "direction": "down",
+   "caption": {
+    "title": "判断の流れ"
+   },
+   "width": "text",
+   "groups": [
+    {
+     "id": "g1",
+     "label": "第 1 段階"
+    }
+   ],
+   "nodes": [
+    {
+     "id": "a",
+     "label": "出発点",
+     "group": "g1"
+    },
+    {
+     "id": "b",
+     "label": "条件 1 を満たす",
+     "group": "g1"
+    },
+    {
+     "id": "c",
+     "label": "条件 2 を満たす"
+    },
+    {
+     "id": "d",
+     "label": "結論 甲",
+     "shape": "ellipse",
+     "tone": "key"
+    },
+    {
+     "id": "e",
+     "label": "結論 乙",
+     "shape": "ellipse"
+    }
+   ],
+   "edges": [
+    {
+     "from": "a",
+     "to": "b"
+    },
+    {
+     "from": "b",
+     "to": "c",
+     "label": "はい"
+    },
+    {
+     "from": "b",
+     "to": "e",
+     "label": "いいえ",
+     "line": "dashed"
+    },
+    {
+     "from": "c",
+     "to": "d",
+     "label": "はい"
+    },
+    {
+     "from": "c",
+     "to": "e",
+     "label": "いいえ",
+     "line": "dashed"
+    }
+   ]
+  }
+ },
+ "pages": [
+  {
+   "master": "chapter",
+   "slots": {
+    "title": {
+     "text": "第 1 章 見本の章"
+    },
+    "overview": {
+     "text": "この章では、見本の論点を 3 つ扱う。\n\n- 論点 1\n- 論点 2\n- 論点 3"
+    }
+   }
+  },
+  {
+   "master": "body",
+   "slots": {
+    "h2": {
+     "text": "1 見本の節"
+    },
+    "body": {
+     "text": "ここに本文が入る。**要の語**は太字にする。この文の末尾に注の印を置く。[^n1]\n\nつづく段落。ここも見本の文である。"
+    },
+    "aside": {
+     "items": [
+      {
+       "ref": "n1",
+       "no": "1",
+       "text": "補足の見本。短く書く。"
+      }
+     ]
+    },
+    "box": {
+     "text": "事例の見本。登場人物 A が B に何かをした。"
+    },
+    "fig": {
+     "fig": "f1"
+    }
+   }
+  }
+ ]
+}

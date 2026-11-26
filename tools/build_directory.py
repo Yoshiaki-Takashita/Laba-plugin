@@ -98,7 +98,7 @@ def main():
         txt = txt[:m.end()] + "\n" + frag + "\n" + txt[m.end():]
         with open(sp, "w", encoding="utf-8", newline="\n") as fh:
             fh.write(txt)
-    skills_with_scripts = {"laba", "laba-figures", "laba-slides", "laba-hanrei", "laba-score", "gnoto-lite", "reportkiller"}
+    skills_with_scripts = {"laba", "laba-figures", "laba-slides", "laba-hanrei", "laba-score", "gnoto-lite", "reportkiller", "laba-textbook"}
     missing = skills_with_scripts - {f[:-3] for f in os.listdir(top)}
     if missing:
         print("失敗：差し込みの文書がないスキル：%s" % sorted(missing)); return 1
