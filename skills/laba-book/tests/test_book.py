@@ -82,6 +82,19 @@ class Outline(unittest.TestCase):
         self.assertIn("換気温度", joined)
         self.assertIn("photo", joined)
 
+    def test_fig_want(self):
+        o = self.good()
+        o["sections"][0]["fig"] = {"kind": "table", "want": "chart"}
+        errs, warns = bs.check_outline(o)
+        self.assertEqual(errs, [])
+        self.assertTrue(any("chart" in w for w in warns))
+        o["sections"][1]["fig"] = {"want": "pie"}
+        errs, _ = bs.check_outline(o)
+        self.assertTrue(any("pie" in e for e in errs))
+        o["sections"][1]["fig"] = {"why": "x"}
+        errs, _ = bs.check_outline(o)
+        self.assertTrue(any("kind も want も無い" in e for e in errs))
+
     def test_example_in_reference_is_valid(self):
         with open(os.path.join(BOOK, "references", "outline.md"), encoding="utf-8") as f:
             md = f.read()
@@ -106,6 +119,133 @@ class Targets(unittest.TestCase):
     def test_example_sentence_counts(self):
         # writer-brief の自作の例に書いた字数が本当か
         self.assertEqual([bs.clen(LONG), bs.clen(MID), bs.clen(SHORT.replace("**", ""))], [61, 59, 16])
+
+
+LEDGER = """ID | 完全な書誌 | 確認に使った URL | V0〜V3 | 使い方の印
+R01 | 甲大学「温室学」シラバス | https://example.org/a | V3 | 【構成】【ウェブ】
+R02 | 乙学会『用語集』「換気温度」の項 | https://example.org/b | V3 | 【一次】【ウェブ】
+R03 | 丙社の書籍ページ（目次だけ） | https://example.org/c | V2 | 【構成】【ウェブ】
+# 未確認（本文で使わない）
+U01 | 丁規則 第3条 | 探した先：コネクタ（つながっていない） | 未確認 | 次の手：コネクタのある環境で確かめる
+"""
+
+
+def good_map():
+    return {"seed": "温室", "kind": "word", "level": "ug", "field": "施設園芸",
+            "standard": {"check": ["R01", "R03"], "note": "シラバスと目次"},
+            "chapters": [{"no": 1, "title": "温室の環境", "concepts": ["c1", "c2", "c3", "c4", "c5"], "check": ["R01"]}],
+            "concepts": [{"id": "c1", "name": "室温", "pre": [], "check": ["R02"]},
+                         {"id": "c2", "name": "換気温度", "pre": ["c1"], "check": ["R02"]},
+                         {"id": "c3", "name": "開度", "pre": ["c2"], "check": ["R02"]},
+                         {"id": "c4", "name": "被覆", "pre": [], "check": ["R02"]},
+                         {"id": "c5", "name": "保温", "pre": ["c4"], "todo": ["乙学会の用語集"]}],
+            "excluded": [{"name": "植物工場", "why": "隣の分野"}], "write": {"chapter": 1}}
+
+
+class Map(unittest.TestCase):
+    def test_good(self):
+        errs, warns = bs.check_map(good_map(), bs.parse_ledger(LEDGER))
+        self.assertEqual(errs, [])
+        self.assertTrue(any("todo" in w for w in warns))
+
+    def test_cycle_missing_and_unconfirmed(self):
+        m = good_map()
+        m["concepts"][0]["pre"] = ["c3"]          # c1 → c3 → c2 → c1
+        m["concepts"][1]["check"] = ["U01"]      # 未確認の行を確認先に
+        m["concepts"][3]["check"] = ["R99"]      # 台帳に無い
+        del m["concepts"][4]["todo"]             # 確認先なし
+        m["standard"] = {}
+        errs, _ = bs.check_map(m, bs.parse_ledger(LEDGER))
+        j = "\n".join(errs)
+        for k in ("循環", "U01", "R99", "c5", "standard.check"):
+            self.assertIn(k, j, k)
+
+    def test_later_chapter_prereq_and_count(self):
+        m = good_map()
+        m["kind"] = "field"
+        m["chapters"].append({"no": 2, "title": "保温", "concepts": ["c5"], "check": ["R01"]})
+        m["chapters"][0]["concepts"] = ["c1", "c2", "c3", "c4"]
+        m["concepts"][0]["pre"] = ["c5"]
+        errs, warns = bs.check_map(m, bs.parse_ledger(LEDGER))
+        j = "\n".join(errs)
+        self.assertIn("後ろの章", j)
+        self.assertIn("概念が 4 個", j)
+        self.assertTrue(any("5〜15 章" in w for w in warns))
+
+    def test_example_in_reference_is_valid(self):
+        with open(os.path.join(BOOK, "references", "scope.md"), encoding="utf-8") as f:
+            md = f.read()
+        m = json.loads(re.search(r"```json\n(.*?)\n```", md, re.S).group(1))
+        errs, _ = bs.check_map(m)
+        self.assertEqual(errs, [])
+
+
+class Ledger(unittest.TestCase):
+    def test_parse_and_ok(self):
+        L = bs.parse_ledger(LEDGER)
+        self.assertEqual([r["id"] for r in L["rows"]], ["R01", "R02", "R03"])
+        self.assertEqual([u["id"] for u in L["unconfirmed"]], ["U01"])
+        errs, warns, st = bs.check_ledger(L)
+        self.assertEqual(errs, [])
+        self.assertEqual(st["byV"], [0, 0, 1, 2])
+
+    def test_v0_dup_url_absent(self):
+        bad = LEDGER + "R04 | 記憶の本 |  | V0 | 【一次】\nR02 | 重複 | https://x | V3 | 【ウェブ】\nR05 | 戊法 第9条 |  | V3 | 【一次】\nU02 | 何か | 探した先：検索 | 未確認 | 存在しない\n"
+        errs, warns, _ = bs.check_ledger(bs.parse_ledger(bad))
+        j = "\n".join(errs + warns)
+        for k in ("V0", "重複", "URL が空：R05", "存在しない", "条文・判例の行"):
+            self.assertIn(k, j, k)
+
+    def test_reference_example_parses(self):
+        with open(os.path.join(BOOK, "references", "sources.md"), encoding="utf-8") as f:
+            md = f.read()
+        block = re.search(r"```\n(ID \|.*?)\n```", md, re.S).group(1)
+        L = bs.parse_ledger(block)
+        self.assertEqual(len(L["rows"]), 3)
+        self.assertEqual(len(L["unconfirmed"]), 1)
+        errs, _, _ = bs.check_ledger(L)
+        self.assertEqual(errs, [])
+
+
+class Claims(unittest.TestCase):
+    def test_marks_and_candidates(self):
+        md = ("# 換気の基準\n\n:::box\nAの温室では、昼に室温が30度まで上がった。\n:::\n"
+              "室温が上がりすぎると作物が弱るので、決めた温度を超えたら天窓を開ける[R02]。"
+              "この決めた温度を、**換気温度**と呼ぶ。"
+              "換気温度は作物ごとに違い、トマトでは25度前後とされる。"
+              "なぜ窓を段階的に開けるのだろうか。"
+              "急に開けると室温が下がりすぎるからである[R01,R02]。\n\n"
+              ":::aside\n冬は保温のために窓を閉じる[U01]。\n:::\n"
+              ":::point\n- 換気温度は30度\n:::\n")
+        r = bs.claims(md, bs.parse_ledger(LEDGER))
+        self.assertFalse(r["pass"])
+        self.assertEqual(r["marked"], 3)
+        self.assertEqual(r["unmarked_claims"], 2)      # 定義の文・数の文（box と point は数えない）
+        self.assertEqual(r["cited_unconfirmed"], ["U01"])
+        sig = [u["signals"] for u in r["unmarked"]]
+        self.assertIn(["定義"], sig)
+
+    def test_v2_and_unknown(self):
+        md = "# 節\n\n目次では換気が先に来る[R03]。別の本もある[R09]。\n"
+        r = bs.claims(md, bs.parse_ledger(LEDGER))
+        self.assertEqual(r["cited_v2"], ["R03"])
+        self.assertEqual(r["unknown_ids"], ["R09"])
+
+    def test_clean_passes_and_strip(self):
+        md = "# 節\n\n**換気温度**と呼ぶ[R02]。窓は2つある。\n"
+        r = bs.claims(md, bs.parse_ledger(LEDGER))
+        self.assertTrue(r["pass"], r)
+        self.assertEqual(bs.strip_marks(md), "# 節\n\n**換気温度**と呼ぶ。窓は2つある。\n")
+
+    @unittest.skipUnless(HAS_NODE, "node が無い")
+    def test_gate_ignores_marks(self):
+        tmp = tempfile.mkdtemp()
+        para = LONG + SHORT.replace("**", "") + MID + "このため、真夏でも室温の上がりすぎを防げる。"
+        plain = "# 換気の基準\n\n" + "\n\n".join([para] * 4) + "\n"
+        marked = plain.replace("仕組みになっている。", "仕組みになっている[R01,R02]。")
+        g1 = bs.gate(write(tmp, "a.md", plain))
+        g2 = bs.gate(write(tmp, "b.md", marked))
+        self.assertEqual(g1["measure"], g2["measure"])
 
 
 @unittest.skipUnless(HAS_NODE, "node が無い")

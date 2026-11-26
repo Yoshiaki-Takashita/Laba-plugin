@@ -3,7 +3,7 @@
 ## 1. 範囲（扱う概念・外すもの）
 
 1. **資料つき**：資料にある概念・数・例を全部拾い、資料にないものは扱わない。拾った項目を `outline.json` の各節の `facts` に、資料の語のまま短く書く（後で担当が自分の分だけ読む）。
-2. **単語・分野**：扱う概念を 5〜15 個挙げ、**前提の向き**（Aを知らないとBが分からない）で並べる。1 節に新しい概念は 2〜4 個まで。外すもの（隣の分野・発展の話題）を `excluded` に書く。
+2. **単語・分野**：`scope.md` のとおり、標準の章立てを確認先つきで立て、概念の地図 `map.json` を作る（概念 5〜15・前提の向き・外すもの）。節の `terms` は地図の概念から取り、`todo`（確かめていない）の概念は定義しない。1 節に新しい概念は 2〜4 個まで。節の `facts` には、確かめた主張を台帳の ID つきで短く書く（例：`"換気温度は作物ごとに違う [R02]"`）。
 
 ## 2. 構成の規則（数は教科書の測定から。`textbook-prose.md` §1・§2）
 
@@ -11,7 +11,7 @@
 - 節の題は 8 字前後（20 字まで）、項の題は 5 字前後（8 字まで）。**名詞で止める**（「〜について」「〜とは」で終えない）。
 - 1 節は本文 1,200〜1,600 字・項 2〜4 個。
 - 各節は **事例（具体）→ 総説（定義・分類）→ 要件・手順 → 例外・比較** の順で開く。事例の枠は節の頭（見出しの直後）に置く。事例の無い題（現象の説明・年表）は、具体の場面の 1〜2 文から入る。
-- 図は「言葉より図が速い所」に 1 節 1 つまで。型は `flow`・`tree`・`table`・`matrix`・`timeline`・`concept`・`relation`（laba-textbook `figure-spec.md`）。図にしない所に図を置かない。
+- 図は「言葉より図が速い所」に 1 節 1 つまで。選び方は `figure-judgment.md`（判断の 12 行）。型は `flow`・`tree`・`table`・`matrix`・`timeline`・`concept`・`relation`（laba-textbook `figure-spec.md`）。案の型（compare・chart・scale など）に当たったら `want` に残す。図にしない所に図を置かない。
 - 太字にする語（定義する用語）を節ごとに 2〜6 個決め、**同じ語を 2 つの節で定義しない**（担当表）。
 
 ## 3. `outline.json` の形
@@ -27,7 +27,7 @@
    "excluded": []}
  ]}
 ```
-`case`＝事例の枠を置くか。`fig` は無ければ `null`。検査：`python3 ${CLAUDE_PLUGIN_ROOT}/skills/laba-book/scripts/book_state.py outline outline.json`。
+`case`＝事例の枠を置くか。`fig` は無ければ `null`（案の型に当たったら `{"kind": "table", "want": "chart", ...}`）。検査：`python3 ${CLAUDE_PLUGIN_ROOT}/skills/laba-book/scripts/book_state.py outline outline.json`。
 
 ## 4. 本文の形（役割の印つき Markdown。節ごとに 1 ファイル）
 

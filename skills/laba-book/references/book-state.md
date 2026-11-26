@@ -17,9 +17,9 @@
  "next": {"chapter": 2, "why": "前の章の続き"}}
 ```
 - `status`：`planned`・`writing`・`done`。`done` の章には `summary`（3〜5 項目）が要る（`book_state.py check` が見る）。
-- `map`：概念の地図（L2 で足す予定。今は `null` か、範囲の一覧のファイル）。
+- `map`：概念の地図 `map.json` の場所（資料なしの題。形は `scope.md` 3）。続きの章は地図の `chapters` の順（前提の向き）で決める。資料つきの題は `null`。
 - `glossary.json`：`{"用語": {"ch": 1, "sec": "s2", "def": "1 文の定義"}}`。章をまたいで表記と定義の場所をそろえる。
-- `ledger.tsv`：出典の台帳（reportkiller `citation-ledger.md` の形）。紙面には出さない。
+- `ledger.tsv`：出典の台帳（形は `sources.md` 2。V0 の行なし・未確認の行は `U`）。章をまたいで引き継ぎ、ID を付け直さない。紙面には出さない。
 
 ## 2. 続きの回の読み方（トークンを抑える）
 

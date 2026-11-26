@@ -7,7 +7,10 @@
   book_state.py chapter book.json --no N [--title T] [--status planned|writing|done] [--summary "a;b;c"] [--outline P] [--text P]
   book_state.py check   book.json                      # book.json の形の検査
   book_state.py outline outline.json                   # 構成の検査（見出しの字数・項の数・用語の重複・図の型）
-  book_state.py gate    節.md [--level ug] [--json]    # 本文の数の検査（targets.json の目標。NG が 0 なら終了コード 0）
+  book_state.py gate    節.md [--level ug] [--json]    # 本文の数の検査（targets.json の目標。NG が 0 なら終了コード 0）。[R01] の印は外して測る
+  book_state.py map     map.json [--ledger ledger.tsv] # 概念の地図（P1・資料なしの題）の検査
+  book_state.py ledger  ledger.tsv [--json]            # 出典の台帳（P3）の検査：V0・重複・URL・確かめ方の印・未確認の数
+  book_state.py claims  節.md --ledger ledger.tsv [--json] [--strip 出力.md]  # 主張の印 [R01] と台帳の突き合わせ・ID の無い主張の候補
 数の元：reportkiller/references/textbook-prose.md §1 → scripts/targets.json（写し）。"""
 import json
 import os
@@ -19,6 +22,8 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(os.path.dirname(HERE))  # skills/
 CHECKER = os.path.join(ROOT, "reportkiller", "scripts", "textbook_check.js")
 FIG_KINDS = {"flow", "tree", "table", "matrix", "timeline", "concept", "relation"}
+FIG_WANT = {"compare", "chart", "scale", "brace", "bracket", "scene", "venn", "family", "ledger"}  # スキーマの案の型（まだ描けない。references/figure-judgment.md）
+MARK_RE = re.compile(r"\[((?:[RU]\d{1,3}[a-z]?)(?:\s*[,，、]\s*[RU]\d{1,3}[a-z]?)*)\]")
 LEVELS = {"hs", "ug", "grad"}
 KINDS = {"word", "field", "sourced"}
 STATUS = {"planned", "writing", "done"}
@@ -156,8 +161,15 @@ def check_outline(o, targets=None):
             if clen(term) > t["boldLenMax"]:
                 warns.append(f"{sid}: 用語「{term}」が {clen(term)} 字（太字は 9 字以下）")
         fig = s.get("fig")
-        if fig is not None and fig.get("kind") not in FIG_KINDS:
+        if fig is not None and fig.get("kind") is not None and fig.get("kind") not in FIG_KINDS:
             errs.append(f"{sid}: 図の型「{fig.get('kind')}」は使えない（{'・'.join(sorted(FIG_KINDS))}）")
+        if fig is not None and fig.get("want") is not None:
+            if fig["want"] not in FIG_WANT:
+                errs.append(f"{sid}: want「{fig['want']}」は案の型ではない（{'・'.join(sorted(FIG_WANT))}）")
+            else:
+                warns.append(f"{sid}: 当たった型 {fig['want']} はまだ描けない（kind={fig.get('kind')} で代える。figure-judgment.md）")
+        if fig is not None and fig.get("kind") is None and fig.get("want") is None:
+            errs.append(f"{sid}: fig に kind も want も無い（図にしないなら null）")
     return errs, warns
 
 
@@ -221,7 +233,17 @@ def gate(path, level="ug", targets=None):
     soft = set(T.get("soft", []))
     with open(path, encoding="utf-8") as f:
         md = f.read()
-    j = run_checker(path)
+    if MARK_RE.search(md):  # 主張の印 [R01] は紙面に出ないので、外してから測る
+        md = strip_marks(md)
+        import tempfile
+        with tempfile.NamedTemporaryFile("w", suffix=".md", delete=False, encoding="utf-8") as tf:
+            tf.write(md)
+        try:
+            j = run_checker(tf.name)
+        finally:
+            os.unlink(tf.name)
+    else:
+        j = run_checker(path)
     M = j["測定"]
     heads, paras, roles, seq = parse_md(md)
     res = []
@@ -298,6 +320,250 @@ def gate(path, level="ug", targets=None):
             "measure": {"字数": M["字数"], "文数": M["文数"], "文の中央値": sl["中央値"], "p90": sl["p90"], "変動係数": sl["変動係数"], "段落の中央値": M["段落"]["字の中央値"]}}
 
 
+# ---------- P1 概念の地図（map.json） ----------
+def check_map(m, ledger=None):
+    """ledger は parse_ledger の結果か None。誤りと注意を返す。"""
+    errs, warns = [], []
+    if not isinstance(m, dict):
+        return ["map.json が JSON の物でない"], []
+    if m.get("kind") not in ("word", "field"):
+        errs.append("kind は word・field（資料つきの題は地図を作らない）")
+    if not m.get("field"):
+        errs.append("field（分野）が空")
+    chs = m.get("chapters") or []
+    cons = m.get("concepts") or []
+    if not chs:
+        errs.append("chapters が空")
+    if m.get("kind") == "field" and chs and not 5 <= len(chs) <= 15:
+        warns.append(f"分野の章立てが {len(chs)} 章（標準の章立ては 5〜15 章が目安）")
+    ids = {}
+    for c in cons:
+        cid = c.get("id")
+        if not cid or cid in ids:
+            errs.append(f"概念の id が空か重複：{cid}")
+            continue
+        ids[cid] = c
+    ch_of = {}
+    nos = []
+    for ch in chs:
+        no = ch.get("no")
+        nos.append(no)
+        if not ch.get("title"):
+            errs.append(f"第 {no} 章の title が空")
+        for cid in ch.get("concepts") or []:
+            if cid not in ids:
+                errs.append(f"第 {no} 章の概念 {cid} が concepts に無い")
+            elif cid in ch_of:
+                errs.append(f"概念 {cid} が 2 つの章（{ch_of[cid]}・{no}）に入っている")
+            else:
+                ch_of[cid] = no
+    if len(nos) != len(set(nos)):
+        errs.append("章の no が重複")
+    w = (m.get("write") or {}).get("chapter")
+    wch = next((ch for ch in chs if ch.get("no") == w), None)
+    if wch is None:
+        errs.append("write.chapter（今回書く章）が chapters に無い")
+    else:
+        n = len(wch.get("concepts") or [])
+        if not 5 <= n <= 15:
+            errs.append(f"書く章（第 {w} 章）の概念が {n} 個（5〜15）")
+    # 前提の向き：存在・循環・後ろの章を前提にしない
+    for cid, c in ids.items():
+        for p in c.get("pre") or []:
+            if p not in ids:
+                errs.append(f"{cid} の前提 {p} が concepts に無い")
+            elif cid in ch_of and p in ch_of and isinstance(ch_of[p], int) and isinstance(ch_of[cid], int) and ch_of[p] > ch_of[cid]:
+                errs.append(f"{cid}（第 {ch_of[cid]} 章）が後ろの章の {p}（第 {ch_of[p]} 章）を前提にしている")
+    state = {}
+
+    def visit(x, stack):
+        if state.get(x) == 1:
+            errs.append("前提が循環している：" + " → ".join(stack + [x]))
+            return
+        if state.get(x) == 2:
+            return
+        state[x] = 1
+        for p in ids[x].get("pre") or []:
+            if p in ids:
+                visit(p, stack + [x])
+        state[x] = 2
+    for cid in ids:
+        visit(cid, [])
+    if not m.get("excluded"):
+        warns.append("excluded（外すもの）が無い（隣の分野・発展の話題を 1 つ以上）")
+    # 確認先
+    std = m.get("standard") or {}
+    if not std.get("check"):
+        if not std.get("note"):
+            errs.append("standard.check（標準の章立ての確認先）が空で、note に「確認先なし（未確認）」も無い")
+        else:
+            warns.append("標準の章立ての確認先が無い（未確認。報告の冒頭に書く）")
+    elif len(std.get("check")) < 2:
+        warns.append("標準の章立ての確認先が 1 つ（種類の違う 2 つ以上が目安）")
+    known = {r["id"]: r for r in (ledger or {}).get("rows", [])}
+    unconf = {u["id"] for u in (ledger or {}).get("unconfirmed", [])}
+
+    def ids_ok(where, lst, allow_v2=False):
+        for rid in lst or []:
+            if ledger is None:
+                continue
+            if rid in unconf:
+                errs.append(f"{where} の確認先 {rid} は未確認の行（確かめてから使う）")
+            elif rid not in known:
+                errs.append(f"{where} の確認先 {rid} が台帳に無い")
+            elif known[rid]["v"] == 2 and not allow_v2 and "【構成】" not in known[rid]["use"]:
+                warns.append(f"{where} の確認先 {rid} は V2（書誌だけ）。中身の根拠にはしない")
+    ids_ok("standard", std.get("check"), True)
+    no_check = 0
+    for ch in chs:
+        ids_ok(f"第 {ch.get('no')} 章", ch.get("check"), True)
+        if not ch.get("check") and not ch.get("todo"):
+            no_check += 1
+    if no_check:
+        warns.append(f"確認先（check か todo）の無い章が {no_check}")
+    todo = []
+    for cid, c in ids.items():
+        ids_ok(f"概念 {cid}", c.get("check"))
+        if not c.get("check"):
+            if c.get("todo"):
+                todo.append(cid)
+            else:
+                errs.append(f"概念 {cid}（{c.get('name', '')}）に確認先（check の台帳 ID か todo）が無い")
+    if todo:
+        warns.append("確かめていない概念（todo。本文で定義しない）：" + "・".join(todo))
+    return errs, warns
+
+
+# ---------- P3 出典の台帳（ledger.tsv） ----------
+LEDGER_ROW = re.compile(r"^\s*\|?\s*([A-Za-z0-9][A-Za-z0-9_.\-]{0,23})\s*\|\s*([^|]*?)\s*\|\s*([^|]*?)\s*\|\s*(V[0-3]|未確認)\s*\|\s*([^|]*?)\s*\|?\s*$")
+METHOD_TAGS = ("【コネクタ】", "【ウェブ】", "【利用者資料】")
+
+
+def parse_ledger(text):
+    rows, unconf, bad = [], [], []
+    for ln in text.replace("\r", "").split("\n"):
+        s = ln.strip()
+        if not s or s.startswith("#") or s.startswith("ID |") or s.startswith("ID|"):
+            continue
+        mm = LEDGER_ROW.match(s)
+        if not mm:
+            if "|" in s:
+                bad.append(s[:60])
+            continue
+        rid, bib, url, v, use = mm.groups()
+        if v == "未確認":
+            unconf.append({"id": rid, "bib": bib, "where": url, "next": use})
+        else:
+            rows.append({"id": rid, "bib": bib, "url": url, "v": int(v[1]), "use": use})
+    return {"rows": rows, "unconfirmed": unconf, "bad": bad}
+
+
+def check_ledger(L):
+    errs, warns = [], []
+    seen = set()
+    for r in L["rows"] + L["unconfirmed"]:
+        if r["id"] in seen:
+            errs.append(f"ID の重複：{r['id']}")
+        seen.add(r["id"])
+    for r in L["rows"]:
+        if r["v"] == 0:
+            errs.append(f"V0（記憶のみ）の行：{r['id']}（台帳に載せない。読んでいない出典は書かない）")
+        if r["id"].startswith("U"):
+            errs.append(f"{r['id']}：U で始まる ID は未確認の行に使う（V を付けた行は R など）")
+        if r["v"] >= 1 and not r["url"].strip() and "【利用者資料】" not in r["use"]:
+            errs.append(f"確認に使った URL が空：{r['id']}")
+        if not any(t in r["use"] for t in METHOD_TAGS):
+            warns.append(f"確かめ方の印（【コネクタ】【ウェブ】【利用者資料】）が無い：{r['id']}")
+        if r["v"] == 1 and "【二次】" not in r["use"]:
+            warns.append(f"V1 の行に【二次】が無い：{r['id']}")
+        if re.search(r"(法|令|規則)\s*第?\s*[0-9０-９一二三四五六七八九十百]+\s*条|判決|決定|判例", r["bib"]) and not any(t in r["use"] for t in ("【コネクタ】", "【ウェブ】")):
+            warns.append(f"条文・判例の行で確かめ方が【コネクタ】【ウェブ】でない：{r['id']}")
+    for u in L["unconfirmed"]:
+        if not u["id"].startswith("U"):
+            errs.append(f"未確認の行の ID は U で始める：{u['id']}")
+        if not u["where"].strip():
+            warns.append(f"未確認の行 {u['id']} に探した先が無い")
+        if re.search(r"存在しない|実在しない|架空", u["where"] + u["next"]):
+            errs.append(f"未確認の行 {u['id']} に「存在しない」と書いている（見つからない＝存在しない、ではない）")
+    for b in L["bad"]:
+        warns.append(f"台帳の形に合わない行：{b}")
+    byv = [sum(1 for r in L["rows"] if r["v"] == v) for v in range(4)]
+    return errs, warns, {"rows": len(L["rows"]), "byV": byv, "unconfirmed": len(L["unconfirmed"])}
+
+
+# ---------- 主張の印と台帳の突き合わせ ----------
+def strip_marks(md):
+    return re.sub(r"\s*" + MARK_RE.pattern, "", md)
+
+
+CLAIM_SIGNALS = [
+    ("数", re.compile(r"[0-9０-９]")),
+    ("条番号", re.compile(r"第\s*[一二三四五六七八九十百千0-9０-９]+\s*条")),
+    ("引用", re.compile(r"「[^」]{6,}」")),
+    ("定義", re.compile(r"\*\*[^*]+\*\*\s*(と(呼ぶ|呼ばれ|いう|言う|称する)|である。|とは)|(と(呼ぶ|呼ばれる|いう|称する))。?$")),
+    ("人名・外来の名", re.compile(r"[ァ-ヴー]{2,}[・＝][ァ-ヴー]{2,}|[A-Z][a-z]+ [A-Z][a-z]+")),
+    ("年・時代", re.compile(r"(世紀|年代|時代|明治|大正|昭和|平成|令和|江戸|室町|鎌倉)")),
+]
+NUM_FREE = re.compile(r"^(第?[一二三四五六七八九十]|[①-⑳]|[0-9０-９]+[つ点]?の)")
+
+
+def claim_sentences(md):
+    """主張の候補になる文：地の文と :::aside の中（:::box・:::point・:::fig・見出しは外す）。"""
+    heads, paras, roles, seq = parse_md(md)
+    texts = list(paras) + ["".join(r["lines"]) for r in roles if r["role"] == "aside"]
+    out = []
+    for t in texts:
+        for s in re.split(r"(?<=[。？！])", t):
+            s = s.strip()
+            if clen(s) > 1:
+                out.append(s)
+    return out
+
+
+def claims(md, L):
+    known = {r["id"]: r for r in L["rows"]}
+    unconf = {u["id"] for u in L["unconfirmed"]}
+    sents = claim_sentences(md)
+    marked, unknown, cite_unconf, cite_v2, cite_v0, unmarked = 0, [], [], [], [], []
+    for s in sents:
+        ms = MARK_RE.findall(s)
+        if ms:
+            marked += 1
+            for grp in ms:
+                for rid in re.split(r"\s*[,，、]\s*", grp):
+                    if rid in unconf:
+                        cite_unconf.append(rid)
+                    elif rid not in known:
+                        unknown.append(rid)
+                    elif known[rid]["v"] == 0:
+                        cite_v0.append(rid)
+                    elif known[rid]["v"] == 2:
+                        cite_v2.append(rid)
+            continue
+        if s.endswith(("？", "?")):
+            continue
+        plain = s.replace("**", "") if not re.search(r"\*\*[^*]+\*\*", s) else s
+        hits = [name for name, rx in CLAIM_SIGNALS if rx.search(plain if name != "定義" else s)]
+        if hits == ["数"] and not re.search(r"[0-9０-９]{2,}|[0-9０-９][.．][0-9０-９]|[0-9０-９]\s*(%|％|年|月|日|円|人|個|度|倍|km|kg|g|m|℃)", s):
+            hits = []  # 1 桁の数え数（2 つの〜）だけなら主張の印に数えない
+        if hits:
+            unmarked.append({"sent": strip_marks(s)[:60], "signals": hits})
+    errs = []
+    if unknown:
+        errs.append("台帳に無い ID：" + "・".join(sorted(set(unknown))))
+    if cite_unconf:
+        errs.append("未確認の行を根拠にした：" + "・".join(sorted(set(cite_unconf))))
+    if cite_v0:
+        errs.append("V0 の行を根拠にした：" + "・".join(sorted(set(cite_v0))))
+    if cite_v2:
+        errs.append("V2（書誌だけ）の行を中身の根拠にした：" + "・".join(sorted(set(cite_v2))))
+    if unmarked:
+        errs.append(f"ID の無い主張の候補 {len(unmarked)}")
+    return {"sentences": len(sents), "marked": marked, "unmarked_claims": len(unmarked), "unmarked": unmarked,
+            "unknown_ids": sorted(set(unknown)), "cited_unconfirmed": sorted(set(cite_unconf)), "cited_v2": sorted(set(cite_v2)),
+            "cited_v0": sorted(set(cite_v0)), "pass": not errs, "errors": errs}
+
+
 def print_gate(g):
     print(f"# {g['file']}（段 {g['level']}）：{'通過' if g['pass'] else 'NG あり'}")
     m = g["measure"]
@@ -367,6 +633,60 @@ def main(argv):
         if not errs:
             print("構成の誤り 0")
         return 1 if errs else 0
+    if cmd == "map":
+        lp = opt(rest, "--ledger")
+        L = None
+        if lp:
+            with open(lp, encoding="utf-8") as f:
+                L = parse_ledger(f.read())
+        errs, warns = check_map(read_json(path), L)
+        for e in errs:
+            print("[誤り] " + e)
+        for w in warns:
+            print("[注意] " + w)
+        if not errs:
+            print("地図の誤り 0" + ("" if lp else "（--ledger なし：確認先の ID は照合していない）"))
+        return 1 if errs else 0
+    if cmd == "ledger":
+        with open(path, encoding="utf-8") as f:
+            L = parse_ledger(f.read())
+        errs, warns, st = check_ledger(L)
+        if "--json" in rest:
+            print(json.dumps({"stats": st, "errors": errs, "warnings": warns, "pass": not errs}, ensure_ascii=False, indent=1))
+        else:
+            print(f"台帳 {st['rows']} 行（V3 {st['byV'][3]}・V2 {st['byV'][2]}・V1 {st['byV'][1]}・V0 {st['byV'][0]}）・未確認 {st['unconfirmed']}")
+            for e in errs:
+                print("[誤り] " + e)
+            for w in warns:
+                print("[注意] " + w)
+            if not errs:
+                print("台帳の誤り 0")
+        return 1 if errs else 0
+    if cmd == "claims":
+        lp = opt(rest, "--ledger")
+        if not lp:
+            print("--ledger が要る")
+            return 2
+        with open(lp, encoding="utf-8") as f:
+            L = parse_ledger(f.read())
+        with open(path, encoding="utf-8") as f:
+            md = f.read()
+        r = claims(md, L)
+        sp = opt(rest, "--strip")
+        if sp:
+            with open(sp, "w", encoding="utf-8") as f:
+                f.write(strip_marks(md))
+        if "--json" in rest:
+            print(json.dumps(r, ensure_ascii=False, indent=1))
+        else:
+            print(f"文 {r['sentences']}・印のある文 {r['marked']}・ID の無い主張の候補 {r['unmarked_claims']} → {'通過' if r['pass'] else 'NG'}")
+            for e in r["errors"]:
+                print("[NG] " + e)
+            for u in r["unmarked"][:12]:
+                print(f"  候補（{'・'.join(u['signals'])}）：{u['sent']}")
+            if sp:
+                print(f"印を外した本文：{sp}")
+        return 0 if r["pass"] else 1
     if cmd == "gate":
         level = opt(rest, "--level", "ug")
         if level not in LEVELS:

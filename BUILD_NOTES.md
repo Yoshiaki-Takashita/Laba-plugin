@@ -56,3 +56,8 @@
   - 担当は 15 本（`textbook-writer` を足した）。README（日英）・overlay の README の表と担当の数を直した。README の英語の表に無かった laba-textbook も足した。
   - 配布：build-dist.sh の EXCLUDE に `skills/laba-book/tests`、build_directory.py の skills_with_scripts に laba-book、`dist-directory/overlay/skill-top/laba-book.md` を足した。plugin.json の版・説明は変えていない（配信は所有者の指示のとき）。
   - この段でしないもの（予定）：出典の台帳の自動化（P3）・概念の地図の道具（P1 の単語・分野）・図（P5）・紙面（P6・v:2 の書き出し）。
+- 【未リリース・main にコミット・push していない】laba-book に資料なしの題（単語・分野）の工程を足した（GLYPH 側の G94。段 L2）。
+  - `references/scope.md`（P1 範囲：標準の章立てを種類の違う 2 つ以上の確認先で見る・分野ごとの確認先の型・概念の地図 `map.json`）・`references/sources.md`（P3 資料台帳：V0 を載せない・根拠は V3 と V1 だけ・見つからない＝存在しないではない＝未確認の行 `U`・主張の印 `[R01]`・法学はコネクタ、無ければ手で開く、それも無理なら未確認）・`references/figure-judgment.md`（図の判断の 12 行。compare・chart・scale はスキーマの案で、実装は図の担当が別に行う。それまでは `fig.want` に残す）。
+  - `book_state.py` に `map`（地図の検査：概念 5〜15・前提の循環と後ろの章・確認先）・`ledger`（台帳の検査：V0・重複・URL・確かめ方の印・「存在しない」の語）・`claims`（主張の印と台帳の突き合わせ・ID の無い主張の候補の数・`--strip` で印を外す）を足した。`gate` は `[R01]` の印を外して測る。`outline` は `fig.want` を受ける。試験 13 → 25 件。
+  - SKILL.md・intake・outline・book-state・writer-brief・担当 textbook-writer・overlay の skill-top を、資料なしの題の手順に合わせた。plugin.json の版・説明は変えていない。
+  - 「ID の無い主張の候補」は機械の下限（数・年・条番号・「」・定義の文・人名らしい語の文）で、印の無い主張をすべて拾うわけではない。
